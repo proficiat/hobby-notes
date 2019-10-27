@@ -17,9 +17,9 @@ const { ApolloServer, UserInputError, gql } = require('apollo-server-lambda')
 
 let persons = [
   {
-    name: 'Arto Hellas',
+    name: 'Layla Hot',
     phone: '040-123543',
-    street: 'Tapiolankatu 5 A',
+    street: 'Octopus street',
     city: 'Espoo',
     id: '3d594650-3436-11e9-bc57-8b80ba54c431',
   },
@@ -31,7 +31,7 @@ let persons = [
     id: '3d599470-3436-11e9-bc57-8b80ba54c431',
   },
   {
-    name: 'Venla Ruuska',
+    name: 'Lisa Ruuska',
     street: 'Nallemäentie 22 C',
     city: 'Helsinki',
     id: '3d599471-3436-11e9-bc57-8b80ba54c431',
