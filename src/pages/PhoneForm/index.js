@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import PersonForm from '../PersonsForm'
 
 const PhoneForm = props => {
   const [name, setName] = useState('')
