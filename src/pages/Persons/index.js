@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { gql } from 'apollo-boost'
 
 import { useApolloClient } from '@apollo/react-hooks'
+import Spinner from '../../components/Spinner'
 
 const FIND_PERSON = gql`
   query findPersonByName($nameToSearch: String!) {
@@ -25,7 +26,7 @@ const Persons = ({ result }) => {
   const [person, setPerson] = useState(null)
 
   if (result.loading) {
-    return <div>loading...</div>
+    return <Spinner />
   }
 
   const showPerson = async name => {
