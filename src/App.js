@@ -6,6 +6,7 @@ import SideBar from './components/SideBar'
 // import Notes from './pages/Notes'
 import Persons from './pages/Persons'
 import PersonForm from './pages/PersonsForm'
+import PhoneForm from './pages/PhoneForm'
 
 import { MainWrapper, PageContent, GlobalStyle } from './styles'
 
@@ -42,6 +43,20 @@ const CREATE_PERSON = gql`
   }
 `
 
+const EDIT_NUMBER = gql`
+  mutation editNumber($name: String!, $phone: String!) {
+    editNumber(name: $name, phone: $phone) {
+      name
+      phone
+      address {
+        street
+        city
+      }
+      id
+    }
+  }
+`
+
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const handleError = () => error => {
@@ -72,6 +87,16 @@ const App = () => {
             onError={handleError()}
           >
             {addPerson => <PersonForm addPerson={addPerson} />}
+          </Mutation>
+          <h2>change number</h2>
+          <Mutation
+            mutation={EDIT_NUMBER}
+          >
+            {(editNumber) =>
+              <PhoneForm
+                editNumber={editNumber}
+              />
+            }
           </Mutation>
         </PageContent>
         <SideBar />
