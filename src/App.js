@@ -1,44 +1,16 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState } from 'react'
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks'
 
 import SideBar from './components/SideBar'
 // import Notes from './pages/Notes'
-import Persons from './pages/Persons'
-import PersonForm from './pages/PersonsForm'
-import PhoneForm from './pages/PhoneForm'
+// import Persons from './pages/Persons'
+// import PersonForm from './pages/PersonsForm'
+// import PhoneForm from './pages/PhoneForm'
 import LoginForm from './pages/LoginForm'
+import AddEditAudio from './pages/AddEditAudio'
 
 import { MainWrapper, PageContent } from './styles'
-
-const ALL_PERSONS = gql`
-  {
-    allPersons {
-      name
-      phone
-      id
-    }
-  }
-`
-
-const CREATE_PERSON = gql`
-  mutation createPerson(
-    $name: String!
-    $street: String!
-    $city: String!
-    $phone: String
-  ) {
-    addPerson(name: $name, street: $street, city: $city, phone: $phone) {
-      name
-      phone
-      id
-      address {
-        street
-        city
-      }
-    }
-  }
-`
 
 const EDIT_NUMBER = gql`
   mutation editNumber($name: String!, $phone: String!) {
@@ -61,6 +33,38 @@ const LOGIN = gql`
   }
 `
 
+const ADD_SOUND = gql`
+  mutation createSound(
+    $name: String!
+    $imageUrl: String
+    $audioUrl: String!
+    $description: String
+  ) {
+    addSound(
+      name: $name
+      imageUrl: $imageUrl
+      audioUrl: $audioUrl
+      description: $description
+    ) {
+      name
+      imageUrl
+      audioUrl
+      description
+    }
+  }
+`
+
+const ALL_SOUNDS = gql`
+  {
+    allSounds {
+      name
+      audioUrl
+      imageUrl
+      id
+    }
+  }
+`
+
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
@@ -74,15 +78,15 @@ const App = () => {
 
   const client = useApolloClient()
 
-  const persons = useQuery(ALL_PERSONS)
+  const sounds = useQuery(ALL_SOUNDS)
 
-  const [addPerson] = useMutation(CREATE_PERSON, {
+  const [addSound] = useMutation(ADD_SOUND, {
     onError: handleError,
     update: (store, response) => {
-      const dataInStore = store.readQuery({ query: ALL_PERSONS })
-      dataInStore.allPersons.push(response.data.addPerson)
+      const dataInStore = store.readQuery({ query: ALL_SOUNDS })
+      dataInStore.allSounds.push(response.data.addSound)
       store.writeQuery({
-        query: ALL_PERSONS,
+        query: ALL_SOUNDS,
         data: dataInStore,
       })
     },
@@ -94,7 +98,7 @@ const App = () => {
     onError: handleError,
   })
 
-  const logout = () => {
+  const logout = () => () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
@@ -109,23 +113,26 @@ const App = () => {
         {!token && (
           <div>
             {errorNotification()}
-            <h2>Login</h2>
+            <h2>Welcome</h2>
             <LoginForm login={login} setToken={setToken} />
           </div>
         )}
+        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        {token && <AddEditAudio addSound={addSound} sounds={sounds} />
+        // (
+        //   <Fragment>
+        //     <Persons result={persons} />
+        //     <h2>create new</h2>
+        //     <PersonForm addPerson={addPerson} />
+        //     <h2>change number</h2>
+        //     <PhoneForm editNumber={editNumber} />
+        //   </Fragment>
+        // )
+        }
         {token && (
-          <Fragment>
-            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-            <Persons result={persons} />
-
-            <h2>create new</h2>
-            <PersonForm addPerson={addPerson} />
-
-            <h2>change number</h2>
-            <PhoneForm editNumber={editNumber} />
-
-            <button onClick={logout}>logout</button>
-          </Fragment>
+          <button type="button" onClick={logout()}>
+            logout
+          </button>
         )}
       </PageContent>
       <SideBar />

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { gql } from 'apollo-boost'
 
 import { useApolloClient } from '@apollo/react-hooks'
+
 import Spinner from '../../components/Spinner'
 
 const FIND_PERSON = gql`

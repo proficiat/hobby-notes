@@ -8,6 +8,7 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const Person = require('./models/person')
 const User = require('./models/user')
+const SoundModel = require('./models/sound')
 
 mongoose.set('useFindAndModify', false)
 
@@ -44,6 +45,13 @@ const typeDefs = gql`
     address: Address!
     id: ID!
   }
+  type Sound {
+    id: ID!
+    name: String!
+    imageUrl: String
+    audioUrl: String!
+    description: String
+  }
   enum YesNo {
     YES
     NO
@@ -51,6 +59,7 @@ const typeDefs = gql`
   type Query {
     personCount: Int!
     allPersons(phone: YesNo): [Person!]!
+    allSounds: [Sound!]!
     findPerson(name: String!): Person
     me: User
   }
@@ -61,6 +70,12 @@ const typeDefs = gql`
       street: String!
       city: String!
     ): Person
+    addSound(
+      name: String!
+      imageUrl: String
+      audioUrl: String
+      description: String
+    ): Sound
     editNumber(name: String!, phone: String!): Person
     addAsFriend(name: String!): User
     createUser(username: String!): User
@@ -76,6 +91,9 @@ const resolvers = {
       }
 
       return Person.find({ phone: { $exists: args.phone === 'YES' } })
+    },
+    allSounds: (root, args) => {
+      return SoundModel.find({})
     },
     findPerson: (root, args) => Person.findOne({ name: args.name }),
     me: (root, args, context) => {
@@ -110,6 +128,17 @@ const resolvers = {
       }
 
       return person
+    },
+    addSound: async (root, args, context) => {
+      const sound = new SoundModel({ ...args })
+      try {
+        await sound.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+      return sound
     },
     editNumber: async (root, args) => {
       const person = await Person.findOne({ name: args.name })
