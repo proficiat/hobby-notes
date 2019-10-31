@@ -17,7 +17,7 @@ const widgetSetup = {
 }
 
 // https://cloudinary.com/documentation/upload_widget
-class AddEditAudio extends PureComponent {
+class AddEditSound extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -133,9 +133,8 @@ class AddEditAudio extends PureComponent {
   }
 }
 
-AddEditAudio.propTypes = {
+AddEditSound.propTypes = {
   addSound: PropTypes.func.isRequired,
-  sounds: PropTypes.object.isRequired,
 }
 
-export default AddEditAudio
+export default AddEditSound

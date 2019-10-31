@@ -3,12 +3,8 @@ import { gql } from 'apollo-boost'
 import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks'
 
 import SideBar from './components/SideBar'
-// import Notes from './pages/Notes'
-// import Persons from './pages/Persons'
-// import PersonForm from './pages/PersonsForm'
-// import PhoneForm from './pages/PhoneForm'
 import LoginForm from './pages/LoginForm'
-import AddEditAudio from './pages/AddEditAudio'
+import Sounds from './pages/Sounds'
 
 import { MainWrapper, PageContent } from './styles'
 
@@ -118,7 +114,7 @@ const App = () => {
           </div>
         )}
         {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-        {token && <AddEditAudio addSound={addSound} sounds={sounds} />
+        {token && <Sounds addSound={addSound} sounds={sounds} />
         // (
         //   <Fragment>
         //     <Persons result={persons} />
@@ -129,13 +125,8 @@ const App = () => {
         //   </Fragment>
         // )
         }
-        {token && (
-          <button type="button" onClick={logout()}>
-            logout
-          </button>
-        )}
       </PageContent>
-      <SideBar />
+      <SideBar token={token} onLogout={logout()} />
     </MainWrapper>
   )
 }

@@ -8,6 +8,8 @@ export const colors = {
   grey: '#d8d9e0',
   text: '#343c5a',
   textSecondary: '#747790',
+  red: '#C3002F',
+  green: '#4D724D',
 }
 
 export const MainWrapper = styled.div`
