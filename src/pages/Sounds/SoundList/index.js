@@ -5,6 +5,8 @@ import map from 'lodash/map'
 
 import SoundCard from './SoundCard'
 
+import { Container } from './styles'
+
 class SoundList extends PureComponent {
   constructor(props) {
     super(props)
@@ -14,11 +16,11 @@ class SoundList extends PureComponent {
   render() {
     const { sounds } = this.props
     return (
-      <div>
+      <Container>
         {map(sounds, (sound, index) => (
           <SoundCard index={index} key={sound.id} sound={sound} />
         ))}
-      </div>
+      </Container>
     )
   }
 }

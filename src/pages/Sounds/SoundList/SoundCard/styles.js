@@ -12,7 +12,6 @@ export const Container = styled.div`
 `
 
 export const Image = styled.div`
-  display: flex;
   height: 100%;
   min-width: 168px;
   margin-right: 15px;
