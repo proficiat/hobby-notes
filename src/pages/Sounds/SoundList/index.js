@@ -15,8 +15,8 @@ class SoundList extends PureComponent {
     const { sounds } = this.props
     return (
       <div>
-        {map(sounds, sound => (
-          <SoundCard key={sound.id} sound={sound} />
+        {map(sounds, (sound, index) => (
+          <SoundCard index={index} key={sound.id} sound={sound} />
         ))}
       </div>
     )

@@ -2,7 +2,11 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import get from 'lodash/get'
-import forEach from 'lodash/forEach'
+
+import {
+  subscribeFrequencyBar,
+  subscribeWaveForm,
+} from 'helpers/audioVisualizations'
 
 import {
   Container,
@@ -20,50 +24,17 @@ class SoundCard extends PureComponent {
   }
 
   componentDidMount() {
-    const { sound } = this.props
+    const { sound, index } = this.props
     const audioUrl = get(sound, 'audioUrl')
     if (audioUrl) {
-      const audio = document.getElementById(`audio-${sound.id}`)
-      audio.src = audioUrl
-      audio.crossOrigin = 'anonymous'
-      const context = new AudioContext()
-      const src = context.createMediaElementSource(audio)
-      const analyser = context.createAnalyser()
-      const canvas = document.getElementById(`canvas-${sound.id}`)
-
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-      const ctx = canvas.getContext('2d')
-
-      src.connect(analyser)
-      analyser.connect(context.destination)
-
-      analyser.fftSize = 256
-
-      const bufferLength = analyser.frequencyBinCount
-
-      const dataArray = new Uint8Array(bufferLength)
-
-      const WIDTH = canvas.width
-      const HEIGHT = canvas.height
-
-      const barWidth = (WIDTH / bufferLength) * 4
-
-      let x = 0
-
-      const renderFrame = () => {
-        requestAnimationFrame(renderFrame)
-        x = 0
-        analyser.getByteFrequencyData(dataArray)
-        ctx.fillStyle = '#f7f8fa'
-        ctx.fillRect(0, 0, WIDTH, HEIGHT)
-        ctx.fillStyle = '#b3e3b5'
-        forEach(dataArray, barHeight => {
-          ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
-          x += barWidth + 1
-        })
+      if (index % 2 === 0) {
+        subscribeFrequencyBar(
+          `canvas-${sound.id}-frequency-bar`,
+          `audio-${sound.id}`,
+        )
+      } else {
+        subscribeWaveForm(`canvas-${sound.id}-waveform`, `audio-${sound.id}`)
       }
-      renderFrame()
     }
   }
 
@@ -76,7 +47,8 @@ class SoundCard extends PureComponent {
       <Container>
         <Image>{imageUrl && <img alt="test" src={imageUrl} />}</Image>
         <CanvasWrapper>
-          <canvas id={`canvas-${sound.id}`} />
+          <canvas id={`canvas-${sound.id}-waveform`} />
+          <canvas id={`canvas-${sound.id}-frequency-bar`} />
           <CardBody>
             <SoundName>{soundName}</SoundName>
             <audio controls id={`audio-${sound.id}`}>
@@ -92,6 +64,7 @@ class SoundCard extends PureComponent {
 }
 
 SoundCard.propTypes = {
+  index: PropTypes.number.isRequired,
   sound: PropTypes.object.isRequired,
 }
 
