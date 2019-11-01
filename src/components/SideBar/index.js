@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
 
 import { Container } from './styles'
 
@@ -12,5 +13,7 @@ class SideBar extends PureComponent {
     return <Container />
   }
 }
+
+SideBar.propTypes = {}
 
 export default SideBar

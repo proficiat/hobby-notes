@@ -14,7 +14,7 @@ export const Container = styled.div`
 export const Image = styled.div`
   display: flex;
   height: 100%;
-  width: 168px;
+  min-width: 168px;
   margin-right: 15px;
   background: #b3e3b5;
 
@@ -26,11 +26,20 @@ export const Image = styled.div`
 
 export const CardBody = styled.div`
   display: flex;
+  position: absolute;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  flex: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  > audio {
+    width: 100%;
+    border-radius: 0;
+    outline: none;
+  }
 `
 
 export const SoundName = styled.h2`
@@ -45,4 +54,20 @@ export const BottomBorder = styled.div`
   width: 33%;
   margin: auto auto;
   background: #c3002f;
+`
+
+export const CanvasWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  > canvas {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.3;
+  }
 `
