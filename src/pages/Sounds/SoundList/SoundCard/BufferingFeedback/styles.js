@@ -19,7 +19,7 @@ export const FeedbackBar = styled.div`
   > span {
     display: block;
     height: 100%;
-    background-color: ${props => (props.color ? props.color : '#d8d9e0')};
+    background-color: ${props => (props.color ? props.color : '#DDEDF4')};
     width: 0;
   }
 `

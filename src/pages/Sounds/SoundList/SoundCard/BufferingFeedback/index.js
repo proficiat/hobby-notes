@@ -12,7 +12,7 @@ const BufferingFeedback = ({ soundId }) => {
       <FeedbackBar>
         <span id={`buffered-amount-${soundId}`} />
       </FeedbackBar>
-      <FeedbackBar color="#b3e3b5">
+      <FeedbackBar color="#B4D0E7">
         <span id={`progress-amount-${soundId}`} />
       </FeedbackBar>
     </Container>

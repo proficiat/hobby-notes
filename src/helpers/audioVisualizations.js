@@ -19,7 +19,7 @@ export const subscribeFrequencyBar = (canvasId, audioId) => {
     analyser.getByteFrequencyData(dataArray)
     canvasContext.fillStyle = '#f7f8fa'
     canvasContext.fillRect(0, 0, WIDTH, HEIGHT)
-    canvasContext.fillStyle = '#b3e3b5'
+    canvasContext.fillStyle = '#DDEDF4'
     forEach(dataArray, height => {
       const barHeight = height * 2
       canvasContext.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
@@ -46,7 +46,7 @@ export const subscribeWaveForm = (canvasId, audioId) => {
     canvasContext.fillStyle = '#f7f8fa'
     canvasContext.fillRect(0, 0, WIDTH, HEIGHT)
     canvasContext.lineWidth = 4
-    canvasContext.strokeStyle = '#b3e3b5'
+    canvasContext.strokeStyle = '#DDEDF4'
     canvasContext.beginPath()
     const sliceWidth = WIDTH / bufferLength
     let x = 0

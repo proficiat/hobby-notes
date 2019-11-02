@@ -14,7 +14,6 @@ export const Container = styled.div`
 export const Image = styled.div`
   height: 100%;
   min-width: 168px;
-  margin-right: 15px;
   background: #b3e3b5;
 
   > img {
@@ -42,10 +41,11 @@ export const CardBody = styled.div`
 `
 
 export const SoundName = styled.h2`
-  margin-bottom: 22px;
-  font-weight: 500;
-  font-size: 18px;
+  font-weight: 300;
+  font-size: 24px;
   text-transform: uppercase;
+  color: #7d3780;
+  opacity: 0.5;
 `
 
 export const BottomBorder = styled.div`
