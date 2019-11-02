@@ -21,6 +21,7 @@ class SoundCard extends PureComponent {
       currentTime: 0,
     }
     this.audioRef = null
+    this.seekRef = null
   }
 
   componentDidMount() {
@@ -82,6 +83,10 @@ class SoundCard extends PureComponent {
     this.audioRef = ref
   }
 
+  addSeekRef = ref => {
+    this.seekRef = ref
+  }
+
   getSoundDuration = () => {
     const { currentTime } = this.state
     const soundDuration = get(this.audioRef, 'duration', 0)
@@ -104,6 +109,20 @@ class SoundCard extends PureComponent {
     }
   }
 
+  handleSeekClick = event => {
+    try {
+      if (this.seekRef) {
+        const percentWidth =
+          (event.clientX - this.seekRef.offsetLeft) / this.seekRef.offsetWidth
+        if (this.audioRef) {
+          this.audioRef.currentTime = percentWidth * this.audioRef.duration
+        }
+      }
+    } catch (error) {
+      //
+    }
+  }
+
   render() {
     const { sound } = this.props
     const { isPaused } = this.state
@@ -116,7 +135,7 @@ class SoundCard extends PureComponent {
         <Image onClick={this.handlePress}>
           {imageUrl && <img alt="test" src={imageUrl} />}
         </Image>
-        <CanvasWrapper>
+        <CanvasWrapper ref={this.addSeekRef} onClick={this.handleSeekClick}>
           <BufferingFeedback soundId={soundId} />
           <canvas id={`canvas-${sound.id}-waveform`} />
           <canvas id={`canvas-${sound.id}-frequency-bar`} />
@@ -126,7 +145,6 @@ class SoundCard extends PureComponent {
             </SoundName>
             <audio id={`audio-${sound.id}`} ref={this.addAudioRef}>
               <source src={get(sound, 'audioUrl')} />
-              Your browser does not support the audio element.
             </audio>
           </CardBody>
         </CanvasWrapper>
