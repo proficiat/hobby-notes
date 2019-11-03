@@ -4,14 +4,18 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import { Duration } from 'luxon'
 
-import {
-  subscribeFrequencyBar,
-  subscribeWaveForm,
-} from 'helpers/audioVisualizations'
+import { subscribeWaveForm } from 'helpers/audioVisualizations'
 
 import BufferingFeedback from './BufferingFeedback'
 
-import { Container, Image, CardBody, SoundName, CanvasWrapper } from './styles'
+import {
+  Container,
+  Cover,
+  AbsoluteCoat,
+  MiddleInfo,
+  Track,
+  WaveformCanvas,
+} from './styles'
 
 class SoundCard extends PureComponent {
   constructor(props) {
@@ -21,13 +25,12 @@ class SoundCard extends PureComponent {
       currentTime: 0,
     }
     this.audioRef = null
-    this.seekRef = null
+    this.trackRef = null
+    this.waveformRef = null
   }
 
   componentDidMount() {
-    const { sound, index } = this.props
-    const audioUrl = get(sound, 'audioUrl')
-    const myAudio = document.getElementById(`audio-${sound.id}`)
+    const { sound } = this.props
     if (this.audioRef) {
       this.audioRef.addEventListener('timeupdate', event => {
         const currentTime = get(event, 'target.currentTime', 0)
@@ -35,18 +38,14 @@ class SoundCard extends PureComponent {
       })
       this.audioRef.addEventListener('progress', () => {
         try {
-          const { duration } = myAudio
+          const { duration } = this.audioRef
           if (duration > 0) {
-            for (let i = 0; i < myAudio.buffered.length; i += 1) {
-              if (
-                myAudio.buffered.start(myAudio.buffered.length - 1 - i) <
-                myAudio.currentTime
-              ) {
+            const { buffered, currentTime } = this.audioRef
+            for (let i = 0; i < buffered.length; i += 1) {
+              if (buffered.start(buffered.length - 1 - i) < currentTime) {
                 document.getElementById(
                   `buffered-amount-${sound.id}`,
-                ).style.width = `${(myAudio.buffered.end(
-                  myAudio.buffered.length - 1 - i,
-                ) /
+                ).style.width = `${(buffered.end(buffered.length - 1 - i) /
                   duration) *
                   100}%`
                 break
@@ -58,23 +57,16 @@ class SoundCard extends PureComponent {
         }
       })
       this.audioRef.addEventListener('timeupdate', () => {
-        const { duration } = myAudio
+        const { duration, currentTime } = this.audioRef
         if (duration > 0) {
           document.getElementById(
             `progress-amount-${sound.id}`,
-          ).style.width = `${(myAudio.currentTime / duration) * 100}%`
+          ).style.width = `${(currentTime / duration) * 100}%`
         }
       })
-    }
 
-    if (audioUrl) {
-      if (index % 2 === 0) {
-        subscribeFrequencyBar(
-          `canvas-${sound.id}-frequency-bar`,
-          `audio-${sound.id}`,
-        )
-      } else {
-        subscribeWaveForm(`canvas-${sound.id}-waveform`, `audio-${sound.id}`)
+      if (this.waveformRef) {
+        subscribeWaveForm(this.waveformRef, this.audioRef)
       }
     }
   }
@@ -83,8 +75,12 @@ class SoundCard extends PureComponent {
     this.audioRef = ref
   }
 
-  addSeekRef = ref => {
-    this.seekRef = ref
+  addTrackRef = ref => {
+    this.trackRef = ref
+  }
+
+  addWaveFormRef = ref => {
+    this.waveformRef = ref
   }
 
   getSoundDuration = () => {
@@ -111,9 +107,9 @@ class SoundCard extends PureComponent {
 
   handleSeekClick = event => {
     try {
-      if (this.seekRef) {
+      if (this.trackRef) {
         const percentWidth =
-          (event.clientX - this.seekRef.offsetLeft) / this.seekRef.offsetWidth
+          (event.clientX - this.trackRef.offsetLeft) / this.trackRef.offsetWidth
         if (this.audioRef) {
           this.audioRef.currentTime = percentWidth * this.audioRef.duration
         }
@@ -132,29 +128,32 @@ class SoundCard extends PureComponent {
 
     return (
       <Container>
-        <Image onClick={this.handlePress}>
+        <Cover onClick={this.handlePress}>
           {imageUrl && <img alt="test" src={imageUrl} />}
-        </Image>
-        <CanvasWrapper ref={this.addSeekRef} onClick={this.handleSeekClick}>
+        </Cover>
+        <Track
+          playing={!isPaused}
+          ref={this.addTrackRef}
+          onClick={this.handleSeekClick}
+        >
           <BufferingFeedback soundId={soundId} />
-          <canvas id={`canvas-${sound.id}-waveform`} />
-          <canvas id={`canvas-${sound.id}-frequency-bar`} />
-          <CardBody>
-            <SoundName>
+          <WaveformCanvas ref={this.addWaveFormRef} />
+          <AbsoluteCoat>
+            <MiddleInfo>
               {isPaused ? soundName : this.getSoundDuration()}
-            </SoundName>
-            <audio id={`audio-${sound.id}`} ref={this.addAudioRef}>
-              <source src={get(sound, 'audioUrl')} />
-            </audio>
-          </CardBody>
-        </CanvasWrapper>
+            </MiddleInfo>
+          </AbsoluteCoat>
+        </Track>
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+        <audio ref={this.addAudioRef}>
+          <source src={get(sound, 'audioUrl')} />
+        </audio>
       </Container>
     )
   }
 }
 
 SoundCard.propTypes = {
-  index: PropTypes.number.isRequired,
   sound: PropTypes.object.isRequired,
 }
 

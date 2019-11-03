@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   display: flex;
@@ -11,7 +11,7 @@ export const Container = styled.div`
   color: #c3002f;
 `
 
-export const Image = styled.div`
+export const Cover = styled.div`
   height: 100%;
   min-width: 168px;
   background: #b3e3b5;
@@ -22,7 +22,7 @@ export const Image = styled.div`
   }
 `
 
-export const CardBody = styled.div`
+export const AbsoluteCoat = styled.div`
   display: flex;
   position: absolute;
   flex-direction: column;
@@ -33,14 +33,9 @@ export const CardBody = styled.div`
   left: 0;
   right: 0;
   z-index: 2;
-  > audio {
-    width: 100%;
-    border-radius: 0;
-    outline: none;
-  }
 `
 
-export const SoundName = styled.h2`
+export const MiddleInfo = styled.h2`
   font-weight: 300;
   font-size: 24px;
   text-transform: uppercase;
@@ -48,24 +43,26 @@ export const SoundName = styled.h2`
   opacity: 0.5;
 `
 
-export const BottomBorder = styled.div`
-  height: 1px;
-  width: 33%;
-  margin: auto auto;
-  background: #c3002f;
+export const WaveformCanvas = styled.canvas`
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  visibility: hidden;
 `
 
-export const CanvasWrapper = styled.div`
+export const Track = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
 
-  > canvas {
-    position: absolute;
-    z-index: 1;
-    left: 0;
-    bottom: 0;
-    height: 50%;
-    width: 100%;
-  }
+  ${props =>
+    props.playing &&
+    css`
+      ${WaveformCanvas} {
+        visibility: visible;
+      }
+    `}
 `

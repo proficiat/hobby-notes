@@ -1,10 +1,10 @@
 import forEach from 'lodash/forEach'
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Visualizations_with_Web_Audio_API#Creating_a_frequency_bar_graph
-export const subscribeFrequencyBar = (canvasId, audioId) => {
+export const subscribeFrequencyBar = (canvasRef, audioRef) => {
   const { analyser, canvas, canvasContext } = createAnalyser(
-    audioId,
-    canvasId,
+    audioRef,
+    canvasRef,
     256,
   )
   const bufferLength = analyser.frequencyBinCount
@@ -29,10 +29,10 @@ export const subscribeFrequencyBar = (canvasId, audioId) => {
   renderFrequencyBar()
 }
 
-export const subscribeWaveForm = (canvasId, audioId) => {
+export const subscribeWaveForm = (canvasRef, audioRef) => {
   const { analyser, canvas, canvasContext } = createAnalyser(
-    audioId,
-    canvasId,
+    audioRef,
+    canvasRef,
     2048,
   )
 
@@ -68,21 +68,19 @@ export const subscribeWaveForm = (canvasId, audioId) => {
   renderWaveForm()
 }
 
-const createAnalyser = (audioId, canvasId, fftSize) => {
-  const audio = document.getElementById(audioId)
-  audio.crossOrigin = 'anonymous'
+const createAnalyser = (audioRef, canvasRef, fftSize) => {
+  audioRef.crossOrigin = 'anonymous'
   const audioContext = new (window.AudioContext || window.webkitAudioContext)()
-  const contextSource = audioContext.createMediaElementSource(audio)
+  const contextSource = audioContext.createMediaElementSource(audioRef)
   const analyser = audioContext.createAnalyser()
-  const canvas = document.getElementById(canvasId)
 
-  canvas.width = window.innerWidth
-  canvas.height = window.innerHeight
+  canvasRef.width = window.innerWidth
+  canvasRef.height = window.innerHeight
 
-  const canvasContext = canvas.getContext('2d')
+  const canvasContext = canvasRef.getContext('2d')
   contextSource.connect(analyser)
   analyser.connect(audioContext.destination)
   analyser.fftSize = fftSize
 
-  return { analyser, canvas, canvasContext }
+  return { analyser, canvas: canvasRef, canvasContext }
 }
