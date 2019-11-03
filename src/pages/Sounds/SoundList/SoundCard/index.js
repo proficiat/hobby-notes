@@ -15,6 +15,9 @@ import {
   MiddleInfo,
   Track,
   WaveformCanvas,
+  PlayButton,
+  PlaySign,
+  PauseSign,
 } from './styles'
 
 class SoundCard extends PureComponent {
@@ -130,6 +133,9 @@ class SoundCard extends PureComponent {
       <Container>
         <Cover onClick={this.handlePress}>
           {imageUrl && <img alt="test" src={imageUrl} />}
+          <PlayButton playing={!isPaused}>
+            {isPaused ? <PlaySign /> : <PauseSign />}
+          </PlayButton>
         </Cover>
         <Track
           playing={!isPaused}
