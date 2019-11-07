@@ -37,7 +37,8 @@
     "react-scripts": "^3.0.1",
     "styled-components": "^4.4.0",
     "utf-8-validate": "^5.0.2",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "waveform-data": "^3.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

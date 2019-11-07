@@ -43,6 +43,16 @@ export const WaveformCanvas = styled.canvas`
   visibility: hidden;
 `
 
+export const WaveformImageCanvas = styled.canvas`
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.3;
+`
+
 export const Track = styled.div`
   position: relative;
   width: 100%;

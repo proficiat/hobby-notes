@@ -6,6 +6,8 @@ import { Duration } from 'luxon'
 
 import { subscribeWaveForm } from 'helpers/audioVisualizations'
 
+import WaveformData from 'waveform-data'
+
 import BufferingFeedback from './BufferingFeedback'
 
 import {
@@ -18,6 +20,7 @@ import {
   PlayButton,
   PlaySign,
   PauseSign,
+  WaveformImageCanvas,
 } from './styles'
 
 class SoundCard extends PureComponent {
@@ -30,11 +33,40 @@ class SoundCard extends PureComponent {
     this.audioRef = null
     this.trackRef = null
     this.waveformRef = null
+    this.waveformImageRef = null
   }
 
   componentDidMount() {
     const { sound } = this.props
     if (this.audioRef) {
+      const audioContext = new AudioContext()
+      fetch(sound.audioUrl)
+        .then(response => response.arrayBuffer())
+        .then(buffer => {
+          const options = {
+            audio_context: audioContext,
+            array_buffer: buffer,
+            scale: 512,
+            // split_channels: true,
+          }
+
+          return new Promise((resolve, reject) => {
+            WaveformData.createFromAudio(options, (err, waveform) => {
+              if (err) {
+                reject(err)
+              } else {
+                resolve(waveform)
+              }
+            })
+          })
+        })
+        .then(waveform => {
+          const resampled = waveform.resample({ width: 800 })
+          const channel = resampled.channel(0)
+          const maxArray = channel.max_array()
+          this.drawWaves(maxArray)
+        })
+
       this.audioRef.addEventListener('timeupdate', event => {
         const currentTime = get(event, 'target.currentTime', 0)
         this.setState({ currentTime })
@@ -74,6 +106,32 @@ class SoundCard extends PureComponent {
     }
   }
 
+  drawWaves = data => {
+    const canvas = this.waveformImageRef
+    const ctx = canvas.getContext('2d')
+    const step = 3 // 2 points for line, 1 for space
+    const width = data.length * step
+    let maxY = 0
+
+    ctx.fillStyle = '#c3002f'
+
+    // find max height
+    for (let i = 0; i < data.length; i += 1) if (data[i] > maxY) maxY = data[i]
+
+    ctx.transform(
+      canvas.width / width,
+      0,
+      0,
+      -canvas.height / maxY,
+      0,
+      canvas.height,
+    ) // scale horizontally and flip coordinate system
+
+    for (let i = 0; i < data.length; i += 1) ctx.rect(i * step, 0, 2, data[i])
+
+    ctx.fill()
+  }
+
   addAudioRef = ref => {
     this.audioRef = ref
   }
@@ -84,6 +142,10 @@ class SoundCard extends PureComponent {
 
   addWaveFormRef = ref => {
     this.waveformRef = ref
+  }
+
+  addWaveformImageRef = ref => {
+    this.waveformImageRef = ref
   }
 
   getSoundDuration = () => {
@@ -144,6 +206,7 @@ class SoundCard extends PureComponent {
         >
           <BufferingFeedback soundId={soundId} />
           <WaveformCanvas ref={this.addWaveFormRef} />
+          <WaveformImageCanvas ref={this.addWaveformImageRef} />
           <AbsoluteCoat>
             <MiddleInfo>
               {isPaused ? soundName : this.getSoundDuration()}
