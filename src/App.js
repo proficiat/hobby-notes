@@ -75,7 +75,7 @@ class App extends Component {
             {!token && <LoginForm setToken={this.setToken} />}
             {token && <Sounds />}
           </PageContent>
-          <SideBar onSetToken={this.setToken} />
+          <SideBar token={token} onSetToken={this.setToken} />
         </MainWrapper>
       </ApolloProvider>
     )

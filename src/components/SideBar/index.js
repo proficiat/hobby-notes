@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { useApolloClient } from '@apollo/react-hooks'
+import { withApollo } from 'react-apollo'
 
-import { Container } from './styles'
+import { Container, Item } from './styles'
 
 class SideBar extends PureComponent {
   constructor(props) {
@@ -11,20 +11,26 @@ class SideBar extends PureComponent {
   }
 
   handleExit = () => {
-    const { onSetToken } = this.props
-    const client = useApolloClient()
+    const { onSetToken, client } = this.props
     onSetToken(null)
     localStorage.clear()
     client.resetStore()
   }
 
   render() {
-    return <Container />
+    const { token } = this.props
+    return (
+      <Container onClick={this.handleExit}>
+        {token && <Item>Exit</Item>}
+      </Container>
+    )
   }
 }
 
 SideBar.propTypes = {
-  onSetToken: PropTypes.func.isRequired
+  client: PropTypes.object.isRequired,
+  token: PropTypes.string.isRequired,
+  onSetToken: PropTypes.func.isRequired,
 }
 
-export default SideBar
+export default withApollo(SideBar)
