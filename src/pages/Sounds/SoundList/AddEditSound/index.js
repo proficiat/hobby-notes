@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 
 import get from 'lodash/get'
 // import isEmpty from 'lodash/isEmpty'
-import map from 'lodash/map'
 
 // import { Mutation, Query } from 'react-apollo'
 
@@ -91,14 +90,9 @@ class AddEditSound extends PureComponent {
   }
 
   render() {
-    const { sounds } = this.props
-    const soundsData = get(sounds, 'data.allSounds', [])
     const { audioName, imageUrl, audioUrl, description } = this.state
     return (
       <div>
-        {map(soundsData, data => (
-          <div key={data.id}>{data.name}</div>
-        ))}
         <div>
           Name <input value={audioName} onChange={this.handleChangeName} />
         </div>

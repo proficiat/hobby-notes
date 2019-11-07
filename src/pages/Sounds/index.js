@@ -1,39 +1,46 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
 
-// import { gql } from 'apollo-boost'
+import { Query } from 'react-apollo'
+import { gql } from 'apollo-boost'
 
 import get from 'lodash/get'
-// import isEmpty from 'lodash/isEmpty'
 
-import AddEdit from './AddEditSound'
+import Spinner from 'components/Spinner'
+
 import SoundList from './SoundList'
+
+const ALL_SOUNDS = gql`
+  {
+    allSounds {
+      name
+      audioUrl
+      imageUrl
+      id
+    }
+  }
+`
 
 class Sounds extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      isAddEdit: false,
-    }
+    this.state = {}
   }
-
-  toggleAddEdit = () =>
-    this.setState(prevState => ({ isAddEdit: !prevState.isAddEdit }))
 
   render() {
-    const { sounds, addSound } = this.props
-    const soundsData = get(sounds, 'data.allSounds', [])
-    const { isAddEdit } = this.state
-    if (isAddEdit) {
-      return <AddEdit addSound={addSound} />
-    }
-    return <SoundList sounds={soundsData} />
+    return (
+      <Query query={ALL_SOUNDS}>
+        {({ loading, error, data }) => {
+          if (loading) {
+            return <Spinner />
+          }
+          const sounds = get(data, 'allSounds', [])
+          return <SoundList sounds={sounds} />
+        }}
+      </Query>
+    )
   }
 }
 
-Sounds.propTypes = {
-  addSound: PropTypes.func.isRequired,
-  sounds: PropTypes.object.isRequired,
-}
+Sounds.propTypes = {}
 
 export default Sounds

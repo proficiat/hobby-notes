@@ -1,6 +1,14 @@
-import React, { useState } from 'react'
-import { gql } from 'apollo-boost'
-import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks'
+import React, { Component } from 'react'
+
+import { ApolloClient } from 'apollo-client'
+import { ApolloLink } from 'apollo-link'
+import { createHttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloProvider } from 'react-apollo'
+
+import Spinner from 'components/Spinner'
+
+import { persistCache } from 'apollo-cache-persist'
 
 import SideBar from './components/SideBar'
 import LoginForm from './pages/LoginForm'
@@ -8,127 +16,70 @@ import Sounds from './pages/Sounds'
 
 import { MainWrapper, PageContent } from './styles'
 
-const EDIT_NUMBER = gql`
-  mutation editNumber($name: String!, $phone: String!) {
-    editNumber(name: $name, phone: $phone) {
-      name
-      phone
-      address {
-        street
-        city
-      }
-      id
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      token: localStorage.getItem('login-token'),
+      client: null,
+      isLoadedCache: false,
     }
   }
-`
-const LOGIN = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      value
-    }
-  }
-`
 
-const ADD_SOUND = gql`
-  mutation createSound(
-    $name: String!
-    $imageUrl: String
-    $audioUrl: String!
-    $description: String
-  ) {
-    addSound(
-      name: $name
-      imageUrl: $imageUrl
-      audioUrl: $audioUrl
-      description: $description
-    ) {
-      name
-      imageUrl
-      audioUrl
-      description
-    }
-  }
-`
-
-const ALL_SOUNDS = gql`
-  {
-    allSounds {
-      name
-      audioUrl
-      imageUrl
-      id
-    }
-  }
-`
-
-const App = () => {
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [token, setToken] = useState(null)
-
-  const handleError = error => {
-    setErrorMessage(error.graphQLErrors[0].message)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 10000)
-  }
-
-  const client = useApolloClient()
-
-  const sounds = useQuery(ALL_SOUNDS)
-
-  const [addSound] = useMutation(ADD_SOUND, {
-    onError: handleError,
-    update: (store, response) => {
-      const dataInStore = store.readQuery({ query: ALL_SOUNDS })
-      dataInStore.allSounds.push(response.data.addSound)
-      store.writeQuery({
-        query: ALL_SOUNDS,
-        data: dataInStore,
+  async componentDidMount() {
+    const httpLink = createHttpLink({ uri: '/.netlify/functions/graphql' })
+    const middlewareLink = new ApolloLink((operation, forward) => {
+      const token = localStorage.getItem('login-token')
+      operation.setContext({
+        headers: {
+          authorization: token ? `bearer ${token}` : null,
+        },
       })
-    },
-  })
+      return forward(operation)
+    })
+    const link = middlewareLink.concat(httpLink)
 
-  const [editNumber] = useMutation(EDIT_NUMBER)
+    const cache = new InMemoryCache()
 
-  const [login] = useMutation(LOGIN, {
-    onError: handleError,
-  })
+    const client = new ApolloClient({
+      link,
+      cache,
+    })
 
-  const logout = () => () => {
-    setToken(null)
-    localStorage.clear()
-    client.resetStore()
+    try {
+      await persistCache({
+        cache,
+        storage: window.localStorage,
+      })
+    } catch (error) {
+      console.error('Error restoring Apollo cache', error)
+    }
+
+    this.setState({
+      client,
+      isLoadedCache: true,
+    })
   }
 
-  const errorNotification = () =>
-    errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>
+  setToken = token => this.setState({ token })
 
-  return (
-    <MainWrapper>
-      <PageContent>
-        {!token && (
-          <div>
-            {errorNotification()}
-            <h2>Welcome</h2>
-            <LoginForm login={login} setToken={setToken} />
-          </div>
-        )}
-        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-        {token && <Sounds addSound={addSound} sounds={sounds} />
-        // (
-        //   <Fragment>
-        //     <Persons result={persons} />
-        //     <h2>create new</h2>
-        //     <PersonForm addPerson={addPerson} />
-        //     <h2>change number</h2>
-        //     <PhoneForm editNumber={editNumber} />
-        //   </Fragment>
-        // )
-        }
-      </PageContent>
-      <SideBar token={token} onLogout={logout()} />
-    </MainWrapper>
-  )
+  render() {
+    const { token, client, isLoadedCache } = this.state
+    if (!isLoadedCache) {
+      return <Spinner />
+    }
+    return (
+      <ApolloProvider client={client}>
+        <MainWrapper>
+          <PageContent>
+            {!token && <LoginForm setToken={this.setToken} />}
+            {token && <Sounds />}
+          </PageContent>
+          <SideBar onSetToken={this.setToken} />
+        </MainWrapper>
+      </ApolloProvider>
+    )
+  }
 }
 
 export default App
