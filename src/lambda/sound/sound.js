@@ -5,22 +5,17 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    minlength: 5,
+    minlength: 2,
   },
-  phone: {
+  imageUrl: {
     type: String,
-    minlength: 5,
   },
-  street: {
+  audioUrl: {
     type: String,
-    required: true,
-    minlength: 5,
   },
-  city: {
+  description: {
     type: String,
-    required: true,
-    minlength: 3,
   },
 })
 
-module.exports = mongoose.model('Person', schema)
+module.exports = mongoose.model('Sound', schema)
