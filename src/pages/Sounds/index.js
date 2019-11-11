@@ -29,12 +29,12 @@ class Sounds extends PureComponent {
   render() {
     return (
       <Query query={ALL_SOUNDS}>
-        {({ loading, error, data }) => {
+        {({ loading, error, data, refetch }) => {
           if (loading) {
             return <Spinner />
           }
           const sounds = get(data, 'allSounds', [])
-          return <SoundList sounds={sounds} />
+          return <SoundList refetchSounds={refetch} sounds={sounds} />
         }}
       </Query>
     )

@@ -44,7 +44,7 @@ class App extends Component {
     const client = new ApolloClient({
       link,
       cache,
-    })
+  })
 
     try {
       await persistCache({

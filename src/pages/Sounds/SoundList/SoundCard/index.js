@@ -2,7 +2,10 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import get from 'lodash/get'
+
 import { Duration } from 'luxon'
+import { gql } from 'apollo-boost'
+import { Mutation } from 'react-apollo'
 
 import { subscribeWaveForm } from 'helpers/audioVisualizations'
 
@@ -23,6 +26,15 @@ import {
   WaveformImageCanvas,
 } from './styles'
 
+const DELETE_SOUND = gql`
+  mutation deleteSound($id: String!) {
+    deleteSound(id: $id) {
+      id
+      name
+    }
+  }
+`
+
 class SoundCard extends PureComponent {
   constructor(props) {
     super(props)
@@ -38,7 +50,7 @@ class SoundCard extends PureComponent {
 
   componentDidMount() {
     const { sound } = this.props
-    if (this.audioRef) {
+    if (this.audioRef && sound.audioUrl) {
       const audioContext = new AudioContext()
       fetch(sound.audioUrl)
         .then(response => response.arrayBuffer())
@@ -184,6 +196,11 @@ class SoundCard extends PureComponent {
     }
   }
 
+  handleDeleteSound = (store, response) => {
+    const { refetchSounds } = this.props
+    refetchSounds()
+  }
+
   render() {
     const { sound } = this.props
     const { isPaused } = this.state
@@ -210,6 +227,13 @@ class SoundCard extends PureComponent {
           <AbsoluteCoat>
             <MiddleInfo>
               {isPaused ? soundName : this.getSoundDuration()}
+              <Mutation mutation={DELETE_SOUND} update={this.handleDeleteSound}>
+                {deleteSound => (
+                  <button
+                    onClick={e => deleteSound({ variables: { id: soundId } })}
+                  >DELETE</button>
+                )}
+              </Mutation>
             </MiddleInfo>
           </AbsoluteCoat>
         </Track>
@@ -223,6 +247,7 @@ class SoundCard extends PureComponent {
 }
 
 SoundCard.propTypes = {
+  refetchSounds: PropTypes.func.isRequired,
   sound: PropTypes.object.isRequired,
 }
 

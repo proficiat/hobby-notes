@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { gql } from 'apollo-boost'
 
-import { Mutation } from 'react-apollo'
+import { Mutation, withApollo } from 'react-apollo'
 
 import map from 'lodash/map'
 
@@ -25,6 +25,7 @@ const ADD_SOUND = gql`
       audioUrl: $audioUrl
       description: $description
     ) {
+      id
       name
       imageUrl
       audioUrl
@@ -50,24 +51,30 @@ class SoundList extends PureComponent {
     this.state = {}
   }
 
-  handleUpdateSounds = (store, response) => {
+  handleUpdateSounds = async (store, response) => {
+    const { client } = this.props
     const dataInStore = store.readQuery({ query: ALL_SOUNDS })
     dataInStore.allSounds.push(response.data.addSound)
-    store.writeQuery({
+    await client.writeData({
       query: ALL_SOUNDS,
-      data: dataInStore,
+      data: { ...dataInStore },
     })
   }
 
   render() {
-    const { sounds } = this.props
+    const { sounds, refetchSounds } = this.props
     return (
       <Container>
         <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
           {addSound => <AddEditSound addSound={addSound} />}
         </Mutation>
         {map(sounds, (sound, index) => (
-          <SoundCard index={index} key={sound.id} sound={sound} />
+          <SoundCard
+            index={index}
+            key={sound.id}
+            refetchSounds={refetchSounds}
+            sound={sound}
+          />
         ))}
       </Container>
     )
@@ -75,7 +82,9 @@ class SoundList extends PureComponent {
 }
 
 SoundList.propTypes = {
+  client: PropTypes.object.isRequired,
+  refetchSounds: PropTypes.func.isRequired,
   sounds: PropTypes.array.isRequired,
 }
 
-export default SoundList
+export default withApollo(SoundList)

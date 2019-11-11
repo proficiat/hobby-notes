@@ -49,7 +49,7 @@ class AddEditSound extends PureComponent {
       (error, res) => {
         if (!error && res && res.event === 'success') {
           console.log('Done! Here is the image info: ', res.info)
-          const cloudinaryUrl = get(res, 'info.url', '')
+          const cloudinaryUrl = get(res, 'info.secure_url', '')
           if (cloudinaryUrl) {
             this.setState({ audioUrl: cloudinaryUrl })
           }

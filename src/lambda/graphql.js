@@ -1,3 +1,5 @@
+import get from 'lodash/get'
+
 const {
   ApolloServer,
   UserInputError,
@@ -79,6 +81,7 @@ const typeDefs = gql`
     editNumber(name: String!, phone: String!): Person
     addAsFriend(name: String!): User
     createUser(username: String!): User
+    deleteSound(id: String!): Sound
     login(username: String!, password: String!): Token
   }
 `
@@ -139,6 +142,11 @@ const resolvers = {
         })
       }
       return sound
+    },
+    deleteSound: async (root, args) => {
+      const id = get(args, 'id')
+      const deleted = await SoundModel.findByIdAndRemove({ _id: id })
+      return deleted
     },
     editNumber: async (root, args) => {
       const person = await Person.findOne({ name: args.name })
