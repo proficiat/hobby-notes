@@ -1,10 +1,12 @@
 const { UserInputError } = require('apollo-server-lambda')
 
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 
 const User = require('./user')
 
 const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
+const OWNER_NAME = 'Adsum'
 
 const resolvers = {
   Query: {
@@ -14,18 +16,26 @@ const resolvers = {
   },
   Mutation: {
     login: async (root, args) => {
+      const { password } = args
       let user = await User.findOne({ username: args.username })
-
       if (!user) {
-        const { username, password } = args
-        const power = username === 'Adsum'
-        user = new User({ username, password, power })
+        const { username } = args
+        const power = username === OWNER_NAME
+        const salt = bcrypt.genSaltSync(10)
+        user = new User({
+          username,
+          password: bcrypt.hashSync(password, salt),
+          power,
+        })
         await user.save().catch(error => {
           throw new UserInputError(error.message, {
             invalidArgs: args,
           })
         })
+      } else if (!bcrypt.compareSync(password, user.password)) {
+        throw new UserInputError('Wrong password', { invalidArgs: args })
       }
+
       const userForToken = {
         username: user.username,
         id: user._id,
