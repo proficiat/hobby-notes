@@ -14,19 +14,18 @@ const resolvers = {
   },
   Mutation: {
     login: async (root, args) => {
-      const user = await User.findOne({ username: args.username })
+      let user = await User.findOne({ username: args.username })
 
-      if (!user || args.password !== 'secred') {
-        const newUser = new User({ username: args.username })
-        return newUser.save().catch(error => {
+      if (!user) {
+        const { username, password } = args
+        const power = username === 'Adsum'
+        user = new User({ username, password, power })
+        await user.save().catch(error => {
           throw new UserInputError(error.message, {
             invalidArgs: args,
           })
         })
-
-        // throw new UserInputError('wrong credentials')
       }
-
       const userForToken = {
         username: user.username,
         id: user._id,

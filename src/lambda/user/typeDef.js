@@ -2,7 +2,9 @@ const { gql } = require('apollo-server-lambda')
 
 const typeDef = gql`
   type User {
+    power: Boolean
     username: String!
+    password: String!
     id: ID!
   }
 
