@@ -13,6 +13,7 @@ import { persistCache } from 'apollo-cache-persist'
 import SideBar from './components/SideBar'
 import LoginForm from './pages/LoginForm'
 import Sounds from './pages/Sounds'
+import { typeDefs } from './resolvers'
 
 import { MainWrapper, PageContent } from './styles'
 
@@ -44,9 +45,10 @@ class App extends Component {
     const client = new ApolloClient({
       link,
       cache,
+      typeDefs,
     })
-    // init
-    cache.writeData({ data: { default: '' } })
+    // init default state
+    cache.writeData({ data: { isViewerInPower: false } })
 
     try {
       await persistCache({
