@@ -10,8 +10,8 @@ const OWNER_NAME = 'Adsum'
 
 const resolvers = {
   Query: {
-    me: (root, args, context) => {
-      return context.currentUser
+    viewer: (root, args, context) => {
+      return context.viewer
     },
   },
   Mutation: {
@@ -41,7 +41,10 @@ const resolvers = {
         id: user._id,
       }
 
-      return { value: jwt.sign(userForToken, JWT_SECRET) }
+      return {
+        token: jwt.sign(userForToken, JWT_SECRET),
+        isViewerInPower: user.power,
+      }
     },
   },
 }

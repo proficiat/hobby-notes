@@ -44,7 +44,9 @@ class App extends Component {
     const client = new ApolloClient({
       link,
       cache,
-  })
+    })
+    // init
+    cache.writeData({ data: { default: '' } })
 
     try {
       await persistCache({

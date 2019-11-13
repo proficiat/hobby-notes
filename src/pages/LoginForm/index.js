@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+
+import get from 'lodash/get'
+
 import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import { withApollo } from 'react-apollo'
 
 const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
-      value
+      token
+      isViewerInPower
     }
   }
 `
@@ -25,6 +30,12 @@ const LoginForm = props => {
 
   const [login] = useMutation(LOGIN, {
     onError: handleError,
+    update(cache, { data }) {
+      const isViewerInPower = get(data, 'login.isViewerInPower', false)
+      cache.writeData({
+        data: { isViewerInPower },
+      })
+    },
   })
 
   const errorNotification = () =>
@@ -38,7 +49,7 @@ const LoginForm = props => {
     })
 
     if (result) {
-      const token = result.data.login.value
+      const { token } = result.data.login
       props.setToken(token)
       localStorage.setItem('login-token', token)
     }
@@ -71,7 +82,8 @@ const LoginForm = props => {
 }
 
 LoginForm.propTypes = {
+  // client: PropTypes.object.isRequired,
   setToken: PropTypes.func.isRequired,
 }
 
-export default LoginForm
+export default withApollo(LoginForm)

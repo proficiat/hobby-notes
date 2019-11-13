@@ -62,7 +62,7 @@ class SoundList extends PureComponent {
   }
 
   render() {
-    const { sounds, refetchSounds } = this.props
+    const { sounds, isViewerInPower, onRefetchSounds } = this.props
     return (
       <Container>
         <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
@@ -71,9 +71,10 @@ class SoundList extends PureComponent {
         {map(sounds, (sound, index) => (
           <SoundCard
             index={index}
+            isViewerInPower={isViewerInPower}
             key={sound.id}
-            refetchSounds={refetchSounds}
             sound={sound}
+            onRefetchSounds={onRefetchSounds}
           />
         ))}
       </Container>
@@ -83,8 +84,9 @@ class SoundList extends PureComponent {
 
 SoundList.propTypes = {
   client: PropTypes.object.isRequired,
-  refetchSounds: PropTypes.func.isRequired,
+  isViewerInPower: PropTypes.bool.isRequired,
   sounds: PropTypes.array.isRequired,
+  onRefetchSounds: PropTypes.func.isRequired,
 }
 
 export default withApollo(SoundList)

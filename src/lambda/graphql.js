@@ -31,9 +31,10 @@ const server = new ApolloServer({
   context: async ({ event, context }) => {
     const auth = event ? event.headers.authorization : null
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
-      const currentUser = await user.User.findById(decodedToken.id)
-      return { currentUser }
+      const token = auth.substring(7) // remove Bearer
+      const decodedToken = jwt.verify(token, JWT_SECRET)
+      const viewer = await user.User.findById(decodedToken.id)
+      return { viewer }
     }
     return context
   },

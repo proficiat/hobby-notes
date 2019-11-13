@@ -9,11 +9,13 @@ const typeDef = gql`
   }
 
   type Token {
-    value: String!
+    token: String!
+    isViewerInPower: Boolean
   }
 
   extend type Query {
-    me: User
+    viewer: User
+    isViewerInPower: Boolean!
   }
 
   extend type Mutation {

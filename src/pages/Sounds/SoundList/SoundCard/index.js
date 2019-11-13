@@ -197,12 +197,12 @@ class SoundCard extends PureComponent {
   }
 
   handleDeleteSound = (store, response) => {
-    const { refetchSounds } = this.props
-    refetchSounds()
+    const { onRefetchSounds } = this.props
+    onRefetchSounds()
   }
 
   render() {
-    const { sound } = this.props
+    const { sound, isViewerInPower } = this.props
     const { isPaused } = this.state
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
@@ -227,13 +227,20 @@ class SoundCard extends PureComponent {
           <AbsoluteCoat>
             <MiddleInfo>
               {isPaused ? soundName : this.getSoundDuration()}
-              <Mutation mutation={DELETE_SOUND} update={this.handleDeleteSound}>
-                {deleteSound => (
-                  <button
-                    onClick={e => deleteSound({ variables: { id: soundId } })}
-                  >DELETE</button>
-                )}
-              </Mutation>
+              {isViewerInPower && (
+                <Mutation
+                  mutation={DELETE_SOUND}
+                  update={this.handleDeleteSound}
+                >
+                  {deleteSound => (
+                    <button
+                      onClick={e => deleteSound({ variables: { id: soundId } })}
+                    >
+                      DELETE
+                    </button>
+                  )}
+                </Mutation>
+              )}
             </MiddleInfo>
           </AbsoluteCoat>
         </Track>
@@ -247,8 +254,9 @@ class SoundCard extends PureComponent {
 }
 
 SoundCard.propTypes = {
-  refetchSounds: PropTypes.func.isRequired,
+  isViewerInPower: PropTypes.bool.isRequired,
   sound: PropTypes.object.isRequired,
+  onRefetchSounds: PropTypes.func.isRequired,
 }
 
 export default SoundCard

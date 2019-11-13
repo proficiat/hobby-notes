@@ -1,24 +1,14 @@
 import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
 
-import { Query } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import { gql } from 'apollo-boost'
 
-import get from 'lodash/get'
+import { compose } from 'recompose'
 
 import Spinner from 'components/Spinner'
 
 import SoundList from './SoundList'
-
-const ALL_SOUNDS = gql`
-  {
-    allSounds {
-      name
-      audioUrl
-      imageUrl
-      id
-    }
-  }
-`
 
 class Sounds extends PureComponent {
   constructor(props) {
@@ -27,20 +17,65 @@ class Sounds extends PureComponent {
   }
 
   render() {
+    const {
+      allSounds,
+      isSoundsLoading,
+      isViewerInPower,
+      onRefetchSounds,
+    } = this.props
+
+    if (isSoundsLoading) {
+      return <Spinner />
+    }
     return (
-      <Query query={ALL_SOUNDS}>
-        {({ loading, error, data, refetch }) => {
-          if (loading) {
-            return <Spinner />
-          }
-          const sounds = get(data, 'allSounds', [])
-          return <SoundList refetchSounds={refetch} sounds={sounds} />
-        }}
-      </Query>
+      <SoundList
+        isViewerInPower={isViewerInPower}
+        sounds={allSounds}
+        onRefetchSounds={onRefetchSounds}
+      />
     )
   }
 }
 
-Sounds.propTypes = {}
+Sounds.propTypes = {
+  allSounds: PropTypes.array.isRequired,
+  isSoundsLoading: PropTypes.bool.isRequired,
+  isViewerInPower: PropTypes.bool.isRequired,
+  onRefetchSounds: PropTypes.func.isRequired,
+}
 
-export default Sounds
+export default compose(
+  graphql(
+    gql`
+      {
+        allSounds {
+          name
+          audioUrl
+          imageUrl
+          id
+        }
+      }
+    `,
+    {
+      name: 'allSounds',
+      props: ({ allSounds: { refetch, allSounds, loading } }) => ({
+        allSounds,
+        isSoundsLoading: loading,
+        onRefetchSounds: () => refetch(),
+      }),
+    },
+  ),
+  graphql(
+    gql`
+      query IsUserLoggedIn {
+        isViewerInPower @client
+      }
+    `,
+    {
+      name: 'isViewerInPower',
+      props: ({ isViewerInPower: { isViewerInPower } }) => ({
+        isViewerInPower,
+      }),
+    },
+  ),
+)(Sounds)
