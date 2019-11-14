@@ -11,7 +11,7 @@ import Spinner from 'components/Spinner'
 import { persistCache } from 'apollo-cache-persist'
 
 import SideBar from './components/SideBar'
-import LoginForm from './pages/LoginForm'
+import Launch from './pages/Launch'
 import Sounds from './pages/Sounds'
 import { typeDefs } from './resolvers'
 
@@ -76,7 +76,7 @@ class App extends Component {
       <ApolloProvider client={client}>
         <MainWrapper>
           <PageContent>
-            {!token && <LoginForm setToken={this.setToken} />}
+            {!token && <Launch setToken={this.setToken} />}
             {token && <Sounds />}
           </PageContent>
           <SideBar token={token} onSetToken={this.setToken} />

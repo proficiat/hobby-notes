@@ -7,6 +7,16 @@ import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { withApollo } from 'react-apollo'
 
+import {
+  Container,
+  Title,
+  Field,
+  Input,
+  Button,
+  StyledForm,
+  Error,
+} from './styles'
+
 const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -16,7 +26,7 @@ const LOGIN = gql`
   }
 `
 
-const LoginForm = props => {
+const Launch = props => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -38,10 +48,7 @@ const LoginForm = props => {
     },
   })
 
-  const errorNotification = () =>
-    errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>
-
-  const submit = () => async event => {
+  const submit = async event => {
     event.preventDefault()
 
     const result = await login({
@@ -56,34 +63,35 @@ const LoginForm = props => {
   }
 
   return (
-    <div>
-      {errorNotification()}
-      <h2>Welcome</h2>
-      <form onSubmit={submit()}>
-        <div>
-          username{' '}
-          <input
+    <Container>
+      <Title>Welcome</Title>
+      <StyledForm onSubmit={submit}>
+        <Field>
+          Name
+          <Input
+            type="text"
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
-          password{' '}
-          <input
+        </Field>
+        <Field>
+          Password
+          <Input
             type="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
+        </Field>
+        {errorMessage && <Error>{errorMessage}</Error>}
+        <Button type="submit">Enter</Button>
+      </StyledForm>
+    </Container>
   )
 }
 
-LoginForm.propTypes = {
+Launch.propTypes = {
   // client: PropTypes.object.isRequired,
   setToken: PropTypes.func.isRequired,
 }
 
-export default withApollo(LoginForm)
+export default withApollo(Launch)

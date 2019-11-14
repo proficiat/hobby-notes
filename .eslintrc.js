@@ -22,7 +22,7 @@ module.exports = {
     ],
     'react/forbid-prop-types': 0,
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
-    'react/jsx-no-bind': [2, { allowArrowFunctions: false, allowBind: false }],
+    'react/jsx-no-bind': [2, { allowArrowFunctions: true, allowBind: false }],
     'react/no-array-index-key': 0,
     'import/prefer-default-export': 0,
     'no-param-reassign': 0,
