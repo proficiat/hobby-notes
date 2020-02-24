@@ -72,6 +72,7 @@ class App extends Component {
     if (!isLoadedCache) {
       return <Spinner />
     }
+    console.log({ testEnv: process.env.REACT_APP_MONGODB_URI, testEnv1: process.env })
     return (
       <ApolloProvider client={client}>
         <MainWrapper>
