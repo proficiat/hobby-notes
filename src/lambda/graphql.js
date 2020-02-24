@@ -1,18 +1,20 @@
 const { ApolloServer, gql } = require('apollo-server-lambda')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const dotenv = require('dotenv')
 
 const user = require('./user')
 const sound = require('./sound')
 
+// loads environment variables from a .env file into process.env
+dotenv.config()
+
 mongoose.set('useFindAndModify', false)
-
-const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
-const MONGODB_URI =
-  'mongodb+srv://adsum_admin:securepassword@adsumapi-miga3.gcp.mongodb.net/test?retryWrites=true&w=majority'
-
 mongoose
-  .connect(MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true })
+  .connect(process.env.REACT_APP_MONGODB_URI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
   .then(() => {
     console.log('connected to MongoDB')
   })
@@ -32,7 +34,7 @@ const server = new ApolloServer({
     const auth = event ? event.headers.authorization : null
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const token = auth.substring(7) // remove Bearer
-      const decodedToken = jwt.verify(token, JWT_SECRET)
+      const decodedToken = jwt.verify(token, process.env.REACT_APP_JWT_SECRET)
       const viewer = await user.User.findById(decodedToken.id)
       return { viewer }
     }

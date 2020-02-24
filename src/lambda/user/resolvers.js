@@ -5,9 +5,6 @@ const bcrypt = require('bcryptjs')
 
 const User = require('./user')
 
-const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
-const OWNER_NAME = 'Adsum'
-
 const resolvers = {
   Query: {
     viewer: (root, args, context) => {
@@ -20,7 +17,7 @@ const resolvers = {
       let user = await User.findOne({ username: args.username })
       if (!user) {
         const { username } = args
-        const power = username === OWNER_NAME
+        const power = username === process.env.REACT_APP_OWNER_NAME
         const salt = bcrypt.genSaltSync(10)
         user = new User({
           username,
@@ -42,7 +39,7 @@ const resolvers = {
       }
 
       return {
-        token: jwt.sign(userForToken, JWT_SECRET),
+        token: jwt.sign(userForToken, process.env.REACT_APP_JWT_SECRET),
         isViewerInPower: user.power,
       }
     },
