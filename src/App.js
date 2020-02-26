@@ -11,9 +11,8 @@ import Spinner from 'components/Spinner'
 import { persistCache } from 'apollo-cache-persist'
 
 import SideBar from './components/SideBar'
-import Launch from './pages/Launch'
 import Sounds from './pages/Sounds'
-import { typeDefs } from './resolvers'
+import { typeDefs, resolvers } from './resolvers'
 
 import { MainWrapper, PageContent } from './styles'
 
@@ -46,9 +45,12 @@ class App extends Component {
       link,
       cache,
       typeDefs,
+      resolvers,
     })
     // init default state
-    cache.writeData({ data: { isViewerInPower: false } })
+    cache.writeData({
+      data: { isViewerInPower: false },
+    })
 
     try {
       await persistCache({
@@ -72,13 +74,11 @@ class App extends Component {
     if (!isLoadedCache) {
       return <Spinner />
     }
-    console.log({ testEnv: process.env.REACT_APP_MONGODB_URI, testEnv1: process.env })
     return (
       <ApolloProvider client={client}>
         <MainWrapper>
           <PageContent>
-            {!token && <Launch setToken={this.setToken} />}
-            {token && <Sounds />}
+            <Sounds />
           </PageContent>
           <SideBar token={token} onSetToken={this.setToken} />
         </MainWrapper>

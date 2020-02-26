@@ -65,9 +65,11 @@ class SoundList extends PureComponent {
     const { sounds, isViewerInPower, onRefetchSounds } = this.props
     return (
       <Container>
-        <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
-          {addSound => <AddEditSound addSound={addSound} />}
-        </Mutation>
+        {isViewerInPower && (
+          <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
+            {addSound => <AddEditSound addSound={addSound} />}
+          </Mutation>
+        )}
         {map(sounds, (sound, index) => (
           <SoundCard
             index={index}
@@ -82,9 +84,13 @@ class SoundList extends PureComponent {
   }
 }
 
+SoundList.defaultProps = {
+  isViewerInPower: false,
+}
+
 SoundList.propTypes = {
   client: PropTypes.object.isRequired,
-  isViewerInPower: PropTypes.bool.isRequired,
+  isViewerInPower: PropTypes.bool,
   sounds: PropTypes.array.isRequired,
   onRefetchSounds: PropTypes.func.isRequired,
 }

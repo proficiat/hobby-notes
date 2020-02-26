@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   display: flex;
@@ -18,6 +18,18 @@ export const Item = styled.div`
   font-weight: 300;
 
   :hover {
-    color: #c3002f;
+    ${props =>
+      !props.logo &&
+      css`
+        color: #c3002f;
+      `}
   }
+
+  ${props =>
+    props.logo &&
+    css`
+      color: #c3002f;
+      font-size: 16px;
+      margin-bottom: 24px;
+    `}
 `

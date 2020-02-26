@@ -10,6 +10,7 @@ export const colors = {
   textSecondary: '#747790',
   red: '#C3002F',
   green: '#4D724D',
+  luciaLash: '#0A0A0A',
 }
 
 export const MainWrapper = styled.div`
@@ -37,6 +38,7 @@ export const GlobalStyle = createGlobalStyle({
     fontFamily: "'Source Sans Pro', sans-serif",
     backgroundColor: colors.background,
     color: colors.text,
+    fontSize: '14px',
   },
   '#root': {
     display: 'flex',
@@ -77,9 +79,9 @@ export const GlobalStyle = createGlobalStyle({
     'select:-webkit-autofill:hover',
     'select:-webkit-autofill:focus',
   ]]: {
-    border: '1px solid black',
-    '-webkit-text-fill-color': 'white',
-    '-webkit-box-shadow': '0 0 0px 1000px #000 inset',
+    border: `1px solid white`,
+    '-webkit-text-fill-color': colors.luciaLash,
+    '-webkit-box-shadow': '0 0 0px 1000px #FFF inset',
     transition: 'background-color 5000s ease-in-out 0s',
   },
 })

@@ -62,12 +62,14 @@ const Launch = props => {
     }
   }
 
+  const { onAddLaunchRef } = props
+
   return (
-    <Container>
+    <Container ref={onAddLaunchRef}>
       <Title>Welcome</Title>
       <StyledForm onSubmit={submit}>
         <Field>
-          Name
+          Name:
           <Input
             type="text"
             value={username}
@@ -75,7 +77,7 @@ const Launch = props => {
           />
         </Field>
         <Field>
-          Password
+          Password:
           <Input
             type="password"
             value={password}
@@ -92,6 +94,7 @@ const Launch = props => {
 Launch.propTypes = {
   // client: PropTypes.object.isRequired,
   setToken: PropTypes.func.isRequired,
+  onAddLaunchRef: PropTypes.func.isRequired,
 }
 
 export default withApollo(Launch)

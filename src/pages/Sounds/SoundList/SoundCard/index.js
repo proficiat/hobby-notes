@@ -234,6 +234,7 @@ class SoundCard extends PureComponent {
                 >
                   {deleteSound => (
                     <button
+                      type="button"
                       onClick={e => deleteSound({ variables: { id: soundId } })}
                     >
                       DELETE
@@ -253,8 +254,12 @@ class SoundCard extends PureComponent {
   }
 }
 
+SoundCard.defaultProps = {
+  isViewerInPower: false,
+}
+
 SoundCard.propTypes = {
-  isViewerInPower: PropTypes.bool.isRequired,
+  isViewerInPower: PropTypes.bool,
   sound: PropTypes.object.isRequired,
   onRefetchSounds: PropTypes.func.isRequired,
 }
