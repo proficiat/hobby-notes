@@ -4,11 +4,23 @@ import PropTypes from 'prop-types'
 // import { gql } from 'apollo-boost'
 
 import get from 'lodash/get'
+import { colors } from 'styles'
 // import isEmpty from 'lodash/isEmpty'
 
 // import { Mutation, Query } from 'react-apollo'
 
-import { ImageWrapper } from './styles'
+import Puzzle from 'components/Puzzle'
+
+import {
+  ImageWrapper,
+  Container,
+  Cover,
+  Sound,
+  BottomInfoTip,
+  Field,
+  Input,
+  TextArea,
+} from './styles'
 
 const widgetSetup = {
   cloudName: 'adsum-cloud',
@@ -72,7 +84,6 @@ class AddEditSound extends PureComponent {
   handleSubmit = async () => {
     const { addSound } = this.props
     const { audioName, imageUrl, audioUrl, description } = this.state
-    console.log({ audioName, imageUrl, audioUrl, description })
     await addSound({
       variables: {
         name: audioName,
@@ -92,37 +103,42 @@ class AddEditSound extends PureComponent {
   render() {
     const { audioName, imageUrl, audioUrl, description } = this.state
     return (
-      <div>
-        <div>
-          Name <input value={audioName} onChange={this.handleChangeName} />
-        </div>
-        <div>
+      <Container>
+        <Cover onClick={this.handleAddImage}>
           {imageUrl && (
             <ImageWrapper>
               <img alt="Flowers in Chania" src={imageUrl} />
             </ImageWrapper>
           )}
-          {!imageUrl && (
-            <button type="button" onClick={this.handleAddImage}>
-              Add Image
-            </button>
-          )}
-        </div>
-        <div>
-          {!audioUrl && (
-            <button type="button" onClick={this.handleAddAudio}>
-              Add Audio
-            </button>
-          )}
-        </div>
-        <div>
-          Description{' '}
-          <input value={description} onChange={this.handleChangeDescription} />
-        </div>
-        <button type="button" onClick={this.handleSubmit}>
-          add!
-        </button>
-      </div>
+          <Puzzle bgColor="white" color={colors.luciaLash} side="left" />
+        </Cover>
+        <Sound>
+          <Field>
+            <div>
+              Name<sup>*</sup>
+            </div>{' '}
+            <Input
+              placeholder="Name your track"
+              type="text"
+              value={audioName}
+              onChange={this.handleChangeName}
+            />
+          </Field>
+          <Field>
+            Description{' '}
+            <TextArea
+              placeholder="Describe your track"
+              value={description}
+              onChange={this.handleChangeDescription}
+            />
+          </Field>
+          <BottomInfoTip
+            onClick={audioUrl ? this.handleSubmit : this.handleAddAudio}
+          >
+            {audioUrl ? 'Upload' : 'Please click here to upload your sound'}
+          </BottomInfoTip>
+        </Sound>
+      </Container>
     )
   }
 }
