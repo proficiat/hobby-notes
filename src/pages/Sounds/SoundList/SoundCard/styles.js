@@ -30,7 +30,6 @@ export const MiddleInfo = styled.h2`
   font-size: 24px;
   text-transform: uppercase;
   color: #7d3780;
-  opacity: 0.5;
 `
 
 export const WaveformCanvas = styled.canvas`
@@ -46,11 +45,12 @@ export const WaveformCanvas = styled.canvas`
 export const WaveformImageCanvas = styled.canvas`
   position: absolute;
   z-index: 2;
-  left: 0;
-  bottom: 0;
-  height: 100%;
+  left: 18px;
+  bottom: 50%;
+  height: 50%;
   width: 100%;
-  opacity: 0.3;
+  opacity: 0.9;
+  transform: translateY(50%);
 `
 
 export const Track = styled.div`

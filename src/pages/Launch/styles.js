@@ -10,16 +10,16 @@ export const Container = styled.div`
   align-items: center;
   padding: 33px 80px;
   top: 0;
-  right: 88px;
+  left: 88px;
   background: ${colors.luciaLash};
   font-weight: 300;
   width: 380px;
-  z-index: 2;
+  z-index: 4;
 
   :before,
   :after {
     top: 50%;
-    left: 100%;
+    right: 100%;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
     border: solid transparent;
@@ -32,7 +32,7 @@ export const Container = styled.div`
 
   :after {
     border: solid 16px rgba(136, 183, 213, 0);
-    border-left-color: ${colors.luciaLash};
+    border-right-color: ${colors.luciaLash};
   }
 `
 

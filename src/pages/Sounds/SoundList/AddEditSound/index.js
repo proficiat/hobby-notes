@@ -105,12 +105,13 @@ class AddEditSound extends PureComponent {
     return (
       <Container>
         <Cover onClick={this.handleAddImage}>
-          {imageUrl && (
+          {imageUrl ? (
             <ImageWrapper>
               <img alt="Flowers in Chania" src={imageUrl} />
             </ImageWrapper>
+          ) : (
+            <Puzzle bgColor="white" color={colors.luciaLash} />
           )}
-          <Puzzle bgColor="white" color={colors.luciaLash} side="left" />
         </Cover>
         <Sound>
           <Field>

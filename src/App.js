@@ -77,10 +77,10 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <MainWrapper>
+          <SideBar token={token} onSetToken={this.setToken} />
           <PageContent>
             <Sounds />
           </PageContent>
-          <SideBar token={token} onSetToken={this.setToken} />
         </MainWrapper>
       </ApolloProvider>
     )

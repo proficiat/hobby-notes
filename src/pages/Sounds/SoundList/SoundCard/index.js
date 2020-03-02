@@ -58,7 +58,7 @@ class SoundCard extends PureComponent {
           const options = {
             audio_context: audioContext,
             array_buffer: buffer,
-            scale: 512,
+            scale: 128,
             // split_channels: true,
           }
 
@@ -73,7 +73,7 @@ class SoundCard extends PureComponent {
           })
         })
         .then(waveform => {
-          const resampled = waveform.resample({ width: 800 })
+          const resampled = waveform.resample({ width: 600 })
           const channel = resampled.channel(0)
           const maxArray = channel.max_array()
           this.drawWaves(maxArray)
@@ -121,27 +121,23 @@ class SoundCard extends PureComponent {
   drawWaves = data => {
     const canvas = this.waveformImageRef
     const ctx = canvas.getContext('2d')
-    const step = 3 // 2 points for line, 1 for space
-    const width = data.length * step
+    const step = 2 // 2 points for line, 1 for space
+    // const width = data.length * step
     let maxY = 0
 
-    ctx.fillStyle = '#c3002f'
-
     // find max height
-    for (let i = 0; i < data.length; i += 1) if (data[i] > maxY) maxY = data[i]
+    ctx.fillStyle = '#C3002F'
+    for (let i = 0; i < data.length; i += 1) {
+      if (data[i] > maxY) maxY = data[i]
+    }
+    ctx.transform(1, 0, 0, -canvas.height / maxY, 0, canvas.height) // scale horizontally and flip coordinate system
+    // ctx.transform(0.1, 0, 0, 0, 0, canvas.height)
+    for (let i = 0; i < data.length; i += 1)
+      ctx.fillRect(i * step, 0, 1, data[i])
 
-    ctx.transform(
-      canvas.width / width,
-      0,
-      0,
-      -canvas.height / maxY,
-      0,
-      canvas.height,
-    ) // scale horizontally and flip coordinate system
+    // ctx.fill()
 
-    for (let i = 0; i < data.length; i += 1) ctx.rect(i * step, 0, 2, data[i])
-
-    ctx.fill()
+    // return canvas.toDataURL()
   }
 
   addAudioRef = ref => {
