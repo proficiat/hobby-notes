@@ -7,6 +7,7 @@ const typeDef = gql`
     imageUrl: String
     audioUrl: String!
     description: String
+    waveform: [Float]!
   }
 
   extend type Query {
@@ -17,8 +18,9 @@ const typeDef = gql`
     addSound(
       name: String!
       imageUrl: String
-      audioUrl: String
+      audioUrl: String!
       description: String
+      waveform: [Float]!
     ): Sound
     deleteSound(id: String!): Sound
   }

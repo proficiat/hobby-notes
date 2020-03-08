@@ -18,18 +18,21 @@ const ADD_SOUND = gql`
     $imageUrl: String
     $audioUrl: String!
     $description: String
+    $waveform: [Float]!
   ) {
     addSound(
       name: $name
       imageUrl: $imageUrl
       audioUrl: $audioUrl
       description: $description
+      waveform: $waveform
     ) {
       id
       name
       imageUrl
       audioUrl
       description
+      waveform
     }
   }
 `
@@ -40,6 +43,7 @@ const ALL_SOUNDS = gql`
       name
       audioUrl
       imageUrl
+      waveform
       id
     }
   }

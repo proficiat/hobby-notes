@@ -2,17 +2,6 @@ import styled from 'styled-components'
 
 import { colors } from 'styles'
 
-export const ImageWrapper = styled.div`
-  display: flex;
-  flex: 1;
-
-  > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`
-
 export const Container = styled.div`
   display: flex;
   flex: 1 1 0;
@@ -32,17 +21,7 @@ export const BottomInfoTip = styled.div`
   font-size: 12px;
 `
 
-export const Cover = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 168px;
-  background: white;
-  cursor: pointer;
-`
-
-export const Sound = styled.div`
+export const Settings = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
@@ -81,4 +60,19 @@ export const TextArea = styled.textarea`
   height: 28px;
   padding: 6px 6px 6px 8px;
   outline: none;
+`
+
+export const AbsoluteTopCircle = styled.div`
+  width: 48px;
+  height: 48px;
+  border-radius: 100%;
+  background: white;
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
 
 import { Duration } from 'luxon'
 import { gql } from 'apollo-boost'
@@ -9,7 +10,7 @@ import { Mutation } from 'react-apollo'
 
 import { subscribeWaveForm } from 'helpers/audioVisualizations'
 
-import WaveformData from 'waveform-data'
+// import WaveformData from 'waveform-data'
 
 import BufferingFeedback from './BufferingFeedback'
 
@@ -50,34 +51,37 @@ class SoundCard extends PureComponent {
 
   componentDidMount() {
     const { sound } = this.props
-    if (this.audioRef && sound.audioUrl) {
-      const audioContext = new AudioContext()
-      fetch(sound.audioUrl)
-        .then(response => response.arrayBuffer())
-        .then(buffer => {
-          const options = {
-            audio_context: audioContext,
-            array_buffer: buffer,
-            scale: 128,
-            // split_channels: true,
-          }
+    const waveform = get(sound, 'waveform', [])
+    if (this.audioRef && !isEmpty(waveform)) {
+      this.draw(waveform)
 
-          return new Promise((resolve, reject) => {
-            WaveformData.createFromAudio(options, (err, waveform) => {
-              if (err) {
-                reject(err)
-              } else {
-                resolve(waveform)
-              }
-            })
-          })
-        })
-        .then(waveform => {
-          const resampled = waveform.resample({ width: 600 })
-          const channel = resampled.channel(0)
-          const maxArray = channel.max_array()
-          this.drawWaves(maxArray)
-        })
+      // const audioContext = new AudioContext()
+      // fetch(sound.audioUrl)
+      //   .then(response => response.arrayBuffer())
+      //   .then(buffer => {
+      //   const options = {
+      //     audio_context: audioContext,
+      //     array_buffer: buffer,
+      //     scale: 128,
+      //     // split_channels: true,
+      //   }
+
+      //   return new Promise((resolve, reject) => {
+      //     WaveformData.createFromAudio(options, (err, waveform) => {
+      //       if (err) {
+      //         reject(err)
+      //       } else {
+      //         resolve(waveform)
+      //       }
+      //     })
+      //   })
+      // })
+      // .then(waveform => {
+      //   const resampled = waveform.resample({ width: 600 })
+      //   const channel = resampled.channel(0)
+      //   const maxArray = channel.max_array()
+      //   this.drawWaves(maxArray)
+      // })
 
       this.audioRef.addEventListener('timeupdate', event => {
         const currentTime = get(event, 'target.currentTime', 0)
@@ -116,6 +120,43 @@ class SoundCard extends PureComponent {
         subscribeWaveForm(this.waveformRef, this.audioRef)
       }
     }
+  }
+
+  draw = normalizedData => {
+    // Set up the canvas
+    const canvas = this.waveformImageRef
+    const dpr = window.devicePixelRatio || 1
+    const padding = 20
+    canvas.width = canvas.offsetWidth * dpr
+    canvas.height = (canvas.offsetHeight + padding * 2) * dpr
+    const ctx = canvas.getContext('2d')
+    ctx.scale(dpr, dpr)
+    ctx.translate(0, canvas.offsetHeight / 2 + padding) // Set Y = 0 to be in the middle of the canvas
+
+    // draw the line segments
+    const width = canvas.offsetWidth / normalizedData.length
+    for (let i = 0; i < normalizedData.length; i += 1) {
+      const x = width * i
+      let height = normalizedData[i] * canvas.offsetHeight - padding
+      if (height < 0) {
+        height = 0
+      } else if (height > canvas.offsetHeight / 2) {
+        height = height > canvas.offsetHeight / 2
+      }
+      this.drawLineSegment(ctx, x, height, width, (i + 1) % 2)
+    }
+  }
+
+  drawLineSegment = (ctx, x, y, width, isEven) => {
+    ctx.lineWidth = 1 // how thick the line is
+    ctx.strokeStyle = 'red' // what color our line is
+    ctx.beginPath()
+    y = isEven ? y : -y
+    ctx.moveTo(x, 0)
+    ctx.lineTo(x, y)
+    ctx.arc(x + width / 2, y, width / 2, Math.PI, 0, isEven)
+    ctx.lineTo(x + width, 0)
+    ctx.stroke()
   }
 
   drawWaves = data => {

@@ -23,6 +23,7 @@ export const AbsoluteCoat = styled.div`
   left: 0;
   right: 0;
   z-index: 2;
+  visibility: hidden;
 `
 
 export const MiddleInfo = styled.h2`

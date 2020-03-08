@@ -1,25 +1,26 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+
+// import 'react-image-crop/dist/ReactCrop.css'
 
 // import { gql } from 'apollo-boost'
 
 import get from 'lodash/get'
-import { colors } from 'styles'
+// import { colors } from 'styles'
 // import isEmpty from 'lodash/isEmpty'
 
 // import { Mutation, Query } from 'react-apollo'
-
-import Puzzle from 'components/Puzzle'
+import Cover from './Cover'
+import Sound from './Sound'
 
 import {
-  ImageWrapper,
   Container,
-  Cover,
-  Sound,
   BottomInfoTip,
   Field,
   Input,
   TextArea,
+  Settings,
 } from './styles'
 
 const widgetSetup = {
@@ -27,48 +28,27 @@ const widgetSetup = {
   uploadPreset: 'hu777qhj',
 }
 
-// https://cloudinary.com/documentation/upload_widget
 class AddEditSound extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
       audioName: '',
-      audioUrl: '',
-      imageUrl: '',
       description: '',
+      isActiveSettings: false,
+      cropperdImageFile: null,
+      soundFile: null,
+      waveFormData: null,
     }
+
+    this.fileInputRef = null
   }
 
-  handleAddImage = () => {
-    const widget = window.cloudinary.createUploadWidget(
-      widgetSetup,
-      (error, res) => {
-        if (!error && res && res.event === 'success') {
-          console.log('Done! Here is the image info: ', res.info)
-          const cloudinaryUrl = get(res, 'info.url', '')
-          if (cloudinaryUrl) {
-            this.setState({ imageUrl: cloudinaryUrl })
-          }
-        }
-      },
-    )
-    widget.open()
+  onDescriptionSwitch = (soundFile, waveFormData) => {
+    this.setState({ soundFile, waveFormData, isActiveSettings: true })
   }
 
-  handleAddAudio = () => {
-    const widget = window.cloudinary.createUploadWidget(
-      widgetSetup,
-      (error, res) => {
-        if (!error && res && res.event === 'success') {
-          console.log('Done! Here is the image info: ', res.info)
-          const cloudinaryUrl = get(res, 'info.secure_url', '')
-          if (cloudinaryUrl) {
-            this.setState({ audioUrl: cloudinaryUrl })
-          }
-        }
-      },
-    )
-    widget.open()
+  onImageCrop = cropperdImageFile => {
+    this.setState({ cropperdImageFile })
   }
 
   handleChangeName = target => {
@@ -81,12 +61,21 @@ class AddEditSound extends PureComponent {
     this.setState({ description })
   }
 
-  handleSubmit = async () => {
+  handleAddAudio = async () => {
     const { addSound } = this.props
-    const { audioName, imageUrl, audioUrl, description } = this.state
+    const {
+      cropperdImageFile,
+      soundFile,
+      audioName,
+      waveFormData,
+      description,
+    } = this.state
+    const imageUrl = await this.handleUploadFile(cropperdImageFile)
+    const audioUrl = await this.handleUploadFile(soundFile)
     await addSound({
       variables: {
         name: audioName,
+        waveform: waveFormData,
         imageUrl,
         audioUrl,
         description,
@@ -94,51 +83,59 @@ class AddEditSound extends PureComponent {
     })
     this.setState({
       audioName: '',
-      imageUrl: '',
-      audioUrl: '',
       description: '',
+      soundFile: null,
+      cropperdImageFile: null,
     })
   }
 
+  handleUploadFile = async file => {
+    const formData = new FormData()
+    const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${widgetSetup.cloudName}/upload`
+    const CLOUDINARY_UPLOAD_PRESET = widgetSetup.uploadPreset
+    formData.append('file', file)
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET) // Replace the preset name with your own
+
+    const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+      method: 'POST',
+      body: formData,
+    })
+    const data = await response.json()
+    return data.secure_url
+  }
+
   render() {
-    const { audioName, imageUrl, audioUrl, description } = this.state
+    const { audioName, description, isActiveSettings } = this.state
     return (
       <Container>
-        <Cover onClick={this.handleAddImage}>
-          {imageUrl ? (
-            <ImageWrapper>
-              <img alt="Flowers in Chania" src={imageUrl} />
-            </ImageWrapper>
-          ) : (
-            <Puzzle bgColor="white" color={colors.luciaLash} />
-          )}
-        </Cover>
-        <Sound>
-          <Field>
-            <div>
-              Name<sup>*</sup>
-            </div>{' '}
-            <Input
-              placeholder="Name your track"
-              type="text"
-              value={audioName}
-              onChange={this.handleChangeName}
-            />
-          </Field>
-          <Field>
-            Description{' '}
-            <TextArea
-              placeholder="Describe your track"
-              value={description}
-              onChange={this.handleChangeDescription}
-            />
-          </Field>
-          <BottomInfoTip
-            onClick={audioUrl ? this.handleSubmit : this.handleAddAudio}
-          >
-            {audioUrl ? 'Upload' : 'Please click here to upload your sound'}
-          </BottomInfoTip>
-        </Sound>
+        <Cover onImageCrop={this.onImageCrop} />
+        {!isActiveSettings && (
+          <Sound onDescriptionSwitch={this.onDescriptionSwitch} />
+        )}
+        {isActiveSettings && (
+          <Settings>
+            <Field>
+              <div>
+                Name<sup>*</sup>
+              </div>{' '}
+              <Input
+                placeholder="Name your track"
+                type="text"
+                value={audioName}
+                onChange={this.handleChangeName}
+              />
+            </Field>
+            <Field>
+              Description{' '}
+              <TextArea
+                placeholder="Describe your track"
+                value={description}
+                onChange={this.handleChangeDescription}
+              />
+            </Field>
+            <BottomInfoTip onClick={this.handleAddAudio}>Upload</BottomInfoTip>
+          </Settings>
+        )}
       </Container>
     )
   }

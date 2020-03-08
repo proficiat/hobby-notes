@@ -24,6 +24,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-no-bind': [2, { allowArrowFunctions: true, allowBind: false }],
     'react/no-array-index-key': 0,
+    "react/jsx-fragments": [1, 'element'],
     'import/prefer-default-export': 0,
     'no-param-reassign': 0,
     'jsx-a11y/href-no-hash': 'off',

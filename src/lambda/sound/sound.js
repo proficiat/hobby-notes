@@ -12,9 +12,14 @@ const schema = new mongoose.Schema({
   },
   audioUrl: {
     type: String,
+    required: true,
   },
   description: {
     type: String,
+  },
+  waveform: {
+    type: [Number],
+    required: true,
   },
 })
 
