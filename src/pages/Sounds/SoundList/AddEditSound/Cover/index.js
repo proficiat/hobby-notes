@@ -2,6 +2,8 @@
 import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
 
+import get from 'lodash/get'
+
 import { colors } from 'styles'
 
 import Dropzone from 'react-dropzone'
@@ -9,7 +11,7 @@ import Dropzone from 'react-dropzone'
 import Puzzle from 'components/Puzzle'
 
 import {
-  Container,
+  CoverFrame,
   StyledReactCrop,
   StyledCropIcon,
   DropzoneRoot,
@@ -30,6 +32,7 @@ class Cover extends PureComponent {
     }
 
     this.imageRef = null
+    this.coverFrameRef = null
   }
 
   onImageLoaded = image => {
@@ -50,8 +53,10 @@ class Cover extends PureComponent {
     const canvas = document.createElement('canvas')
     const scaleX = image.naturalWidth / image.width
     const scaleY = image.naturalHeight / image.height
-    const scaledCropWidth = crop.width * scaleX
-    const scaledCropHeight = crop.height * scaleY
+    const cropWidth = crop.width || get(this.coverFrameRef, 'clientWidth', 0)
+    const cropHeight = crop.height || get(this.coverFrameRef, 'clientHeight', 0)
+    const scaledCropWidth = cropWidth * scaleX
+    const scaledCropHeight = cropHeight * scaleY
 
     canvas.width = Math.ceil(scaledCropWidth)
     canvas.height = Math.ceil(scaledCropHeight)
@@ -90,6 +95,10 @@ class Cover extends PureComponent {
     })
   }
 
+  addCoverFrameReF = ref => {
+    this.coverFrameRef = ref
+  }
+
   handleImageCrop = () => {
     const { cropperdImageFile } = this.state
     const { onImageCrop } = this.props
@@ -109,7 +118,7 @@ class Cover extends PureComponent {
   }
 
   async makeClientCrop(crop) {
-    if (this.imageRef && crop.width && crop.height) {
+    if (this.imageRef) {
       const { file, fileUrl } = await this.getCroppedImg(
         this.imageRef,
         crop,
@@ -122,7 +131,7 @@ class Cover extends PureComponent {
   render() {
     const { crop, coverImageSrc, croppedImageUrl } = this.state
     return (
-      <Container>
+      <CoverFrame ref={this.addCoverFrameReF}>
         {coverImageSrc && (
           <Fragment>
             <AbsoluteCropCircle onClick={this.handleImageCrop}>
@@ -164,7 +173,7 @@ class Cover extends PureComponent {
             )}
           </Dropzone>
         )}
-      </Container>
+      </CoverFrame>
     )
   }
 }

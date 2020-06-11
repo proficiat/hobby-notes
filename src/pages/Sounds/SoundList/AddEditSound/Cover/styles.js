@@ -4,12 +4,11 @@ import { IoIosCrop } from 'react-icons/io'
 
 import ReactCrop from 'react-image-crop'
 
-export const Container = styled.div`
+export const CoverFrame = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   width: 168px;
   background: white;
 `

@@ -24,8 +24,8 @@ import {
 } from './styles'
 
 const widgetSetup = {
-  cloudName: 'adsum-cloud',
-  uploadPreset: 'hu777qhj',
+  cloudName: process.env.REACT_APP_CLOUD_NAME,
+  uploadPreset: process.env.REACT_APP_CLOUD_UPLOAD_PRESET,
 }
 
 class AddEditSound extends PureComponent {
