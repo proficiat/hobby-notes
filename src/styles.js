@@ -11,6 +11,8 @@ export const colors = {
   red: '#C3002F',
   green: '#4D724D',
   luciaLash: '#0A0A0A',
+  lushLava: '#FF4500',
+  phantomBlue: '#191970',
 }
 
 export const MainWrapper = styled.div`

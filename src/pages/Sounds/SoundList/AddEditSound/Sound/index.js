@@ -6,7 +6,12 @@ import isEmpty from 'lodash/isEmpty'
 
 import Dropzone from 'react-dropzone'
 
-import { Container, DropzoneRoot, StyledCogIcon } from './styles'
+import {
+  Container,
+  DropzoneRoot,
+  StyledCogIcon,
+  DropzonePrompt,
+} from './styles'
 import { AbsoluteTopCircle } from '../styles'
 
 class Sound extends PureComponent {
@@ -83,6 +88,10 @@ class Sound extends PureComponent {
                 // onDrop: event => event.stopPropagation(),
               })}
             >
+              <DropzonePrompt>
+                Attach files by dragging & dropping, selecting or pasting them.
+              </DropzonePrompt>
+
               <input {...getInputProps()} />
             </DropzoneRoot>
           )}
