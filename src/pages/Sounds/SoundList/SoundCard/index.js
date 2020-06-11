@@ -8,7 +8,11 @@ import { Duration } from 'luxon'
 import { gql } from 'apollo-boost'
 import { Mutation } from 'react-apollo'
 
-import { subscribeWaveForm } from 'helpers/audioVisualizations'
+import {
+  subscribeWaveForm,
+  drawLinearWaveForm,
+  // drawWaveFormBars,
+} from 'helpers/audioVisualizations'
 
 // import WaveformData from 'waveform-data'
 
@@ -52,36 +56,9 @@ class SoundCard extends PureComponent {
   componentDidMount() {
     const { sound } = this.props
     const waveform = get(sound, 'waveform', [])
-    if (this.audioRef && !isEmpty(waveform)) {
-      this.draw(waveform)
-
-      // const audioContext = new AudioContext()
-      // fetch(sound.audioUrl)
-      //   .then(response => response.arrayBuffer())
-      //   .then(buffer => {
-      //   const options = {
-      //     audio_context: audioContext,
-      //     array_buffer: buffer,
-      //     scale: 128,
-      //     // split_channels: true,
-      //   }
-
-      //   return new Promise((resolve, reject) => {
-      //     WaveformData.createFromAudio(options, (err, waveform) => {
-      //       if (err) {
-      //         reject(err)
-      //       } else {
-      //         resolve(waveform)
-      //       }
-      //     })
-      //   })
-      // })
-      // .then(waveform => {
-      //   const resampled = waveform.resample({ width: 600 })
-      //   const channel = resampled.channel(0)
-      //   const maxArray = channel.max_array()
-      //   this.drawWaves(maxArray)
-      // })
+    if (this.audioRef && this.waveformImageRef && !isEmpty(waveform)) {
+      drawLinearWaveForm(waveform, this.waveformImageRef)
+      // drawWaveFormBars(waveform, this.waveformImageRef)
 
       this.audioRef.addEventListener('timeupdate', event => {
         const currentTime = get(event, 'target.currentTime', 0)
@@ -120,65 +97,6 @@ class SoundCard extends PureComponent {
         subscribeWaveForm(this.waveformRef, this.audioRef)
       }
     }
-  }
-
-  draw = normalizedData => {
-    // Set up the canvas
-    const canvas = this.waveformImageRef
-    const dpr = window.devicePixelRatio || 1
-    const padding = 20
-    canvas.width = canvas.offsetWidth * dpr
-    canvas.height = (canvas.offsetHeight + padding * 2) * dpr
-    const ctx = canvas.getContext('2d')
-    ctx.scale(dpr, dpr)
-    ctx.translate(0, canvas.offsetHeight / 2 + padding) // Set Y = 0 to be in the middle of the canvas
-
-    // draw the line segments
-    const width = canvas.offsetWidth / normalizedData.length
-    for (let i = 0; i < normalizedData.length; i += 1) {
-      const x = width * i
-      let height = normalizedData[i] * canvas.offsetHeight - padding
-      if (height < 0) {
-        height = 0
-      } else if (height > canvas.offsetHeight / 2) {
-        height = height > canvas.offsetHeight / 2
-      }
-      this.drawLineSegment(ctx, x, height, width, (i + 1) % 2)
-    }
-  }
-
-  drawLineSegment = (ctx, x, y, width, isEven) => {
-    ctx.lineWidth = 1 // how thick the line is
-    ctx.strokeStyle = 'red' // what color our line is
-    ctx.beginPath()
-    y = isEven ? y : -y
-    ctx.moveTo(x, 0)
-    ctx.lineTo(x, y)
-    ctx.arc(x + width / 2, y, width / 2, Math.PI, 0, isEven)
-    ctx.lineTo(x + width, 0)
-    ctx.stroke()
-  }
-
-  drawWaves = data => {
-    const canvas = this.waveformImageRef
-    const ctx = canvas.getContext('2d')
-    const step = 2 // 2 points for line, 1 for space
-    // const width = data.length * step
-    let maxY = 0
-
-    // find max height
-    ctx.fillStyle = '#C3002F'
-    for (let i = 0; i < data.length; i += 1) {
-      if (data[i] > maxY) maxY = data[i]
-    }
-    ctx.transform(1, 0, 0, -canvas.height / maxY, 0, canvas.height) // scale horizontally and flip coordinate system
-    // ctx.transform(0.1, 0, 0, 0, 0, canvas.height)
-    for (let i = 0; i < data.length; i += 1)
-      ctx.fillRect(i * step, 0, 1, data[i])
-
-    // ctx.fill()
-
-    // return canvas.toDataURL()
   }
 
   addAudioRef = ref => {

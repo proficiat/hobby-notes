@@ -84,3 +84,61 @@ const createAnalyser = (audioRef, canvasRef, fftSize) => {
 
   return { analyser, canvas: canvasRef, canvasContext }
 }
+
+export const drawLinearWaveForm = (normalizedData, waveformImageRef) => {
+  // Set up the canvas
+  const canvas = waveformImageRef
+  const dpr = window.devicePixelRatio || 1
+  const padding = 20
+  canvas.width = canvas.offsetWidth * dpr
+  canvas.height = (canvas.offsetHeight + padding * 2) * dpr
+  const ctx = canvas.getContext('2d')
+  ctx.scale(dpr, dpr)
+  ctx.translate(0, canvas.offsetHeight / 2 + padding) // Set Y = 0 to be in the middle of the canvas
+
+  // draw the line segments
+  const width = canvas.offsetWidth / normalizedData.length
+  for (let i = 0; i < normalizedData.length; i += 1) {
+    const x = width * i
+    let height = normalizedData[i] * canvas.offsetHeight - padding
+    if (height < 0) {
+      height = 0
+    } else if (height > canvas.offsetHeight / 2) {
+      height = height > canvas.offsetHeight / 2
+    }
+    drawLineSegment(ctx, x, height, width, (i + 1) % 2)
+  }
+}
+
+const drawLineSegment = (ctx, x, y, width, isEven) => {
+  ctx.lineWidth = 1 // how thick the line is
+  ctx.strokeStyle = 'red' // what color our line is
+  ctx.beginPath()
+  y = isEven ? y : -y
+  ctx.moveTo(x, 0)
+  ctx.lineTo(x, y)
+  ctx.arc(x + width / 2, y, width / 2, Math.PI, 0, isEven)
+  ctx.lineTo(x + width, 0)
+  ctx.stroke()
+}
+
+export const drawWaveFormBars = (data, waveformImageRef) => {
+  const canvas = waveformImageRef
+  const ctx = canvas.getContext('2d')
+  const step = 2 // 2 points for line, 1 for space
+  // const width = data.length * step
+  let maxY = 0
+
+  // find max height
+  ctx.fillStyle = '#C3002F'
+  for (let i = 0; i < data.length; i += 1) {
+    if (data[i] > maxY) maxY = data[i]
+  }
+  ctx.transform(1, 0, 0, -canvas.height / maxY, 0, canvas.height) // scale horizontally and flip coordinate system
+  // ctx.transform(0.1, 0, 0, 0, 0, canvas.height)
+  for (let i = 0; i < data.length; i += 1) ctx.fillRect(i * step, 0, 1, data[i])
+
+  // ctx.fill()
+
+  // return canvas.toDataURL()
+}
