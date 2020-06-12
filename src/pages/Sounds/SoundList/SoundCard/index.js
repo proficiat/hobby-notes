@@ -19,16 +19,19 @@ import {
 import BufferingFeedback from './BufferingFeedback'
 
 import {
-  Container,
+  HoverFrame,
+  SoundFrame,
   Cover,
-  AbsoluteCoat,
-  MiddleInfo,
   Track,
   WaveformCanvas,
   PlayButton,
   PlaySign,
   PauseSign,
   WaveformImageCanvas,
+  SoundControlsBar,
+  IconsCircleFrame,
+  StyledEditIcon,
+  StyledTrashIcon,
 } from './styles'
 
 const DELETE_SOUND = gql`
@@ -161,50 +164,48 @@ class SoundCard extends PureComponent {
     const { isPaused } = this.state
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
-    const soundName = get(sound, 'name', '')
+    // const soundName = get(sound, 'name', '')
 
     return (
-      <Container>
-        <Cover onClick={this.handlePress}>
-          {imageUrl && <img alt="test" src={imageUrl} />}
-          <PlayButton playing={!isPaused}>
-            {isPaused ? <PlaySign /> : <PauseSign />}
-          </PlayButton>
-        </Cover>
-        <Track
-          playing={!isPaused}
-          ref={this.addTrackRef}
-          onClick={this.handleSeekClick}
-        >
-          <BufferingFeedback soundId={soundId} />
-          <WaveformCanvas ref={this.addWaveFormRef} />
-          <WaveformImageCanvas ref={this.addWaveformImageRef} />
-          <AbsoluteCoat>
-            <MiddleInfo>
-              {isPaused ? soundName : this.getSoundDuration()}
-              {isViewerInPower && (
-                <Mutation
-                  mutation={DELETE_SOUND}
-                  update={this.handleDeleteSound}
-                >
-                  {deleteSound => (
-                    <button
-                      type="button"
-                      onClick={e => deleteSound({ variables: { id: soundId } })}
-                    >
-                      DELETE
-                    </button>
-                  )}
-                </Mutation>
-              )}
-            </MiddleInfo>
-          </AbsoluteCoat>
-        </Track>
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <audio ref={this.addAudioRef}>
-          <source src={get(sound, 'audioUrl')} />
-        </audio>
-      </Container>
+      <HoverFrame>
+        {isViewerInPower && (
+          <SoundControlsBar>
+            <IconsCircleFrame>
+              <StyledEditIcon />
+            </IconsCircleFrame>
+            <IconsCircleFrame>
+              <Mutation mutation={DELETE_SOUND} update={this.handleDeleteSound}>
+                {deleteSound => (
+                  <StyledTrashIcon
+                    onClick={e => deleteSound({ variables: { id: soundId } })}
+                  />
+                )}
+              </Mutation>
+            </IconsCircleFrame>
+          </SoundControlsBar>
+        )}
+        <SoundFrame>
+          <Cover onClick={this.handlePress}>
+            {imageUrl && <img alt="test" src={imageUrl} />}
+            <PlayButton playing={!isPaused}>
+              {isPaused ? <PlaySign /> : <PauseSign />}
+            </PlayButton>
+          </Cover>
+          <Track
+            playing={!isPaused}
+            ref={this.addTrackRef}
+            onClick={this.handleSeekClick}
+          >
+            <BufferingFeedback soundId={soundId} />
+            <WaveformCanvas ref={this.addWaveFormRef} />
+            <WaveformImageCanvas ref={this.addWaveformImageRef} />
+          </Track>
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+          <audio ref={this.addAudioRef}>
+            <source src={get(sound, 'audioUrl')} />
+          </audio>
+        </SoundFrame>
+      </HoverFrame>
     )
   }
 }

@@ -1,36 +1,54 @@
 import styled, { css } from 'styled-components'
 
-export const Container = styled.div`
+import { FiTrash, FiEdit2 } from "react-icons/fi";
+
+export const SoundControlsBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  margin: 0 8px 0 auto;
+  width: 36px;
+`
+
+export const StyledEditIcon = styled(FiEdit2)``
+export const StyledTrashIcon = styled(FiTrash)``
+
+export const HoverFrame = styled.div`
+  display: flex;
+  width: 100%;
+  height: 168px;
+  margin-bottom: 36px;
+
+  :hover {
+    ${SoundControlsBar} {
+      visibility: visible;
+    }
+  }
+`
+
+export const IconsCircleFrame = styled.div`
+  width: 36px;
+  height: 36px;
+  border-radius: 100%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 5px 0;
+`
+
+export const SoundFrame = styled.div`
   display: flex;
   flex: 1;
   align-items: center;
   min-width: 579px;
-  height: 168px;
-  margin-bottom: 36px;
+  height: 100%;
   background: transparent;
   color: #c3002f;
   cursor: pointer;
-`
-
-export const AbsoluteCoat = styled.div`
-  display: flex;
-  position: absolute;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  visibility: hidden;
-`
-
-export const MiddleInfo = styled.h2`
-  font-weight: 300;
-  font-size: 24px;
-  text-transform: uppercase;
-  color: #7d3780;
 `
 
 export const WaveformCanvas = styled.canvas`
