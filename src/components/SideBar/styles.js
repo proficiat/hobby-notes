@@ -1,11 +1,15 @@
 import styled, { css } from 'styled-components'
 
+// import { colors } from 'styles'
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 88px;
   background: white;
   margin-left: auto;
+  box-shadow: 1px 0 22px 0 rgba(10, 10, 10, 0.08);
+  z-index: 5;
 `
 
 export const Item = styled.div`

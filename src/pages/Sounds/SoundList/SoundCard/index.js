@@ -9,7 +9,7 @@ import { gql } from 'apollo-boost'
 import { Mutation } from 'react-apollo'
 
 import {
-  subscribeWaveForm,
+  // subscribeWaveForm,
   drawLinearWaveForm,
   // drawWaveFormBars,
 } from 'helpers/audioVisualizations'
@@ -48,9 +48,8 @@ class SoundCard extends PureComponent {
     super(props)
     this.state = {
       isPaused: true,
-      currentTime: 0,
+      // currentTime: 0,
     }
-    this.audioRef = null
     this.trackRef = null
     this.waveformRef = null
     this.waveformImageRef = null
@@ -59,51 +58,22 @@ class SoundCard extends PureComponent {
   componentDidMount() {
     const { sound } = this.props
     const waveform = get(sound, 'waveform', [])
-    if (this.audioRef && this.waveformImageRef && !isEmpty(waveform)) {
+    if (this.waveformImageRef && !isEmpty(waveform)) {
       drawLinearWaveForm(waveform, this.waveformImageRef)
       // drawWaveFormBars(waveform, this.waveformImageRef)
-
-      this.audioRef.addEventListener('timeupdate', event => {
-        const currentTime = get(event, 'target.currentTime', 0)
-        this.setState({ currentTime })
-      })
-      this.audioRef.addEventListener('progress', () => {
-        try {
-          const { duration } = this.audioRef
-          if (duration > 0) {
-            const { buffered, currentTime } = this.audioRef
-            for (let i = 0; i < buffered.length; i += 1) {
-              if (buffered.start(buffered.length - 1 - i) < currentTime) {
-                document.getElementById(
-                  `buffered-amount-${sound.id}`,
-                ).style.width = `${(buffered.end(buffered.length - 1 - i) /
-                  duration) *
-                  100}%`
-                break
-              }
-            }
-          }
-        } catch (e) {
-          //
-        }
-      })
-      this.audioRef.addEventListener('timeupdate', () => {
-        const { duration, currentTime } = this.audioRef
-        if (duration > 0) {
-          document.getElementById(
-            `progress-amount-${sound.id}`,
-          ).style.width = `${(currentTime / duration) * 100}%`
-        }
-      })
-
-      if (this.waveformRef) {
-        subscribeWaveForm(this.waveformRef, this.audioRef)
-      }
     }
   }
 
-  addAudioRef = ref => {
-    this.audioRef = ref
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { audioRef, isActive } = this.props
+    if (audioRef) {
+      if (this.waveformRef) {
+        // subscribeWaveForm(this.waveformRef, audioRef)
+      }
+    }
+    if (!isActive && prevProps.isActive) {
+      this.handleChangeActiveSound()
+    }
   }
 
   addTrackRef = ref => {
@@ -118,8 +88,12 @@ class SoundCard extends PureComponent {
     this.waveformImageRef = ref
   }
 
+  handleChangeActiveSound = () => {
+    this.setState({ isPaused: true })
+  }
+
   getSoundDuration = () => {
-    const { currentTime } = this.state
+    const { currentTime } = this.props
     const soundDuration = get(this.audioRef, 'duration', 0)
     const currentTimeDuration = Duration.fromObject({
       seconds: currentTime,
@@ -131,22 +105,34 @@ class SoundCard extends PureComponent {
   }
 
   handlePress = () => {
-    if (this.audioRef) {
-      if (this.audioRef.paused) {
-        this.setState({ isPaused: false }, () => this.audioRef.play())
-      } else {
-        this.setState({ isPaused: true }, () => this.audioRef.pause())
+    const { isActive, audioRef, sound, onSoundClick } = this.props
+    const soundId = get(sound, 'id')
+    if (audioRef) {
+      let isSoundPaused = false
+      if (audioRef.paused || !isActive) {
+        isSoundPaused = true
       }
+      this.setState({ isPaused: !isSoundPaused }, () => {
+        if (isSoundPaused) {
+          audioRef.play()
+        } else {
+          audioRef.pause()
+        }
+      })
+    } else {
+      this.setState({ isPaused: false })
     }
+    onSoundClick(soundId)
   }
 
   handleSeekClick = event => {
+    const { audioRef } = this.props
     try {
       if (this.trackRef) {
         const percentWidth =
           (event.clientX - this.trackRef.offsetLeft) / this.trackRef.offsetWidth
-        if (this.audioRef) {
-          this.audioRef.currentTime = percentWidth * this.audioRef.duration
+        if (audioRef) {
+          audioRef.currentTime = percentWidth * audioRef.duration
         }
       }
     } catch (error) {
@@ -200,10 +186,6 @@ class SoundCard extends PureComponent {
             <WaveformCanvas ref={this.addWaveFormRef} />
             <WaveformImageCanvas ref={this.addWaveformImageRef} />
           </Track>
-          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <audio ref={this.addAudioRef}>
-            <source src={get(sound, 'audioUrl')} />
-          </audio>
         </SoundFrame>
       </HoverFrame>
     )
@@ -212,12 +194,17 @@ class SoundCard extends PureComponent {
 
 SoundCard.defaultProps = {
   isViewerInPower: false,
+  audioRef: null,
 }
 
 SoundCard.propTypes = {
+  audioRef: PropTypes.object,
+  currentTime: PropTypes.number.isRequired,
+  isActive: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
   sound: PropTypes.object.isRequired,
   onRefetchSounds: PropTypes.func.isRequired,
+  onSoundClick: PropTypes.func.isRequired,
 }
 
 export default SoundCard

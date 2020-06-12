@@ -66,7 +66,14 @@ class SoundList extends PureComponent {
   }
 
   render() {
-    const { sounds, isViewerInPower, onRefetchSounds } = this.props
+    const {
+      activeSoundId,
+      audioRef,
+      sounds,
+      isViewerInPower,
+      onRefetchSounds,
+      onSoundClick,
+    } = this.props
     return (
       <Container>
         {isViewerInPower && (
@@ -76,11 +83,14 @@ class SoundList extends PureComponent {
         )}
         {map(sounds, (sound, index) => (
           <SoundCard
+            audioRef={audioRef}
             index={index}
+            isActive={activeSoundId && activeSoundId === sound.id}
             isViewerInPower={isViewerInPower}
             key={sound.id}
             sound={sound}
             onRefetchSounds={onRefetchSounds}
+            onSoundClick={onSoundClick}
           />
         ))}
       </Container>
@@ -90,13 +100,17 @@ class SoundList extends PureComponent {
 
 SoundList.defaultProps = {
   isViewerInPower: false,
+  activeSoundId: ''
 }
 
 SoundList.propTypes = {
+  activeSoundId: PropTypes.string,
+  audioRef: PropTypes.object.isRequired,
   client: PropTypes.object.isRequired,
   isViewerInPower: PropTypes.bool,
   sounds: PropTypes.array.isRequired,
   onRefetchSounds: PropTypes.func.isRequired,
+  onSoundClick: PropTypes.func.isRequired,
 }
 
 export default withApollo(SoundList)
