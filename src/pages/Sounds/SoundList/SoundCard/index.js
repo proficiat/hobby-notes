@@ -48,44 +48,32 @@ class SoundCard extends PureComponent {
     super(props)
     this.state = {
       isPaused: true,
-      // currentTime: 0,
     }
-    this.trackRef = null
-    this.waveformRef = null
-    this.waveformImageRef = null
+    this.trackRef = React.createRef()
+    this.waveformRef = React.createRef()
+    this.waveformImageRef = React.createRef()
   }
 
   componentDidMount() {
     const { sound } = this.props
+    const { current: waveformImageRef } = this.waveformImageRef
     const waveform = get(sound, 'waveform', [])
-    if (this.waveformImageRef && !isEmpty(waveform)) {
-      drawLinearWaveForm(waveform, this.waveformImageRef)
-      // drawWaveFormBars(waveform, this.waveformImageRef)
+    if (waveformImageRef && !isEmpty(waveform)) {
+      drawLinearWaveForm(waveform, waveformImageRef)
+      // drawWaveFormBars(waveform, waveformImageRef)
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { audioRef, isActive } = this.props
     if (audioRef) {
-      if (this.waveformRef) {
-        // subscribeWaveForm(this.waveformRef, audioRef)
-      }
+      // if (this.waveformRef) {
+      // subscribeWaveForm(this.waveformRef, audioRef)
+      // }
     }
     if (!isActive && prevProps.isActive) {
       this.handleChangeActiveSound()
     }
-  }
-
-  addTrackRef = ref => {
-    this.trackRef = ref
-  }
-
-  addWaveFormRef = ref => {
-    this.waveformRef = ref
-  }
-
-  addWaveformImageRef = ref => {
-    this.waveformImageRef = ref
   }
 
   handleChangeActiveSound = () => {
@@ -126,11 +114,15 @@ class SoundCard extends PureComponent {
   }
 
   handleSeekClick = event => {
-    const { audioRef } = this.props
+    const { audioRef, isActive } = this.props
+    const { current: trackRef } = this.trackRef
+    if (!isActive) {
+      return
+    }
     try {
-      if (this.trackRef) {
+      if (trackRef) {
         const percentWidth =
-          (event.clientX - this.trackRef.offsetLeft) / this.trackRef.offsetWidth
+          (event.clientX - trackRef.offsetLeft) / trackRef.offsetWidth
         if (audioRef) {
           audioRef.currentTime = percentWidth * audioRef.duration
         }
@@ -179,12 +171,12 @@ class SoundCard extends PureComponent {
           </Cover>
           <Track
             playing={!isPaused}
-            ref={this.addTrackRef}
+            ref={this.trackRef}
             onClick={this.handleSeekClick}
           >
             <BufferingFeedback soundId={soundId} />
-            <WaveformCanvas ref={this.addWaveFormRef} />
-            <WaveformImageCanvas ref={this.addWaveformImageRef} />
+            <WaveformCanvas ref={this.waveformRef} />
+            <WaveformImageCanvas ref={this.waveformImageRef} />
           </Track>
         </SoundFrame>
       </HoverFrame>

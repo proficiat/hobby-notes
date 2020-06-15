@@ -55,7 +55,7 @@ export const StepMarkBox = styled.div`
 
 export const ProgressFrame = styled.div`
   width: 58%;
-  height: 1px;
+  height: 2px;
   margin-left: 88px;
-  background: darkviolet;
+  background: ${colors.background};
 `

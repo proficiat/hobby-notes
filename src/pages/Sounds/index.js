@@ -11,6 +11,7 @@ import Spinner from 'components/Spinner'
 import get from 'lodash/get'
 import memoize from 'lodash/memoize'
 import find from 'lodash/find'
+import forEach from 'lodash/forEach'
 
 import SoundList from './SoundList'
 import SoundFooter from './SoundFooter'
@@ -30,46 +31,18 @@ class Sounds extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.audioRef.current) {
-      this.audioRef.current.addEventListener(
-        'timeupdate',
-        this.handleSoundTimeUpdate,
-      )
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const { activeSoundId } = this.state
-    if (activeSoundId !== prevState.activeSoundId) {
-      if (this.audioRef.current) {
-        if (prevState.activeSoundId) {
-          this.audioRef.current.removeEventListener(
-            'progress',
-            this.handleSoundProgress,
-            false,
-          )
-        }
-        if (activeSoundId) {
-          this.audioRef.current.addEventListener(
-            'progress',
-            this.handleSoundProgress,
-          )
-        }
-      }
+    const { current: audioRef } = this.audioRef
+    if (audioRef) {
+      audioRef.addEventListener('timeupdate', this.handleSoundTimeUpdate)
+      audioRef.addEventListener('progress', this.handleSoundProgress)
     }
   }
 
   componentWillUnmount() {
-    const { activeSoundId } = this.state
-    if (this.audioRef.current) {
-      if (activeSoundId) {
-        this.audioRef.current.removeEventListener(
-          'progress',
-          this.handleSoundProgress,
-          false,
-        )
-      }
-      this.audioRef.current.removeEventListener(
+    const { current: audioRef } = this.audioRef
+    if (audioRef) {
+      audioRef.removeEventListener('progress', this.handleSoundProgress, false)
+      audioRef.removeEventListener(
         'timeupdate',
         this.handleSoundTimeUpdate,
         false,
@@ -90,16 +63,21 @@ class Sounds extends PureComponent {
   handleSoundProgress = () => {
     try {
       const { activeSoundId } = this.state
-      const { duration } = this.audioRef
+      const { current: audioRef } = this.audioRef
+      const duration = get(audioRef, 'duration')
       if (duration > 0 && activeSoundId) {
-        const { buffered, currentTime } = this.audioRef
+        const buffered = get(audioRef, 'buffered')
+        const currentTime = get(audioRef, 'currentTime')
         for (let i = 0; i < buffered.length; i += 1) {
           if (buffered.start(buffered.length - 1 - i) < currentTime) {
-            document.getElementById(
+            const amountElements = document.getElementsByClassName(
               `buffered-amount-${activeSoundId}`,
-            ).style.width = `${(buffered.end(buffered.length - 1 - i) /
-              duration) *
-              100}%`
+            )
+            forEach(amountElements, element => {
+              element.style.width = `${(buffered.end(buffered.length - 1 - i) /
+                duration) *
+                100}%`
+            })
             break
           }
         }
@@ -111,12 +89,17 @@ class Sounds extends PureComponent {
 
   handleSoundTimeUpdate = event => {
     const { activeSoundId } = this.state
+    const { current: audioRef } = this.audioRef
     this.setState({ currentTime: get(event, 'target.currentTime', 0) })
-    const { duration, currentTime } = this.audioRef
+    const duration = get(audioRef, 'duration')
+    const currentTime = get(audioRef, 'currentTime')
     if (activeSoundId && duration > 0) {
-      document.getElementById(
+      const progressElements = document.getElementsByClassName(
         `progress-amount-${activeSoundId}`,
-      ).style.width = `${(currentTime / duration) * 100}%`
+      )
+      forEach(progressElements, element => {
+        element.style.width = `${(currentTime / duration) * 100}%`
+      })
     }
   }
 

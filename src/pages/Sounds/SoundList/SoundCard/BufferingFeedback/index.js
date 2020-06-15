@@ -1,21 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Container, FeedbackBar } from './styles'
+import { Base, FeedbackBar } from './styles'
 
 const BufferingFeedback = ({ soundId }) => {
   if (!soundId) {
     return null
   }
   return (
-    <Container>
+    <Base>
       <FeedbackBar>
-        <span id={`buffered-amount-${soundId}`} />
+        <span className={`buffered-amount-${soundId}`} />
       </FeedbackBar>
       <FeedbackBar color="#B4D0E7">
-        <span id={`progress-amount-${soundId}`} />
+        <span className={`progress-amount-${soundId}`} />
       </FeedbackBar>
-    </Container>
+    </Base>
   )
 }
 

@@ -70,6 +70,7 @@ class SoundList extends PureComponent {
       activeSoundId,
       audioRef,
       sounds,
+      currentTime,
       isViewerInPower,
       onRefetchSounds,
       onSoundClick,
@@ -81,18 +82,22 @@ class SoundList extends PureComponent {
             {addSound => <AddEditSound addSound={addSound} />}
           </Mutation>
         )}
-        {map(sounds, (sound, index) => (
-          <SoundCard
-            audioRef={audioRef}
-            index={index}
-            isActive={activeSoundId && activeSoundId === sound.id}
-            isViewerInPower={isViewerInPower}
-            key={sound.id}
-            sound={sound}
-            onRefetchSounds={onRefetchSounds}
-            onSoundClick={onSoundClick}
-          />
-        ))}
+        {map(sounds, (sound, index) => {
+          const isSoundActive = activeSoundId && activeSoundId === sound.id
+          return (
+            <SoundCard
+              audioRef={audioRef}
+              currentTime={isSoundActive ? currentTime : 0}
+              index={index}
+              isActive={isSoundActive}
+              isViewerInPower={isViewerInPower}
+              key={sound.id}
+              sound={sound}
+              onRefetchSounds={onRefetchSounds}
+              onSoundClick={onSoundClick}
+            />
+          )
+        })}
       </Container>
     )
   }
@@ -100,13 +105,14 @@ class SoundList extends PureComponent {
 
 SoundList.defaultProps = {
   isViewerInPower: false,
-  activeSoundId: ''
+  activeSoundId: '',
 }
 
 SoundList.propTypes = {
   activeSoundId: PropTypes.string,
   audioRef: PropTypes.object.isRequired,
   client: PropTypes.object.isRequired,
+  currentTime: PropTypes.number.isRequired,
   isViewerInPower: PropTypes.bool,
   sounds: PropTypes.array.isRequired,
   onRefetchSounds: PropTypes.func.isRequired,

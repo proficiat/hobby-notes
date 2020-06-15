@@ -15,13 +15,12 @@ class SoundFooter extends PureComponent {
     super(props)
     this.state = {
       isPlaying: false,
-      currentTime: 0,
     }
   }
 
   render() {
     const { sound } = this.props
-    const { isPlaying, currentTime } = this.state
+    const { isPlaying } = this.state
     return (
       <Frame>
         <PlayControls>
