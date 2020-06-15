@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import isEmpty from 'lodash/isEmpty'
+import get from 'lodash/get'
 
 import Dropzone from 'react-dropzone'
 
@@ -20,6 +21,7 @@ class Sound extends PureComponent {
     this.state = {
       soundFile: null,
       waveformData: [],
+      soundDuration: null,
     }
   }
 
@@ -53,7 +55,8 @@ class Sound extends PureComponent {
       audioContext.decodeAudioData(buffer).then(audioBuffer => {
         const filtered = this.filterData(audioBuffer)
         const normalized = this.normalizeData(filtered)
-        this.setState({ waveformData: normalized })
+        const duration = get(audioBuffer, 'duration')
+        this.setState({ waveformData: normalized, soundDuration: duration })
       })
     })
     const soundFile = files[0]
@@ -63,8 +66,8 @@ class Sound extends PureComponent {
 
   handleClickCog = () => {
     const { onDescriptionSwitch } = this.props
-    const { soundFile, waveformData } = this.state
-    onDescriptionSwitch(soundFile, waveformData)
+    const { soundFile, waveformData, soundDuration } = this.state
+    onDescriptionSwitch(soundFile, waveformData, soundDuration)
   }
 
   render() {

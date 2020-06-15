@@ -159,6 +159,8 @@ export default compose(
           imageUrl
           waveform
           id
+          duration
+          uploadedAt
         }
       }
     `,

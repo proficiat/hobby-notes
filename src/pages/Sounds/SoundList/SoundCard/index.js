@@ -80,18 +80,6 @@ class SoundCard extends PureComponent {
     this.setState({ isPaused: true })
   }
 
-  getSoundDuration = () => {
-    const { currentTime } = this.props
-    const soundDuration = get(this.audioRef, 'duration', 0)
-    const currentTimeDuration = Duration.fromObject({
-      seconds: currentTime,
-    }).toFormat('mm:ss')
-    const totalTimeDuration = Duration.fromObject({
-      seconds: soundDuration,
-    }).toFormat('mm:ss')
-    return `${currentTimeDuration} / ${totalTimeDuration}`
-  }
-
   handlePress = () => {
     const { isActive, audioRef, sound, onSoundClick } = this.props
     const soundId = get(sound, 'id')
@@ -138,10 +126,16 @@ class SoundCard extends PureComponent {
   }
 
   render() {
-    const { sound, isViewerInPower } = this.props
+    const { sound, isViewerInPower, currentTime } = this.props
     const { isPaused } = this.state
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
+    const currentDuration = Duration.fromObject({
+      seconds: currentTime,
+    }).toFormat('mm:ss')
+    const soundDuration = Duration.fromObject({
+      seconds: get(sound, 'duration', 0),
+    }).toFormat('mm:ss')
     // const soundName = get(sound, 'name', '')
 
     return (

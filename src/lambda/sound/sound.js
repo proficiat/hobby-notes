@@ -21,6 +21,14 @@ const schema = new mongoose.Schema({
     type: [Number],
     required: true,
   },
+  duration: {
+    type: Number,
+    required: true,
+  },
+  uploadedAt: {
+    type: String,
+    required: true,
+  },
 })
 
 module.exports = mongoose.model('Sound', schema)

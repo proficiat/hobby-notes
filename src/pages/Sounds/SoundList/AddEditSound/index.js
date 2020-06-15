@@ -6,6 +6,8 @@ import PropTypes from 'prop-types'
 
 // import { gql } from 'apollo-boost'
 
+import { DateTime } from 'luxon'
+
 import get from 'lodash/get'
 // import { colors } from 'styles'
 // import isEmpty from 'lodash/isEmpty'
@@ -35,20 +37,26 @@ class AddEditSound extends PureComponent {
       audioName: '',
       description: '',
       isActiveSettings: false,
-      cropperdImageFile: null,
+      croppedImageFile: null,
       soundFile: null,
       waveFormData: null,
+      soundDuration: null,
     }
 
     this.fileInputRef = null
   }
 
-  onDescriptionSwitch = (soundFile, waveFormData) => {
-    this.setState({ soundFile, waveFormData, isActiveSettings: true })
+  onDescriptionSwitch = (soundFile, waveFormData, soundDuration) => {
+    this.setState({
+      soundFile,
+      waveFormData,
+      isActiveSettings: true,
+      soundDuration,
+    })
   }
 
-  onImageCrop = cropperdImageFile => {
-    this.setState({ cropperdImageFile })
+  onImageCrop = croppedImageFile => {
+    this.setState({ croppedImageFile })
   }
 
   handleChangeName = target => {
@@ -61,17 +69,19 @@ class AddEditSound extends PureComponent {
     this.setState({ description })
   }
 
-  handleAddAudio = async () => {
+  uploadSound = async () => {
     const { addSound } = this.props
     const {
-      cropperdImageFile,
+      croppedImageFile,
       soundFile,
       audioName,
       waveFormData,
       description,
+      soundDuration,
     } = this.state
-    const imageUrl = await this.handleUploadFile(cropperdImageFile)
+    const imageUrl = await this.handleUploadFile(croppedImageFile)
     const audioUrl = await this.handleUploadFile(soundFile)
+    const uploadedAt = DateTime.local()
     await addSound({
       variables: {
         name: audioName,
@@ -79,13 +89,16 @@ class AddEditSound extends PureComponent {
         imageUrl,
         audioUrl,
         description,
+        duration: soundDuration,
+        uploadedAt,
       },
     })
     this.setState({
       audioName: '',
       description: '',
       soundFile: null,
-      cropperdImageFile: null,
+      croppedImageFile: null,
+      soundDuration: null,
     })
   }
 
@@ -133,7 +146,7 @@ class AddEditSound extends PureComponent {
                 onChange={this.handleChangeDescription}
               />
             </Field>
-            <BottomInfoTip onClick={this.handleAddAudio}>Upload</BottomInfoTip>
+            <BottomInfoTip onClick={this.uploadSound}>Upload</BottomInfoTip>
           </Settings>
         )}
       </Container>

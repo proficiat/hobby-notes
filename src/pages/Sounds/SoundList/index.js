@@ -19,6 +19,8 @@ const ADD_SOUND = gql`
     $audioUrl: String!
     $description: String
     $waveform: [Float]!
+    $duration: Float!
+    $uploadedAt: String!
   ) {
     addSound(
       name: $name
@@ -26,6 +28,8 @@ const ADD_SOUND = gql`
       audioUrl: $audioUrl
       description: $description
       waveform: $waveform
+      duration: $duration
+      uploadedAt: $uploadedAt
     ) {
       id
       name
@@ -33,6 +37,8 @@ const ADD_SOUND = gql`
       audioUrl
       description
       waveform
+      duration
+      uploadedAt
     }
   }
 `
@@ -40,11 +46,13 @@ const ADD_SOUND = gql`
 const ALL_SOUNDS = gql`
   {
     allSounds {
+      id
       name
       audioUrl
       imageUrl
       waveform
-      id
+      duration
+      uploadedAt
     }
   }
 `
