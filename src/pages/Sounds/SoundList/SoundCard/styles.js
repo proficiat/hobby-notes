@@ -2,6 +2,8 @@ import styled, { css } from 'styled-components'
 
 import { FiTrash, FiEdit2 } from "react-icons/fi";
 
+const CARD_HEIGHT = 128
+
 export const SoundControlsBar = styled.div`
   display: flex;
   flex-direction: column;
@@ -18,7 +20,7 @@ export const StyledTrashIcon = styled(FiTrash)``
 export const HoverFrame = styled.div`
   display: flex;
   width: 100%;
-  height: 168px;
+  height: ${CARD_HEIGHT}px;
   margin-bottom: 36px;
 
   :hover {
@@ -44,10 +46,9 @@ export const SoundFrame = styled.div`
   display: flex;
   flex: 1;
   align-items: center;
-  min-width: 579px;
+  min-width: 330px;
   height: 100%;
   background: transparent;
-  color: #c3002f;
   cursor: pointer;
 `
 
@@ -65,9 +66,9 @@ export const WaveformImageCanvas = styled.canvas`
   position: absolute;
   z-index: 2;
   left: 18px;
-  bottom: 50%;
+  bottom: 30%;
   height: 50%;
-  width: 100%;
+  width: calc(100% - 18px);
   opacity: 0.9;
   transform: translateY(50%);
 `
@@ -103,7 +104,7 @@ export const PlayButton = styled.div`
 
 export const Cover = styled.div`
   height: 100%;
-  min-width: 168px;
+  min-width: ${CARD_HEIGHT}px;
   background: #b3e3b5;
   position: relative;
 

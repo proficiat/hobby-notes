@@ -9,7 +9,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: white;
   cursor: pointer;
   padding: 28px 28px 28px 0;
   z-index: 1;
@@ -37,11 +36,11 @@ export const DropzoneRoot = styled.div`
   position: relative;
   background: linear-gradient(
     to right,
-    #fff,
+    ghostwhite,
     ${colors.background},
     ${colors.red},
     ${colors.background},
-    #fff
+    ghostwhite
   );
   animation-name: ${gradientAnimation};
   animation-duration: 3s;
@@ -62,7 +61,7 @@ export const DropzonePrompt = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: ghostwhite;
   font-size: 14px;
   font-weight: 300;
   margin: 1px;

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
-import { Duration } from 'luxon'
 import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
@@ -13,6 +12,7 @@ import {
   drawLinearWaveForm,
   // drawWaveFormBars,
 } from 'helpers/audioVisualizations'
+import { getSoundDurations } from 'helpers/sounds'
 
 // import WaveformData from 'waveform-data'
 
@@ -35,15 +35,6 @@ import {
   StyledEditIcon,
   StyledTrashIcon,
 } from './styles'
-
-const DELETE_SOUND = gql`
-  mutation deleteSound($id: String!) {
-    deleteSound(id: $id) {
-      id
-      name
-    }
-  }
-`
 
 class SoundCard extends PureComponent {
   constructor(props) {
@@ -133,13 +124,11 @@ class SoundCard extends PureComponent {
     const { isPaused } = this.state
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
-    const currentDuration = Duration.fromObject({
-      seconds: currentTime,
-    }).toFormat('mm:ss')
-    const soundDuration = Duration.fromObject({
-      seconds: get(sound, 'duration', 0),
-    }).toFormat('mm:ss')
-    // const soundName = get(sound, 'name', '')
+    const soundName = get(sound, 'name', '')
+    const { currentDuration, soundDuration } = getSoundDurations(
+      sound,
+      currentTime,
+    )
     return (
       <HoverFrame>
         {isViewerInPower && !isSoundDeleting && (

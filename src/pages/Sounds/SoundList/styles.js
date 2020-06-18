@@ -1,12 +1,14 @@
 import styled from 'styled-components'
 
-export const Container = styled.div`
+import { colors } from 'styles'
+
+export const List = styled.div`
   display: flex;
+  flex: 3;
   flex-direction: column;
-  width: 80%;
+  padding: 0 64px;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-left: 88px;
 
   ::-webkit-scrollbar {
     display: none;

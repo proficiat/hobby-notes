@@ -10,7 +10,6 @@ export const CoverFrame = styled.div`
   align-items: center;
   justify-content: center;
   width: 168px;
-  background: white;
 `
 
 export const StyledReactCrop = styled(ReactCrop)`

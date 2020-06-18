@@ -10,7 +10,7 @@ import map from 'lodash/map'
 import SoundCard from './SoundCard'
 import AddEditSound from './AddEditSound'
 
-import { Container } from './styles'
+import { List } from './styles'
 
 const ADD_SOUND = gql`
   mutation createSound(
@@ -84,7 +84,7 @@ class SoundList extends PureComponent {
       onSoundClick,
     } = this.props
     return (
-      <Container>
+      <List>
         {isViewerInPower && (
           <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
             {(addSound, { loading }) => {
@@ -108,7 +108,7 @@ class SoundList extends PureComponent {
             />
           )
         })}
-      </Container>
+      </List>
     )
   }
 }

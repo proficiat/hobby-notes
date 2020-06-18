@@ -4,10 +4,11 @@ import { colors } from 'styles'
 
 export const Container = styled.div`
   display: flex;
-  flex: 1 1 0;
+  flex: 0 1 0;
   min-height: 168px;
-  background: white;
-  margin: 80px 0px;
+  background: ghostwhite;
+  margin: 80px 0;
+  //flex-shrink: 0;
 `
 
 export const BottomInfoTip = styled.div`

@@ -14,7 +14,10 @@ import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 
 import SoundList from './SoundList'
+import GroupsList from './GroupsList'
 import SoundFooter from './SoundFooter'
+
+import { ListsBase } from './styles'
 
 const findActiveSound = memoize((activeSoundId, sounds) =>
   find(sounds, sound => get(sound, 'id') === activeSoundId),
@@ -119,20 +122,23 @@ class Sounds extends PureComponent {
 
     return (
       <React.Fragment>
-        <SoundList
-          activeSoundId={activeSoundId}
-          audioRef={this.audioRef.current}
-          currentTime={currentTime}
-          isViewerInPower={isViewerInPower}
-          sounds={allSounds}
-          onRefetchSounds={onRefetchSounds}
-          onSoundClick={this.onSoundClick}
-        />
+        <ListsBase>
+          <GroupsList />
+          <SoundList
+            activeSoundId={activeSoundId}
+            audioRef={this.audioRef.current}
+            currentTime={currentTime}
+            isViewerInPower={isViewerInPower}
+            sounds={allSounds}
+            onRefetchSounds={onRefetchSounds}
+            onSoundClick={this.onSoundClick}
+          />
+        </ListsBase>
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <audio crossOrigin="anonymous" ref={this.audioRef}>
           <source src={get(sound, 'audioUrl')} />
         </audio>
-        <SoundFooter sound={sound} />
+        <SoundFooter currentTime={currentTime} sound={sound} />
       </React.Fragment>
     )
   }

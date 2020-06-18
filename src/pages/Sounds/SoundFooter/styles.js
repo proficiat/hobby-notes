@@ -57,6 +57,13 @@ export const StepMarkBox = styled.div`
 export const ProgressFrame = styled.div`
   width: 58%;
   height: 2px;
-  margin-left: 88px;
   background: ${colors.background};
+`
+
+export const TimeDuration = styled.div`
+  margin: 0 28px;
+  font-size: 13px;
+  color: ${props => (props.current ? colors.lushLava : colors.luciaLash)};
+  line-height: normal;
+  font-weight: 300;
 `

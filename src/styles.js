@@ -24,13 +24,14 @@ export const MainWrapper = styled.div`
 export const PageContent = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1 1;
+  flex: 1 1 0;
   background: ${colors.background};
   color: ${colors.text};
 `
 export const GlobalStyle = createGlobalStyle({
   [['html', 'body']]: {
     height: '100%',
+    margin: 0,
   },
   body: {
     margin: 0,
@@ -39,6 +40,7 @@ export const GlobalStyle = createGlobalStyle({
     backgroundColor: colors.background,
     color: colors.text,
     fontSize: '14px',
+    overflow: 'hidden',
   },
   '#root': {
     display: 'flex',

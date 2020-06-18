@@ -6,9 +6,17 @@ import get from 'lodash/get'
 import PlaySign from 'components/PlaySign'
 import PauseSign from 'components/PauseSign'
 
+import { getSoundDurations } from 'helpers/sounds'
+
 import BufferingFeedback from '../SoundList/SoundCard/BufferingFeedback'
 
-import { Frame, PlayControls, StepMarkBox, ProgressFrame } from './styles'
+import {
+  Frame,
+  PlayControls,
+  StepMarkBox,
+  ProgressFrame,
+  TimeDuration,
+} from './styles'
 
 class SoundFooter extends PureComponent {
   constructor(props) {
@@ -19,8 +27,12 @@ class SoundFooter extends PureComponent {
   }
 
   render() {
-    const { sound } = this.props
+    const { sound, currentTime } = this.props
     const { isPlaying } = this.state
+    const { currentDuration, soundDuration } = getSoundDurations(
+      sound,
+      currentTime,
+    )
     return (
       <Frame>
         <PlayControls>
@@ -36,9 +48,11 @@ class SoundFooter extends PureComponent {
             <PlaySign size={12} strokeWidth={5} />
           </StepMarkBox>
         </PlayControls>
+        <TimeDuration current>{currentDuration}</TimeDuration>
         <ProgressFrame>
           <BufferingFeedback soundId={get(sound, 'id', null)} />
         </ProgressFrame>
+        <TimeDuration>{soundDuration}</TimeDuration>
       </Frame>
     )
   }
@@ -49,6 +63,7 @@ SoundFooter.defaultProps = {
 }
 
 SoundFooter.propTypes = {
+  currentTime: PropTypes.number.isRequired,
   sound: PropTypes.object.isRequired,
 }
 

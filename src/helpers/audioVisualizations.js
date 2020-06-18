@@ -1,3 +1,5 @@
+import { colors } from 'styles'
+
 import forEach from 'lodash/forEach'
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Visualizations_with_Web_Audio_API#Creating_a_frequency_bar_graph
@@ -111,8 +113,8 @@ export const drawLinearWaveForm = (normalizedData, waveformImageRef) => {
 }
 
 const drawLineSegment = (ctx, x, y, width, isEven) => {
-  ctx.lineWidth = 1 // how thick the line is
-  ctx.strokeStyle = 'red' // what color our line is
+  ctx.lineWidth = 0.8 // how thick the line is
+  ctx.strokeStyle = colors.luciaLash // what color our line is
   ctx.beginPath()
   y = isEven ? y : -y
   ctx.moveTo(x, 0)
