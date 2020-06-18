@@ -12,7 +12,7 @@ import {
   drawLinearWaveForm,
   // drawWaveFormBars,
 } from 'helpers/audioVisualizations'
-import { getSoundDurations } from 'helpers/sounds'
+// import { getSoundDurations } from 'helpers/sounds'
 
 // import WaveformData from 'waveform-data'
 
@@ -124,11 +124,11 @@ class SoundCard extends PureComponent {
     const { isPaused } = this.state
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
-    const soundName = get(sound, 'name', '')
-    const { currentDuration, soundDuration } = getSoundDurations(
-      sound,
-      currentTime,
-    )
+    // const soundName = get(sound, 'name', '')
+    // const { currentDuration, soundDuration } = getSoundDurations(
+    //   sound,
+    //   currentTime,
+    // )
     return (
       <HoverFrame>
         {isViewerInPower && !isSoundDeleting && (

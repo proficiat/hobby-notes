@@ -1,8 +1,8 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { colors } from 'styles'
 
-import { space, layout } from 'styled-system'
+// import { space, layout } from 'styled-system'
 
 export const Frame = styled.div`
   display: flex;
