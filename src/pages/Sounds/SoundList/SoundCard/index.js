@@ -117,7 +117,7 @@ class SoundCard extends PureComponent {
     const {
       sound,
       isViewerInPower,
-      currentTime,
+      // currentTime,
       deleteSound,
       isSoundDeleting,
     } = this.props
