@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 
 import { Duration } from 'luxon'
 import { gql } from 'apollo-boost'
-import { Mutation } from 'react-apollo'
+import { graphql } from 'react-apollo'
 
 import {
   // subscribeWaveForm,
@@ -15,6 +15,8 @@ import {
 } from 'helpers/audioVisualizations'
 
 // import WaveformData from 'waveform-data'
+
+import Spinner from 'components/Spinner'
 
 import BufferingFeedback from './BufferingFeedback'
 
@@ -120,13 +122,14 @@ class SoundCard extends PureComponent {
     }
   }
 
-  handleDeleteSound = (store, response) => {
-    const { onRefetchSounds } = this.props
-    onRefetchSounds()
-  }
-
   render() {
-    const { sound, isViewerInPower, currentTime } = this.props
+    const {
+      sound,
+      isViewerInPower,
+      currentTime,
+      deleteSound,
+      isSoundDeleting,
+    } = this.props
     const { isPaused } = this.state
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
@@ -137,22 +140,15 @@ class SoundCard extends PureComponent {
       seconds: get(sound, 'duration', 0),
     }).toFormat('mm:ss')
     // const soundName = get(sound, 'name', '')
-
     return (
       <HoverFrame>
-        {isViewerInPower && (
+        {isViewerInPower && !isSoundDeleting && (
           <SoundControlsBar>
             <IconsCircleFrame>
               <StyledEditIcon />
             </IconsCircleFrame>
             <IconsCircleFrame>
-              <Mutation mutation={DELETE_SOUND} update={this.handleDeleteSound}>
-                {deleteSound => (
-                  <StyledTrashIcon
-                    onClick={e => deleteSound({ variables: { id: soundId } })}
-                  />
-                )}
-              </Mutation>
+              <StyledTrashIcon onClick={deleteSound} />
             </IconsCircleFrame>
           </SoundControlsBar>
         )}
@@ -163,15 +159,18 @@ class SoundCard extends PureComponent {
               {isPaused ? <PlaySign /> : <PauseSign />}
             </PlayButton>
           </Cover>
-          <Track
-            playing={!isPaused}
-            ref={this.trackRef}
-            onClick={this.handleSeekClick}
-          >
-            <BufferingFeedback soundId={soundId} />
-            <WaveformCanvas ref={this.waveformRef} />
-            <WaveformImageCanvas ref={this.waveformImageRef} />
-          </Track>
+          {isSoundDeleting && <Spinner />}
+          {!isSoundDeleting && (
+            <Track
+              playing={!isPaused}
+              ref={this.trackRef}
+              onClick={this.handleSeekClick}
+            >
+              <BufferingFeedback soundId={soundId} />
+              <WaveformCanvas ref={this.waveformRef} />
+              <WaveformImageCanvas ref={this.waveformImageRef} />
+            </Track>
+          )}
         </SoundFrame>
       </HoverFrame>
     )
@@ -186,11 +185,35 @@ SoundCard.defaultProps = {
 SoundCard.propTypes = {
   audioRef: PropTypes.object,
   currentTime: PropTypes.number.isRequired,
+  deleteSound: PropTypes.func.isRequired,
   isActive: PropTypes.bool.isRequired,
+  isSoundDeleting: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
   sound: PropTypes.object.isRequired,
-  onRefetchSounds: PropTypes.func.isRequired,
+  // onRefetchSounds: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
 }
 
-export default SoundCard
+export default graphql(
+  gql`
+    mutation deleteSound($id: String!) {
+      deleteSound(id: $id) {
+        id
+        name
+      }
+    }
+  `,
+  {
+    name: 'deleteSound',
+    options: props => ({
+      update: props.onRefetchSounds,
+      variables: {
+        id: get(props, 'sound.id'),
+      },
+    }),
+    props: ({ deleteSound, deleteSoundResult: { loading } }) => ({
+      deleteSound,
+      isSoundDeleting: loading,
+    }),
+  },
+)(SoundCard)

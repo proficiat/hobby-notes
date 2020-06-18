@@ -87,7 +87,9 @@ class SoundList extends PureComponent {
       <Container>
         {isViewerInPower && (
           <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
-            {addSound => <AddEditSound addSound={addSound} />}
+            {(addSound, { loading }) => {
+              return <AddEditSound addSound={addSound} isLoading={loading} />
+            }}
           </Mutation>
         )}
         {map(sounds, (sound, index) => {

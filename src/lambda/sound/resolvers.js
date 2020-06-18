@@ -20,7 +20,8 @@ const resolvers = {
       return sound
     },
     deleteSound: async (root, args) => {
-      const deleted = await Sound.findByIdAndRemove({ _id: args.id })
+      const { id } = args
+      const deleted = await Sound.findByIdAndRemove(id)
       return deleted
     },
   },

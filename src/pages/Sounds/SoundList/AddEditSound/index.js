@@ -10,8 +10,7 @@ import { DateTime } from 'luxon'
 
 import get from 'lodash/get'
 // import { colors } from 'styles'
-// import isEmpty from 'lodash/isEmpty'
-
+import Spinner from 'components/Spinner'
 // import { Mutation, Query } from 'react-apollo'
 import Cover from './Cover'
 import Sound from './Sound'
@@ -30,17 +29,22 @@ const widgetSetup = {
   uploadPreset: process.env.REACT_APP_CLOUD_UPLOAD_PRESET,
 }
 
+const INIT_STATE = {
+  audioName: '',
+  description: '',
+  isActiveSettings: false,
+  croppedImageFile: null,
+  soundFile: null,
+  waveFormData: null,
+  soundDuration: null,
+  isPreUploading: false,
+}
+
 class AddEditSound extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      audioName: '',
-      description: '',
-      isActiveSettings: false,
-      croppedImageFile: null,
-      soundFile: null,
-      waveFormData: null,
-      soundDuration: null,
+      ...INIT_STATE,
     }
 
     this.fileInputRef = null
@@ -71,6 +75,7 @@ class AddEditSound extends PureComponent {
 
   uploadSound = async () => {
     const { addSound } = this.props
+    this.setState({ isPreUploading: true })
     const {
       croppedImageFile,
       soundFile,
@@ -94,15 +99,14 @@ class AddEditSound extends PureComponent {
       },
     })
     this.setState({
-      audioName: '',
-      description: '',
-      soundFile: null,
-      croppedImageFile: null,
-      soundDuration: null,
+      ...INIT_STATE,
     })
   }
 
   handleUploadFile = async file => {
+    // if (isEmpty(file)) {
+    //   return ''
+    // }
     const formData = new FormData()
     const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${widgetSetup.cloudName}/upload`
     const CLOUDINARY_UPLOAD_PRESET = widgetSetup.uploadPreset
@@ -118,14 +122,22 @@ class AddEditSound extends PureComponent {
   }
 
   render() {
-    const { audioName, description, isActiveSettings } = this.state
+    const {
+      audioName,
+      description,
+      isActiveSettings,
+      isPreUploading,
+    } = this.state
+    const { isLoading } = this.props
+    const isLoad = isLoading || isPreUploading
     return (
       <Container>
         <Cover onImageCrop={this.onImageCrop} />
-        {!isActiveSettings && (
+        {isLoad && <Spinner />}
+        {!isActiveSettings && !isLoad && (
           <Sound onDescriptionSwitch={this.onDescriptionSwitch} />
         )}
-        {isActiveSettings && (
+        {isActiveSettings && !isLoad && (
           <Settings>
             <Field>
               <div>
@@ -156,6 +168,7 @@ class AddEditSound extends PureComponent {
 
 AddEditSound.propTypes = {
   addSound: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 }
 
 export default AddEditSound

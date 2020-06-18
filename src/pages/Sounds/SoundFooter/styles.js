@@ -12,6 +12,7 @@ export const Frame = styled.div`
   margin-top: auto;
   align-items: center;
   padding-left: 88px;
+  flex-shrink: 0;
 `
 
 export const PlayControls = styled.div`
