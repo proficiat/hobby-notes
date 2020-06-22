@@ -56,15 +56,16 @@ class Sounds extends PureComponent {
 
   onSoundClick = soundId => {
     const { activeSoundId } = this.state
-    const isActive = soundId && activeSoundId === soundId
     const { current: audioRef } = this.audioRef
+    const isActive = soundId && activeSoundId === soundId
+    const isNewSound = soundId && activeSoundId !== soundId
     if (audioRef) {
       let isSoundPaused = false
       if (audioRef.paused || !isActive) {
         isSoundPaused = true
       }
       this.setState({ isPaused: !isSoundPaused }, () => {
-        if (isSoundPaused) {
+        if (isSoundPaused && !isNewSound) {
           audioRef.play()
         } else {
           audioRef.pause()
@@ -74,7 +75,7 @@ class Sounds extends PureComponent {
       this.setState({ isPaused: false })
     }
 
-    if (soundId && activeSoundId !== soundId) {
+    if (isNewSound) {
       this.setState({ activeSoundId: soundId }, () => {
         this.audioRef.current.load()
         this.audioRef.current.play()
