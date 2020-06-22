@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import { space, layout, color } from 'styled-system'
 
@@ -17,6 +18,10 @@ const PauseSign = styled.div`
 
 PauseSign.defaultProps = {
   strokeWidth: 3,
+}
+
+PauseSign.propTypes = {
+  strokeWidth: PropTypes.number,
 }
 
 export default PauseSign

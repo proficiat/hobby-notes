@@ -27,6 +27,7 @@ class Sounds extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
+      isPaused: true,
       activeSoundId: null,
       currentTime: 0,
     }
@@ -55,6 +56,24 @@ class Sounds extends PureComponent {
 
   onSoundClick = soundId => {
     const { activeSoundId } = this.state
+    const isActive = soundId && activeSoundId === soundId
+    const { current: audioRef } = this.audioRef
+    if (audioRef) {
+      let isSoundPaused = false
+      if (audioRef.paused || !isActive) {
+        isSoundPaused = true
+      }
+      this.setState({ isPaused: !isSoundPaused }, () => {
+        if (isSoundPaused) {
+          audioRef.play()
+        } else {
+          audioRef.pause()
+        }
+      })
+    } else {
+      this.setState({ isPaused: false })
+    }
+
     if (soundId && activeSoundId !== soundId) {
       this.setState({ activeSoundId: soundId }, () => {
         this.audioRef.current.load()
@@ -113,7 +132,7 @@ class Sounds extends PureComponent {
       isViewerInPower,
       onRefetchSounds,
     } = this.props
-    const { currentTime, activeSoundId } = this.state
+    const { currentTime, activeSoundId, isPaused } = this.state
     const sound = findActiveSound(activeSoundId, allSounds)
 
     if (isSoundsLoading) {
@@ -128,6 +147,7 @@ class Sounds extends PureComponent {
             activeSoundId={activeSoundId}
             audioRef={this.audioRef.current}
             currentTime={currentTime}
+            isPaused={isPaused}
             isViewerInPower={isViewerInPower}
             sounds={allSounds}
             onRefetchSounds={onRefetchSounds}
@@ -138,7 +158,12 @@ class Sounds extends PureComponent {
         <audio crossOrigin="anonymous" ref={this.audioRef}>
           <source src={get(sound, 'audioUrl')} />
         </audio>
-        <SoundFooter currentTime={currentTime} sound={sound} />
+        <SoundFooter
+          currentTime={currentTime}
+          isPaused={isPaused}
+          sound={sound}
+          onSoundClick={this.onSoundClick}
+        />
       </React.Fragment>
     )
   }

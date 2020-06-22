@@ -39,9 +39,7 @@ import {
 class SoundCard extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      isPaused: true,
-    }
+    this.state = {}
     this.trackRef = React.createRef()
     this.waveformRef = React.createRef()
     this.waveformImageRef = React.createRef()
@@ -58,39 +56,17 @@ class SoundCard extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const { audioRef, isActive } = this.props
+    const { audioRef } = this.props
     if (audioRef) {
       // if (this.waveformRef) {
       // subscribeWaveForm(this.waveformRef, audioRef)
       // }
     }
-    if (!isActive && prevProps.isActive) {
-      this.handleChangeActiveSound()
-    }
-  }
-
-  handleChangeActiveSound = () => {
-    this.setState({ isPaused: true })
   }
 
   handlePress = () => {
-    const { isActive, audioRef, sound, onSoundClick } = this.props
+    const { sound, onSoundClick } = this.props
     const soundId = get(sound, 'id')
-    if (audioRef) {
-      let isSoundPaused = false
-      if (audioRef.paused || !isActive) {
-        isSoundPaused = true
-      }
-      this.setState({ isPaused: !isSoundPaused }, () => {
-        if (isSoundPaused) {
-          audioRef.play()
-        } else {
-          audioRef.pause()
-        }
-      })
-    } else {
-      this.setState({ isPaused: false })
-    }
     onSoundClick(soundId)
   }
 
@@ -120,8 +96,8 @@ class SoundCard extends PureComponent {
       // currentTime,
       deleteSound,
       isSoundDeleting,
+      isSoundPaused,
     } = this.props
-    const { isPaused } = this.state
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
     // const soundName = get(sound, 'name', '')
@@ -144,14 +120,14 @@ class SoundCard extends PureComponent {
         <SoundFrame>
           <Cover onClick={this.handlePress}>
             {imageUrl && <img alt="test" src={imageUrl} />}
-            <PlayButton playing={!isPaused}>
-              {isPaused ? <PlaySign /> : <PauseSign />}
+            <PlayButton playing={!isSoundPaused}>
+              {isSoundPaused ? <PlaySign /> : <PauseSign />}
             </PlayButton>
           </Cover>
           {isSoundDeleting && <Spinner />}
           {!isSoundDeleting && (
             <Track
-              playing={!isPaused}
+              playing={!isSoundPaused}
               ref={this.trackRef}
               onClick={this.handleSeekClick}
             >
@@ -177,6 +153,7 @@ SoundCard.propTypes = {
   deleteSound: PropTypes.func.isRequired,
   isActive: PropTypes.bool.isRequired,
   isSoundDeleting: PropTypes.bool.isRequired,
+  isSoundPaused: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
   sound: PropTypes.object.isRequired,
   // onRefetchSounds: PropTypes.func.isRequired,

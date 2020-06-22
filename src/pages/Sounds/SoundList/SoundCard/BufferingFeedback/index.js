@@ -19,8 +19,12 @@ const BufferingFeedback = ({ soundId }) => {
   )
 }
 
+BufferingFeedback.defaultProps = {
+  soundId: null,
+}
+
 BufferingFeedback.propTypes = {
-  soundId: PropTypes.string.isRequired,
+  soundId: PropTypes.string,
 }
 
 export default BufferingFeedback

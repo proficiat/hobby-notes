@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { FiTrash, FiEdit2 } from "react-icons/fi";
+import { FiTrash, FiEdit2 } from 'react-icons/fi'
 
 const CARD_HEIGHT = 128
 

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import { space, layout, color } from 'styled-system'
 
@@ -18,8 +19,13 @@ const PlaySign = styled.div`
 `
 
 PlaySign.defaultProps = {
-  strokeWidth: 3,
   leftRotate: false,
+  strokeWidth: 3,
+}
+
+PlaySign.propTypes = {
+  leftRotate: PropTypes.bool,
+  strokeWidth: PropTypes.number,
 }
 
 export default PlaySign

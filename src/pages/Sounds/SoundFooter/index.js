@@ -21,14 +21,19 @@ import {
 class SoundFooter extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      isPlaying: false,
+    this.state = {}
+  }
+
+  handlePlayPress = () => {
+    const { sound, onSoundClick } = this.props
+    const soundId = get(sound, 'id')
+    if (soundId) {
+      onSoundClick(soundId)
     }
   }
 
   render() {
-    const { sound, currentTime } = this.props
-    const { isPlaying } = this.state
+    const { sound, currentTime, isPaused } = this.props
     const { currentDuration, soundDuration } = getSoundDurations(
       sound,
       currentTime,
@@ -39,10 +44,18 @@ class SoundFooter extends PureComponent {
           <StepMarkBox mr="12px" prev>
             <PlaySign leftRotate size={12} strokeWidth={5} />
           </StepMarkBox>
-          {isPlaying ? (
-            <PauseSign size={16} strokeWidth={6} />
+          {isPaused ? (
+            <PlaySign
+              size={16}
+              strokeWidth={6}
+              onClick={this.handlePlayPress}
+            />
           ) : (
-            <PlaySign size={16} strokeWidth={6} />
+            <PauseSign
+              size={16}
+              strokeWidth={6}
+              onClick={this.handlePlayPress}
+            />
           )}
           <StepMarkBox ml="17px" next>
             <PlaySign size={12} strokeWidth={5} />
@@ -60,11 +73,14 @@ class SoundFooter extends PureComponent {
 
 SoundFooter.defaultProps = {
   // isViewerInPower: false,
+  sound: null,
 }
 
 SoundFooter.propTypes = {
   currentTime: PropTypes.number.isRequired,
-  sound: PropTypes.object.isRequired,
+  isPaused: PropTypes.bool.isRequired,
+  sound: PropTypes.object,
+  onSoundClick: PropTypes.func.isRequired,
 }
 
 export default SoundFooter

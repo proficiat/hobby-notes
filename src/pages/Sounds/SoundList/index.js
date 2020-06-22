@@ -79,6 +79,7 @@ class SoundList extends PureComponent {
       audioRef,
       sounds,
       currentTime,
+      isPaused,
       isViewerInPower,
       onRefetchSounds,
       onSoundClick,
@@ -93,13 +94,15 @@ class SoundList extends PureComponent {
           </Mutation>
         )}
         {map(sounds, (sound, index) => {
-          const isSoundActive = activeSoundId && activeSoundId === sound.id
+          const isSoundActive = !!activeSoundId && activeSoundId === sound.id
+          const isSoundPaused = isSoundActive ? isPaused : true
           return (
             <SoundCard
               audioRef={audioRef}
               currentTime={isSoundActive ? currentTime : 0}
               index={index}
               isActive={isSoundActive}
+              isSoundPaused={isSoundPaused}
               isViewerInPower={isViewerInPower}
               key={sound.id}
               sound={sound}
@@ -116,13 +119,15 @@ class SoundList extends PureComponent {
 SoundList.defaultProps = {
   isViewerInPower: false,
   activeSoundId: '',
+  audioRef: null,
 }
 
 SoundList.propTypes = {
   activeSoundId: PropTypes.string,
-  audioRef: PropTypes.object.isRequired,
+  audioRef: PropTypes.object,
   client: PropTypes.object.isRequired,
   currentTime: PropTypes.number.isRequired,
+  isPaused: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
   sounds: PropTypes.array.isRequired,
   onRefetchSounds: PropTypes.func.isRequired,
