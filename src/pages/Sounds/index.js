@@ -12,6 +12,7 @@ import get from 'lodash/get'
 import memoize from 'lodash/memoize'
 import find from 'lodash/find'
 import forEach from 'lodash/forEach'
+import findIndex from 'lodash/findIndex'
 
 import SoundList from './SoundList'
 import GroupsList from './GroupsList'
@@ -21,6 +22,10 @@ import { ListsBase } from './styles'
 
 const findActiveSound = memoize((activeSoundId, sounds) =>
   find(sounds, sound => get(sound, 'id') === activeSoundId),
+)
+
+const findActiveSoundIndex = memoize((activeSoundId, sounds) =>
+  findIndex(sounds, ['id', activeSoundId]),
 )
 
 class Sounds extends PureComponent {
@@ -76,11 +81,36 @@ class Sounds extends PureComponent {
     }
 
     if (isNewSound) {
-      this.setState({ activeSoundId: soundId }, () => {
-        this.audioRef.current.load()
-        this.audioRef.current.play()
-      })
+      this.handleSwitchSoundId(soundId)
     }
+  }
+
+  onSwitchSound = (isPrevious = false) => e => {
+    const { allSounds } = this.props
+    const lastSoundIndex = allSounds.length - 1
+    if (lastSoundIndex <= 0) {
+      return
+    }
+    const { activeSoundId } = this.state
+    let soundIndex = findActiveSoundIndex(activeSoundId, allSounds)
+    soundIndex = isPrevious ? soundIndex - 1 : soundIndex + 1
+    if (soundIndex > lastSoundIndex) {
+      soundIndex = 0
+    } else if (soundIndex < 0) {
+      soundIndex = lastSoundIndex
+    }
+    const nextSound = allSounds[soundIndex]
+    this.handleSwitchSoundId(nextSound.id)
+  }
+
+  handleSwitchSoundId = soundId => {
+    if (!soundId) return
+    const { current: audioRef } = this.audioRef
+    this.setState({ activeSoundId: soundId }, () => {
+      audioRef.pause()
+      audioRef.load()
+      audioRef.play()
+    })
   }
 
   handleSoundProgress = () => {
@@ -164,6 +194,7 @@ class Sounds extends PureComponent {
           isPaused={isPaused}
           sound={sound}
           onSoundClick={this.onSoundClick}
+          onSwitchSound={this.onSwitchSound}
         />
       </React.Fragment>
     )

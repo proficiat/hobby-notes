@@ -33,7 +33,7 @@ class SoundFooter extends PureComponent {
   }
 
   render() {
-    const { sound, currentTime, isPaused } = this.props
+    const { sound, currentTime, isPaused, onSwitchSound } = this.props
     const { currentDuration, soundDuration } = getSoundDurations(
       sound,
       currentTime,
@@ -41,7 +41,7 @@ class SoundFooter extends PureComponent {
     return (
       <Frame>
         <PlayControls>
-          <StepMarkBox mr="12px" prev>
+          <StepMarkBox mr="12px" prev onClick={onSwitchSound(true)}>
             <PlaySign leftRotate size={12} strokeWidth={5} />
           </StepMarkBox>
           {isPaused ? (
@@ -57,7 +57,7 @@ class SoundFooter extends PureComponent {
               onClick={this.handlePlayPress}
             />
           )}
-          <StepMarkBox ml="17px" next>
+          <StepMarkBox ml="17px" next onClick={onSwitchSound()}>
             <PlaySign size={12} strokeWidth={5} />
           </StepMarkBox>
         </PlayControls>
@@ -81,6 +81,7 @@ SoundFooter.propTypes = {
   isPaused: PropTypes.bool.isRequired,
   sound: PropTypes.object,
   onSoundClick: PropTypes.func.isRequired,
+  onSwitchSound: PropTypes.func.isRequired,
 }
 
 export default SoundFooter
