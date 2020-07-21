@@ -25,7 +25,7 @@ import {
   SoundFrame,
   Cover,
   Track,
-  WaveformCanvas,
+  // WaveformCanvas,
   PlayButton,
   PlaySign,
   PauseSign,
@@ -34,6 +34,9 @@ import {
   IconsCircleFrame,
   StyledEditIcon,
   StyledTrashIcon,
+  WaveformProgressBar,
+  TrackHeader,
+  // TimeLine,
 } from './styles'
 
 class SoundCard extends PureComponent {
@@ -100,7 +103,7 @@ class SoundCard extends PureComponent {
     } = this.props
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
-    // const soundName = get(sound, 'name', '')
+    const soundName = get(sound, 'name', '')
     // const { currentDuration, soundDuration } = getSoundDurations(
     //   sound,
     //   currentTime,
@@ -131,9 +134,15 @@ class SoundCard extends PureComponent {
               ref={this.trackRef}
               onClick={this.handleSeekClick}
             >
-              <BufferingFeedback soundId={soundId} />
-              <WaveformCanvas ref={this.waveformRef} />
-              <WaveformImageCanvas ref={this.waveformImageRef} />
+              <TrackHeader>{soundName}</TrackHeader>
+              <WaveformProgressBar>
+                <BufferingFeedback soundId={soundId} />
+                <WaveformImageCanvas
+                  id={`canvasImage${soundId}`}
+                  ref={this.waveformImageRef}
+                />
+              </WaveformProgressBar>
+              {/* <WaveformCanvas ref={this.waveformRef} /> */}
             </Track>
           )}
         </SoundFrame>

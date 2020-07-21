@@ -1,10 +1,13 @@
 import styled from 'styled-components'
 
+import { colors } from 'styles'
+
 export const Base = styled.div`
   position: relative;
   display: flex;
   flex: 1;
   height: 100%;
+  background: ${colors.luciaLash};
 `
 
 export const FeedbackBar = styled.div`
@@ -14,7 +17,7 @@ export const FeedbackBar = styled.div`
   height: 100%;
   width: 100%;
   z-index: 2;
-  opacity: 0.2;
+  opacity: 0.8;
 
   > span {
     display: block;

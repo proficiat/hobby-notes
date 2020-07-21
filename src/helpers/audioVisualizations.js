@@ -108,12 +108,21 @@ export const drawLinearWaveForm = (normalizedData, waveformImageRef) => {
     } else if (height > canvas.offsetHeight / 2) {
       height = height > canvas.offsetHeight / 2
     }
-    drawLineSegment(ctx, x, height, width, (i + 1) % 2)
+    const isLast = i === normalizedData.length - 1
+    drawLineSegment(ctx, x, height, width, (i + 1) % 2, isLast)
   }
+  ctx.globalCompositeOperation = 'xor'
+  ctx.fillStyle = colors.background // '#B4D0E7' // what color our line is
+  ctx.fillRect(0, -80, canvas.width + 100, canvas.height)
+  ctx.fill()
+  ctx.closePath()
 }
 
-const drawLineSegment = (ctx, x, y, width, isEven) => {
-  ctx.lineWidth = 0.8 // how thick the line is
+export const drawLineSegment = (ctx, x, y, width, isEven, isLast) => {
+  ctx.lineWidth = 1 // how thick the line is
+  ctx.lineJoin = 'round'
+  ctx.lineCap = 'round'
+
   ctx.strokeStyle = colors.luciaLash // what color our line is
   ctx.beginPath()
   y = isEven ? y : -y
@@ -122,6 +131,12 @@ const drawLineSegment = (ctx, x, y, width, isEven) => {
   ctx.arc(x + width / 2, y, width / 2, Math.PI, 0, isEven)
   ctx.lineTo(x + width, 0)
   ctx.stroke()
+  if (isLast) {
+    ctx.beginPath()
+    ctx.moveTo(x + width + 1, 0)
+    ctx.lineTo(x + width + 1, y)
+    ctx.stroke()
+  }
 }
 
 export const drawWaveFormBars = (data, waveformImageRef) => {

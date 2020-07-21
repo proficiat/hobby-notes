@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { colors } from 'styles'
+
 import { FiTrash, FiEdit2 } from 'react-icons/fi'
 
 const CARD_HEIGHT = 128
@@ -65,18 +67,17 @@ export const WaveformCanvas = styled.canvas`
 export const WaveformImageCanvas = styled.canvas`
   position: absolute;
   z-index: 2;
-  left: 18px;
-  bottom: 30%;
-  height: 50%;
-  width: calc(100% - 18px);
-  opacity: 0.9;
-  transform: translateY(50%);
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
 `
 
 export const Track = styled.div`
-  position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 
   ${props =>
     props.playing &&
@@ -137,4 +138,27 @@ export const PauseSign = styled.div`
   border-left: solid 3px;
   border-right: solid 3px;
   border-color: #f7f8fa;
+`
+
+export const TrackHeader = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: ${colors.luciaLash};
+  padding-left: 40px;
+  padding-top: 5px;
+  line-height: 1.2;
+  font-weight: 300;
+`
+
+export const WaveformProgressBar = styled.div`
+  margin: auto 40px auto 40px;
+  position: relative;
+  background: ${colors.background};
+  height: 50%;
+  padding: 4px;
+`
+
+export const TimeLine = styled.div`
+  margin: auto 0 auto 0;
 `

@@ -147,11 +147,12 @@ class Sounds extends PureComponent {
     const duration = get(audioRef, 'duration')
     const currentTime = get(audioRef, 'currentTime')
     if (activeSoundId && duration > 0) {
+      const filledInterest = (currentTime / duration) * 100
       const progressElements = document.getElementsByClassName(
         `progress-amount-${activeSoundId}`,
       )
       forEach(progressElements, element => {
-        element.style.width = `${(currentTime / duration) * 100}%`
+        element.style.width = `${filledInterest}%`
       })
     }
   }
