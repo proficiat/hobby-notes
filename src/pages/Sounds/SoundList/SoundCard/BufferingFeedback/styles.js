@@ -7,7 +7,7 @@ export const Base = styled.div`
   display: flex;
   flex: 1;
   height: 100%;
-  background: ${colors.luciaLash};
+  background: ${props => (props.color ? props.color : 'unset')};
 `
 
 export const FeedbackBar = styled.div`
@@ -17,12 +17,12 @@ export const FeedbackBar = styled.div`
   height: 100%;
   width: 100%;
   z-index: 2;
-  opacity: 0.8;
+  opacity: 1;
 
   > span {
     display: block;
     height: 100%;
-    background-color: ${props => (props.color ? props.color : '#DDEDF4')};
+    background-color: ${props => (props.color ? props.color : 'unset')};
     width: 0;
   }
 `

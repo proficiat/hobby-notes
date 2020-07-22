@@ -7,7 +7,7 @@ import { colors } from 'styles'
 export const Frame = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 2;
   background: ghostwhite;
   padding-left: 36px;
   flex-shrink: 0;

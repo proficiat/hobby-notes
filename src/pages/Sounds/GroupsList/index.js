@@ -15,7 +15,7 @@ class GroupsList extends PureComponent {
     return (
       <Frame>
         <Controls />
-        <Item>All</Item>
+        <Item>Coming soon...</Item>
       </Frame>
     )
   }

@@ -15,7 +15,7 @@ import forEach from 'lodash/forEach'
 import findIndex from 'lodash/findIndex'
 
 import SoundList from './SoundList'
-import GroupsList from './GroupsList'
+// import GroupsList from './GroupsList'
 import SoundFooter from './SoundFooter'
 
 import { ListsBase } from './styles'
@@ -174,7 +174,7 @@ class Sounds extends PureComponent {
     return (
       <React.Fragment>
         <ListsBase>
-          <GroupsList />
+          {/* <GroupsList /> */}
           <SoundList
             activeSoundId={activeSoundId}
             audioRef={this.audioRef.current}

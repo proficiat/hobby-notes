@@ -11,8 +11,14 @@ export const Frame = styled.div`
   background: white;
   margin-top: auto;
   align-items: center;
-  padding-left: 88px;
   flex-shrink: 0;
+`
+
+export const SoundFrame = styled.div`
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  align-items: center;
 `
 
 export const PlayControls = styled.div`
@@ -56,8 +62,8 @@ export const StepMarkBox = styled.div`
 
 export const ProgressFrame = styled.div`
   width: 58%;
-  height: 2px;
-  background: ${colors.background};
+  height: 1px;
+  background: ${colors.grey};
 `
 
 export const TimeDuration = styled.div`

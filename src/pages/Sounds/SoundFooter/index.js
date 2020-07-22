@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
+import { colors } from 'styles'
+
 import get from 'lodash/get'
 
 import PlaySign from 'components/PlaySign'
@@ -16,6 +18,7 @@ import {
   StepMarkBox,
   ProgressFrame,
   TimeDuration,
+  SoundFrame,
 } from './styles'
 
 class SoundFooter extends PureComponent {
@@ -40,32 +43,37 @@ class SoundFooter extends PureComponent {
     )
     return (
       <Frame>
-        <PlayControls>
-          <StepMarkBox mr="12px" prev onClick={onSwitchSound(true)}>
-            <PlaySign leftRotate size={12} strokeWidth={5} />
-          </StepMarkBox>
-          {isPaused ? (
-            <PlaySign
-              size={16}
-              strokeWidth={6}
-              onClick={this.handlePlayPress}
+        <SoundFrame>
+          <PlayControls>
+            <StepMarkBox mr="12px" prev onClick={onSwitchSound(true)}>
+              <PlaySign leftRotate size={12} strokeWidth={5} />
+            </StepMarkBox>
+            {isPaused ? (
+              <PlaySign
+                size={16}
+                strokeWidth={6}
+                onClick={this.handlePlayPress}
+              />
+            ) : (
+              <PauseSign
+                size={16}
+                strokeWidth={6}
+                onClick={this.handlePlayPress}
+              />
+            )}
+            <StepMarkBox ml="17px" next onClick={onSwitchSound()}>
+              <PlaySign size={12} strokeWidth={5} />
+            </StepMarkBox>
+          </PlayControls>
+          <TimeDuration current>{currentDuration}</TimeDuration>
+          <ProgressFrame>
+            <BufferingFeedback
+              progressColor={colors.lushLava}
+              soundId={get(sound, 'id', null)}
             />
-          ) : (
-            <PauseSign
-              size={16}
-              strokeWidth={6}
-              onClick={this.handlePlayPress}
-            />
-          )}
-          <StepMarkBox ml="17px" next onClick={onSwitchSound()}>
-            <PlaySign size={12} strokeWidth={5} />
-          </StepMarkBox>
-        </PlayControls>
-        <TimeDuration current>{currentDuration}</TimeDuration>
-        <ProgressFrame>
-          <BufferingFeedback soundId={get(sound, 'id', null)} />
-        </ProgressFrame>
-        <TimeDuration>{soundDuration}</TimeDuration>
+          </ProgressFrame>
+          <TimeDuration>{soundDuration}</TimeDuration>
+        </SoundFrame>
       </Frame>
     )
   }

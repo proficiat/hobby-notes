@@ -9,10 +9,14 @@ export const colors = {
   text: '#343c5a',
   textSecondary: '#747790',
   red: '#C3002F',
+  blue: '#34558B',
   green: '#4D724D',
   luciaLash: '#0A0A0A',
   lushLava: '#FF4500',
   phantomBlue: '#191970',
+  chinesePorcelain: '#395E7D',
+  navy: '#02075D',
+  blush: '#FFC0CB',
 }
 
 export const MainWrapper = styled.div`

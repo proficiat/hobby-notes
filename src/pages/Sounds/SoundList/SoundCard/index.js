@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
+import { colors } from 'styles'
+
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
@@ -136,7 +138,12 @@ class SoundCard extends PureComponent {
             >
               <TrackHeader>{soundName}</TrackHeader>
               <WaveformProgressBar>
-                <BufferingFeedback soundId={soundId} />
+                <BufferingFeedback
+                  amountColor={colors.chinesePorcelain}
+                  bgColor={colors.luciaLash}
+                  progressColor={colors.lushLava}
+                  soundId={soundId}
+                />
                 <WaveformImageCanvas
                   id={`canvasImage${soundId}`}
                   ref={this.waveformImageRef}

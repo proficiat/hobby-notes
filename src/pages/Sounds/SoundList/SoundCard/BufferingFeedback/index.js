@@ -5,16 +5,21 @@ import { colors } from 'styles'
 
 import { Base, FeedbackBar } from './styles'
 
-const BufferingFeedback = ({ soundId }) => {
+const BufferingFeedback = ({
+  soundId,
+  bgColor,
+  amountColor,
+  progressColor,
+}) => {
   if (!soundId) {
     return null
   }
   return (
-    <Base>
-      <FeedbackBar>
+    <Base color={bgColor}>
+      <FeedbackBar color={amountColor}>
         <span className={`buffered-amount-${soundId}`} />
       </FeedbackBar>
-      <FeedbackBar color={colors.red}>
+      <FeedbackBar color={progressColor}>
         <span className={`progress-amount-${soundId}`} />
       </FeedbackBar>
     </Base>
@@ -23,9 +28,15 @@ const BufferingFeedback = ({ soundId }) => {
 
 BufferingFeedback.defaultProps = {
   soundId: null,
+  bgColor: '',
+  amountColor: '',
+  progressColor: '',
 }
 
 BufferingFeedback.propTypes = {
+  amountColor: PropTypes.string,
+  bgColor: PropTypes.string,
+  progressColor: PropTypes.string,
   soundId: PropTypes.string,
 }
 
