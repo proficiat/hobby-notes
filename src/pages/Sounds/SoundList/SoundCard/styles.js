@@ -152,13 +152,25 @@ export const TrackHeader = styled.div`
 `
 
 export const WaveformProgressBar = styled.div`
-  margin: auto 40px auto 40px;
   position: relative;
   background: ${colors.background};
-  height: 50%;
   padding: 4px;
+  width: 100%;
+  height: 100%;
+  margin: 0 8px;
 `
 
 export const TimeLine = styled.div`
+  display: flex;
+  width: 100%;
+  height: 50%;
+  align-items: center;
   margin: auto 0 auto 0;
+  padding-left: 40px;
+  font-size: 13px;
+  font-weight: 300;
+
+  > span:first-child {
+    color: ${colors.lushLava};
+  }
 `

@@ -14,7 +14,7 @@ import {
   drawLinearWaveForm,
   // drawWaveFormBars,
 } from 'helpers/audioVisualizations'
-// import { getSoundDurations } from 'helpers/sounds'
+import { getSoundDurations } from 'helpers/sounds'
 
 // import WaveformData from 'waveform-data'
 
@@ -38,7 +38,7 @@ import {
   StyledTrashIcon,
   WaveformProgressBar,
   TrackHeader,
-  // TimeLine,
+  TimeLine,
 } from './styles'
 
 class SoundCard extends PureComponent {
@@ -98,18 +98,19 @@ class SoundCard extends PureComponent {
     const {
       sound,
       isViewerInPower,
-      // currentTime,
+      currentTime,
       deleteSound,
       isSoundDeleting,
       isSoundPaused,
+      isActive,
     } = this.props
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
     const soundName = get(sound, 'name', '')
-    // const { currentDuration, soundDuration } = getSoundDurations(
-    //   sound,
-    //   currentTime,
-    // )
+    const { currentDuration, soundDuration } = getSoundDurations(
+      sound,
+      currentTime,
+    )
     return (
       <HoverFrame>
         {isViewerInPower && !isSoundDeleting && (
@@ -137,18 +138,22 @@ class SoundCard extends PureComponent {
               onClick={this.handleSeekClick}
             >
               <TrackHeader>{soundName}</TrackHeader>
-              <WaveformProgressBar>
-                <BufferingFeedback
-                  amountColor={colors.chinesePorcelain}
-                  bgColor={colors.luciaLash}
-                  progressColor={colors.lushLava}
-                  soundId={soundId}
-                />
-                <WaveformImageCanvas
-                  id={`canvasImage${soundId}`}
-                  ref={this.waveformImageRef}
-                />
-              </WaveformProgressBar>
+              <TimeLine>
+                {isActive && <span>{currentDuration}</span>}
+                <WaveformProgressBar>
+                  <BufferingFeedback
+                    amountColor={colors.chinesePorcelain}
+                    bgColor={colors.luciaLash}
+                    progressColor={colors.lushLava}
+                    soundId={soundId}
+                  />
+                  <WaveformImageCanvas
+                    id={`canvasImage${soundId}`}
+                    ref={this.waveformImageRef}
+                  />
+                </WaveformProgressBar>
+                {soundDuration}
+              </TimeLine>
               {/* <WaveformCanvas ref={this.waveformRef} /> */}
             </Track>
           )}

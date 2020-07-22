@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { colors } from 'styles'
-
 import { Base, FeedbackBar } from './styles'
 
 const BufferingFeedback = ({

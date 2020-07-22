@@ -35,5 +35,6 @@ export const Item = styled.div`
       color: #c3002f;
       font-size: 16px;
       margin-bottom: 24px;
+      cursor: default;
     `}
 `

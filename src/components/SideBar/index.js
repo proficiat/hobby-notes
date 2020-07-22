@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withApollo } from 'react-apollo'
 
 import Launch from 'pages/Launch'
+import GhostLogo from '../GhostLogo'
 
 import { Container, Item } from './styles'
 
@@ -74,9 +75,11 @@ class SideBar extends PureComponent {
     const { isVisibleLaunch } = this.state
     const { token, onSetToken } = this.props
     return (
-      <>
+      <React.Fragment>
         <Container onClick={this.handleExit}>
-          <Item logo>ADSUM</Item>
+          <Item logo>
+            <GhostLogo />
+          </Item>
           <Item ref={this.addLaunchItemRef} onClick={this.handleLaunchClick}>
             {token ? 'Exit' : 'Launch'}
           </Item>
@@ -84,7 +87,7 @@ class SideBar extends PureComponent {
         {isVisibleLaunch && !token && (
           <Launch setToken={onSetToken} onAddLaunchRef={this.addLaunchRef} />
         )}
-      </>
+      </React.Fragment>
     )
   }
 }
