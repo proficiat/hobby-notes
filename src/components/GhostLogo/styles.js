@@ -1,9 +1,7 @@
 import styled from 'styled-components'
 
-import { colors } from 'styles'
-
 export const Container = styled.div`
-  background: ${colors.lushLava};
+  background: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;

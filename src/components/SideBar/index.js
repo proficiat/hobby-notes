@@ -77,11 +77,13 @@ class SideBar extends PureComponent {
     return (
       <React.Fragment>
         <Container onClick={this.handleExit}>
-          <Item logo>
+          <Item
+            logo
+            ref={this.addLaunchItemRef}
+            onClick={this.handleLaunchClick}
+          >
             <GhostLogo />
-          </Item>
-          <Item ref={this.addLaunchItemRef} onClick={this.handleLaunchClick}>
-            {token ? 'Exit' : 'Launch'}
+            <span> {token ? 'Exit' : 'Launch'}</span>
           </Item>
         </Container>
         {isVisibleLaunch && !token && (

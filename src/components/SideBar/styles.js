@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-// import { colors } from 'styles'
+import { colors } from 'styles'
 
 export const Container = styled.div`
   display: flex;
@@ -22,19 +22,19 @@ export const Item = styled.div`
   font-weight: 300;
 
   :hover {
-    ${props =>
-      !props.logo &&
-      css`
-        color: #c3002f;
-      `}
+    color: ${colors.red};
   }
 
   ${props =>
     props.logo &&
     css`
-      color: #c3002f;
       font-size: 16px;
-      margin-bottom: 24px;
-      cursor: default;
+      margin-top: 24px;
+      cursor: pointer;
+      flex-direction: column;
+
+      > span {
+        margin-top: 12px;
+      }
     `}
 `

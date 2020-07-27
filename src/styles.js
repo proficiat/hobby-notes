@@ -40,7 +40,7 @@ export const GlobalStyle = createGlobalStyle({
   body: {
     margin: 0,
     padding: 0,
-    fontFamily: "'Source Sans Pro', sans-serif",
+    fontFamily: 'economica, serif;',
     backgroundColor: colors.background,
     color: colors.text,
     fontSize: '14px',

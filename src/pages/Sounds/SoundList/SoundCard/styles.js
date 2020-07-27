@@ -143,12 +143,13 @@ export const PauseSign = styled.div`
 export const TrackHeader = styled.div`
   display: flex;
   align-items: center;
-  font-size: 13px;
+  font-size: 16px;
   color: ${colors.luciaLash};
   padding-left: 40px;
   padding-top: 5px;
   line-height: 1.2;
-  font-weight: 300;
+  font-weight: 700;
+  text-transform: uppercase;
 `
 
 export const WaveformProgressBar = styled.div`
