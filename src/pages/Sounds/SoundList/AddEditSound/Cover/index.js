@@ -4,8 +4,6 @@ import PropTypes from 'prop-types'
 
 import get from 'lodash/get'
 
-import { colors } from 'styles'
-
 import Dropzone from 'react-dropzone'
 
 import PuzzleIcon from 'components/Icons/Puzzle'
