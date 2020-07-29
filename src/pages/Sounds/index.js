@@ -163,6 +163,9 @@ class Sounds extends PureComponent {
       forEach(progressElements, element => {
         element.style.width = `${filledInterest}%`
       })
+      if (filledInterest >= 100) {
+        this.onSwitchSound()()
+      }
     }
   }
 
