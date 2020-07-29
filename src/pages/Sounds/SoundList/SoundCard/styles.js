@@ -169,7 +169,7 @@ export const TimeLine = styled.div`
   margin: auto 0 auto 0;
   padding-left: 40px;
   font-size: 13px;
-  font-weight: 300;
+  font-weight: 700;
 
   > span:first-child {
     color: ${colors.lushLava};

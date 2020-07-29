@@ -60,6 +60,15 @@ class Sounds extends PureComponent {
   }
 
   onSoundClick = soundId => {
+    if (!soundId) {
+      const { allSounds } = this.props
+      const initSoundId = get(allSounds, '[0].id', null)
+      if (initSoundId) {
+        this.handleSwitchSoundId(initSoundId)
+      } else {
+        return
+      }
+    }
     const { activeSoundId } = this.state
     const { current: audioRef } = this.audioRef
     const isActive = soundId && activeSoundId === soundId

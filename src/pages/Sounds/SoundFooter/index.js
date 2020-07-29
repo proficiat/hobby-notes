@@ -30,9 +30,7 @@ class SoundFooter extends PureComponent {
   handlePlayPress = () => {
     const { sound, onSoundClick } = this.props
     const soundId = get(sound, 'id')
-    if (soundId) {
-      onSoundClick(soundId)
-    }
+    onSoundClick(soundId)
   }
 
   render() {

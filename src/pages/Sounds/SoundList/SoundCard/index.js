@@ -142,7 +142,7 @@ class SoundCard extends PureComponent {
                 {isActive && <span>{currentDuration}</span>}
                 <WaveformProgressBar>
                   <BufferingFeedback
-                    amountColor={colors.chinesePorcelain}
+                    amountColor={colors.suicidePreventionBlue}
                     bgColor={colors.luciaLash}
                     progressColor={colors.lushLava}
                     soundId={soundId}
