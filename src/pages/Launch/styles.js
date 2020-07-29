@@ -14,25 +14,23 @@ export const Container = styled.div`
   background: ${colors.luciaLash};
   font-weight: 300;
   width: 380px;
-  z-index: 4;
+  z-index: 6;
+  box-shadow: 1px 0 22px 0 rgba(10, 10, 10, 0.8);
 
   :before,
   :after {
-    top: 50%;
+    top: 92px;
     right: 100%;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
-    border: solid transparent;
     content: ' ';
     height: 0;
     width: 0;
     position: absolute;
     pointer-events: none;
-  }
-
-  :after {
-    border: solid 16px rgba(136, 183, 213, 0);
+    border: solid 16px transparent;
     border-right-color: ${colors.luciaLash};
+    z-index: 6;
   }
 `
 
@@ -47,8 +45,8 @@ export const Title = styled.h3`
 export const Field = styled.div`
   display: flex;
   flex-direction: column;
-  font-size: 11px;
-  margin: 0 auto 8px auto;
+  font-size: 14px;
+  margin: 0 auto 16px auto;
   color: white;
 `
 
@@ -62,20 +60,23 @@ export const Input = styled.input`
   width: 220px;
   margin-top: 4px;
   padding-left: 8px;
+  border-radius: 4px;
 `
 
 export const Button = styled.button`
-  height: 32px;
-  font-size: 12px;
+  height: 44px;
+  font-size: 16px;
+  font-family: 'economica, serif';
   font-weight: 300;
-  margin-top: 26px;
+  margin-top: 18px;
   width: 144px;
-  background-color: white;
-  border-color: white;
+  background-color: ${colors.red};
   outline: none;
   cursor: pointer;
-  color: ${colors.luciaLash};
+  color: ${colors.blush};
   text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
 `
 
 export const StyledForm = styled.form`
@@ -85,6 +86,6 @@ export const StyledForm = styled.form`
 `
 
 export const Error = styled.div`
-  font-size: 11px;
-  color: red;
+  font-size: 15px;
+  color: ${colors.lushLava};
 `
