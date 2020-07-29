@@ -19,6 +19,7 @@ import { getSoundDurations } from 'helpers/sounds'
 // import WaveformData from 'waveform-data'
 
 import Spinner from 'components/Spinner'
+import PuzzleIcon from 'components/Icons/Puzzle'
 
 import BufferingFeedback from './BufferingFeedback'
 
@@ -125,7 +126,8 @@ class SoundCard extends PureComponent {
         )}
         <SoundFrame>
           <Cover onClick={this.handlePress}>
-            {imageUrl && <img alt="test" src={imageUrl} />}
+            {imageUrl ? <img alt="test" src={imageUrl} /> : <PuzzleIcon />}
+
             <PlayButton playing={!isSoundPaused}>
               {isSoundPaused ? <PlaySign /> : <PauseSign />}
             </PlayButton>

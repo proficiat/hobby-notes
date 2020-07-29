@@ -32,10 +32,13 @@ const Launch = props => {
   const [password, setPassword] = useState('')
 
   const handleError = error => {
-    setErrorMessage(error.graphQLErrors[0].message)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 10000)
+    const errorGQLMessage = get(error, 'graphQLErrors[0].message')
+    if (errorGQLMessage) {
+      setErrorMessage(errorGQLMessage)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 10000)
+    }
   }
 
   const [login] = useMutation(LOGIN, {

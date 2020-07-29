@@ -18,6 +18,7 @@ export const colors = {
   chinesePorcelain: '#395E7D',
   navy: '#02075D',
   blush: '#FFC0CB',
+  whitesmoke: '#f5f5f5',
 }
 
 export const MainWrapper = styled.div`

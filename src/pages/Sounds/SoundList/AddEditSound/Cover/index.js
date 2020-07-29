@@ -8,7 +8,7 @@ import { colors } from 'styles'
 
 import Dropzone from 'react-dropzone'
 
-import Puzzle from 'components/Puzzle'
+import PuzzleIcon from 'components/Icons/Puzzle'
 
 import {
   CoverFrame,
@@ -167,7 +167,7 @@ class Cover extends PureComponent {
                 )}
 
                 {!coverImageSrc && !croppedImageUrl && (
-                  <Puzzle bgColor="white" color={colors.luciaLash} />
+                  <PuzzleIcon />
                 )}
               </DropzoneRoot>
             )}

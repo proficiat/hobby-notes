@@ -106,7 +106,7 @@ export const PlayButton = styled.div`
 export const Cover = styled.div`
   height: 100%;
   min-width: ${CARD_HEIGHT}px;
-  background: #b3e3b5;
+  background: ${colors.whitesmoke};
   position: relative;
 
   > img {
