@@ -150,22 +150,26 @@ class Sounds extends PureComponent {
   }
 
   handleSoundTimeUpdate = event => {
-    const { activeSoundId } = this.state
-    const { current: audioRef } = this.audioRef
-    this.setState({ currentTime: get(event, 'target.currentTime', 0) })
-    const duration = get(audioRef, 'duration')
-    const currentTime = get(audioRef, 'currentTime')
-    if (activeSoundId && duration > 0) {
-      const filledInterest = (currentTime / duration) * 100
-      const progressElements = document.getElementsByClassName(
-        `progress-amount-${activeSoundId}`,
-      )
-      forEach(progressElements, element => {
-        element.style.width = `${filledInterest}%`
-      })
-      if (filledInterest >= 100) {
-        this.onSwitchSound()()
+    try {
+      const { activeSoundId } = this.state
+      const { current: audioRef } = this.audioRef
+      this.setState({ currentTime: get(event, 'target.currentTime', 0) })
+      const duration = get(audioRef, 'duration')
+      const currentTime = get(audioRef, 'currentTime')
+      if (activeSoundId && duration > 0) {
+        const filledInterest = (currentTime / duration) * 100
+        const progressElements = document.getElementsByClassName(
+          `progress-amount-${activeSoundId}`,
+        )
+        forEach(progressElements, element => {
+          element.style.width = `${filledInterest}%`
+        })
+        if (filledInterest >= 100) {
+          this.onSwitchSound()()
+        }
       }
+    } catch (e) {
+      //
     }
   }
 
@@ -179,25 +183,24 @@ class Sounds extends PureComponent {
     const { currentTime, activeSoundId, isPaused } = this.state
     const sound = findActiveSound(activeSoundId, allSounds)
 
-    if (isSoundsLoading) {
-      return <Spinner />
-    }
-
     return (
       <React.Fragment>
-        <ListsBase>
-          {/* <GroupsList /> */}
-          <SoundList
-            activeSoundId={activeSoundId}
-            audioRef={this.audioRef.current}
-            currentTime={currentTime}
-            isPaused={isPaused}
-            isViewerInPower={isViewerInPower}
-            sounds={allSounds}
-            onRefetchSounds={onRefetchSounds}
-            onSoundClick={this.onSoundClick}
-          />
-        </ListsBase>
+        {!isSoundsLoading && (
+          <ListsBase>
+            {/* <GroupsList /> */}
+            <SoundList
+              activeSoundId={activeSoundId}
+              audioRef={this.audioRef.current}
+              currentTime={currentTime}
+              isPaused={isPaused}
+              isViewerInPower={isViewerInPower}
+              sounds={allSounds}
+              onRefetchSounds={onRefetchSounds}
+              onSoundClick={this.onSoundClick}
+            />
+          </ListsBase>
+        )}
+        {isSoundsLoading && <Spinner />}
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <audio crossOrigin="anonymous" ref={this.audioRef}>
           <source src={get(sound, 'audioUrl')} />
