@@ -4,7 +4,6 @@ export const Base = styled.div`
   position: relative;
   display: flex;
   flex: 1;
-  height: 100%;
   background: ${props => (props.color ? props.color : 'unset')};
 `
 

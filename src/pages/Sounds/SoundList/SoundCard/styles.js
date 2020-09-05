@@ -22,7 +22,7 @@ export const StyledTrashIcon = styled(FiTrash)``
 export const HoverFrame = styled.div`
   display: flex;
   width: 100%;
-  height: ${CARD_HEIGHT}px;
+  min-height: ${CARD_HEIGHT}px;
   margin-bottom: 36px;
 
   :hover {
@@ -75,7 +75,7 @@ export const WaveformImageCanvas = styled.canvas`
 
 export const Track = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: ${CARD_HEIGHT}px;
   display: flex;
   flex-direction: column;
 
@@ -157,14 +157,16 @@ export const WaveformProgressBar = styled.div`
   background: ${colors.background};
   padding: 4px;
   width: 100%;
-  height: 100%;
+  min-height: calc(${CARD_HEIGHT}px / 2);
   margin: 0 8px;
+  display: flex;
+  flex: 1;
 `
 
 export const TimeLine = styled.div`
   display: flex;
   width: 100%;
-  height: 50%;
+  min-height: calc(${CARD_HEIGHT}px / 2);
   align-items: center;
   margin: auto 0 auto 0;
   padding-left: 40px;

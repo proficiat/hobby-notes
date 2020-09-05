@@ -64,6 +64,7 @@ export const ProgressFrame = styled.div`
   width: 48%;
   height: 1px;
   background: ${colors.grey};
+  display: flex;
 `
 
 export const TimeDuration = styled.div`
