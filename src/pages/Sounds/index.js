@@ -219,10 +219,11 @@ class Sounds extends PureComponent {
 
 Sounds.defaultProps = {
   isViewerInPower: false,
+  allSounds: [],
 }
 
 Sounds.propTypes = {
-  allSounds: PropTypes.array.isRequired,
+  allSounds: PropTypes.array,
   isSoundsLoading: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
   onRefetchSounds: PropTypes.func.isRequired,

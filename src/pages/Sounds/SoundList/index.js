@@ -120,6 +120,7 @@ SoundList.defaultProps = {
   isViewerInPower: false,
   activeSoundId: '',
   audioRef: null,
+  sounds: [],
 }
 
 SoundList.propTypes = {
@@ -129,7 +130,7 @@ SoundList.propTypes = {
   currentTime: PropTypes.number.isRequired,
   isPaused: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
-  sounds: PropTypes.array.isRequired,
+  sounds: PropTypes.array,
   onRefetchSounds: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
 }

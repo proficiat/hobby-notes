@@ -26,7 +26,6 @@ class SideBar extends PureComponent {
 
   componentWillUnmount() {
     const { removeEventListener } = document
-
     removeEventListener('click', this.handleClickOutsideLaunch, false)
     removeEventListener('touched', this.handleClickOutsideLaunch, false)
   }
@@ -39,11 +38,15 @@ class SideBar extends PureComponent {
     this.launchItemRef = ref
   }
 
-  handleExit = () => {
+  handleExit = async () => {
     const { onSetToken, client } = this.props
+    const { isVisibleLaunch } = this.state
+    if (isVisibleLaunch) {
+      this.setState({ isVisibleLaunch: false })
+    }
     onSetToken(null)
-    localStorage.clear()
-    client.resetStore()
+    await localStorage.clear()
+    await client.resetStore()
   }
 
   handleLaunchClick = () => {
@@ -76,7 +79,7 @@ class SideBar extends PureComponent {
     const { token, onSetToken } = this.props
     return (
       <React.Fragment>
-        <Container onClick={this.handleExit}>
+        <Container>
           <Item
             logo
             ref={this.addLaunchItemRef}
