@@ -46,7 +46,7 @@ class SoundCard extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
-    this.trackRef = React.createRef()
+    this.progressBarRef = React.createRef()
     this.waveformRef = React.createRef()
     this.waveformImageRef = React.createRef()
   }
@@ -76,16 +76,17 @@ class SoundCard extends PureComponent {
     onSoundClick(soundId)
   }
 
-  handleSeekClick = event => {
+  handleSeekProgress = event => {
     const { audioRef, isActive } = this.props
-    const { current: trackRef } = this.trackRef
+    const { current: progressBarRef } = this.progressBarRef
     if (!isActive) {
       return
     }
     try {
-      if (trackRef) {
+      if (progressBarRef) {
         const percentWidth =
-          (event.clientX - trackRef.offsetLeft) / trackRef.offsetWidth
+          (event.clientX - progressBarRef.offsetLeft) /
+          progressBarRef.offsetWidth
         if (audioRef) {
           audioRef.currentTime = percentWidth * audioRef.duration
         }
@@ -134,15 +135,14 @@ class SoundCard extends PureComponent {
           </Cover>
           {isSoundDeleting && <Spinner />}
           {!isSoundDeleting && (
-            <Track
-              playing={!isSoundPaused}
-              ref={this.trackRef}
-              onClick={this.handleSeekClick}
-            >
+            <Track playing={!isSoundPaused}>
               <TrackHeader>{soundName}</TrackHeader>
               <TimeLine>
                 {isActive && <span>{currentDuration}</span>}
-                <WaveformProgressBar>
+                <WaveformProgressBar
+                  ref={this.progressBarRef}
+                  onClick={this.handleSeekProgress}
+                >
                   <BufferingFeedback
                     amountColor={colors.suicidePreventionBlue}
                     bgColor={colors.luciaLash}
