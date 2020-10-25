@@ -5,7 +5,7 @@ import styled, { keyframes } from 'styled-components'
 const float = keyframes`
   50% {
     transform: translate(0, 4px);
-}
+  }
 `
 
 export const Frame = styled.div`
@@ -13,6 +13,7 @@ export const Frame = styled.div`
   width: 55px;
   animation: ${float} 3s ease-out infinite;
 `
+
 const GhostIcon = () => {
   return (
     <svg version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
