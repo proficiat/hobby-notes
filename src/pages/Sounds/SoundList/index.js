@@ -10,7 +10,7 @@ import map from 'lodash/map'
 import SoundCard from './SoundCard'
 import AddEditSound from './AddEditSound'
 
-import { List } from './styles'
+import { List, Frame } from './styles'
 
 const ADD_SOUND = gql`
   mutation createSound(
@@ -85,33 +85,35 @@ class SoundList extends PureComponent {
       onSoundClick,
     } = this.props
     return (
-      <List>
-        {isViewerInPower && (
-          <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
-            {(addSound, { loading }) => {
-              return <AddEditSound addSound={addSound} isLoading={loading} />
-            }}
-          </Mutation>
-        )}
-        {map(sounds, (sound, index) => {
-          const isSoundActive = !!activeSoundId && activeSoundId === sound.id
-          const isSoundPaused = isSoundActive ? isPaused : true
-          return (
-            <SoundCard
-              audioRef={audioRef}
-              currentTime={isSoundActive ? currentTime : 0}
-              index={index}
-              isActive={isSoundActive}
-              isSoundPaused={isSoundPaused}
-              isViewerInPower={isViewerInPower}
-              key={sound.id}
-              sound={sound}
-              onRefetchSounds={onRefetchSounds}
-              onSoundClick={onSoundClick}
-            />
-          )
-        })}
-      </List>
+      <Frame>
+        <List>
+          {isViewerInPower && (
+            <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
+              {(addSound, { loading }) => {
+                return <AddEditSound addSound={addSound} isLoading={loading} />
+              }}
+            </Mutation>
+          )}
+          {map(sounds, (sound, index) => {
+            const isSoundActive = !!activeSoundId && activeSoundId === sound.id
+            const isSoundPaused = isSoundActive ? isPaused : true
+            return (
+              <SoundCard
+                audioRef={audioRef}
+                currentTime={isSoundActive ? currentTime : 0}
+                index={index}
+                isActive={isSoundActive}
+                isSoundPaused={isSoundPaused}
+                isViewerInPower={isViewerInPower}
+                key={sound.id}
+                sound={sound}
+                onRefetchSounds={onRefetchSounds}
+                onSoundClick={onSoundClick}
+              />
+            )
+          })}
+        </List>
+      </Frame>
     )
   }
 }

@@ -29,7 +29,7 @@ export const Item = styled.div`
     props.logo &&
     css`
       font-size: 16px;
-      margin-top: 24px;
+      margin-top: 100px;
       cursor: pointer;
       flex-direction: column;
 

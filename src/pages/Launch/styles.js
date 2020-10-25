@@ -9,7 +9,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 33px 80px;
-  top: 0;
+  top: 38px;
   left: 88px;
   background: ${colors.luciaLash};
   font-weight: 300;

@@ -11,6 +11,7 @@ import Spinner from 'components/Spinner'
 import { persistCache } from 'apollo-cache-persist'
 
 import SideBar from './components/SideBar'
+import Header from './components/Header'
 import Sounds from './pages/Sounds'
 import { typeDefs, resolvers } from './resolvers'
 
@@ -77,6 +78,7 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <MainWrapper>
+          <Header />
           <SideBar token={token} onSetToken={this.setToken} />
           <PageContent>
             <Sounds />
