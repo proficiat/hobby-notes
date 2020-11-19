@@ -1,13 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Base, FeedbackBar } from './styles'
+import { Base, FeedbackBar, Dot } from './styles'
 
 const BufferingFeedback = ({
   soundId,
   bgColor,
   amountColor,
   progressColor,
+  dot,
 }) => {
   if (!soundId) {
     return null
@@ -18,7 +19,9 @@ const BufferingFeedback = ({
         <span className={`buffered-amount-${soundId}`} />
       </FeedbackBar>
       <FeedbackBar color={progressColor}>
-        <span className={`progress-amount-${soundId}`} />
+        <span className={`progress-amount-${soundId}`}>
+          {dot && <Dot color={amountColor} />}
+        </span>
       </FeedbackBar>
     </Base>
   )
@@ -29,11 +32,13 @@ BufferingFeedback.defaultProps = {
   bgColor: '',
   amountColor: '',
   progressColor: '',
+  dot: false,
 }
 
 BufferingFeedback.propTypes = {
   amountColor: PropTypes.string,
   bgColor: PropTypes.string,
+  dot: PropTypes.bool,
   progressColor: PropTypes.string,
   soundId: PropTypes.string,
 }

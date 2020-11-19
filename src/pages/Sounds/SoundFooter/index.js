@@ -66,6 +66,7 @@ class SoundFooter extends PureComponent {
           <TimeDuration current>{currentDuration}</TimeDuration>
           <ProgressFrame>
             <BufferingFeedback
+              dot
               progressColor={colors.lushLava}
               soundId={get(sound, 'id', null)}
             />
