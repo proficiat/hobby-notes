@@ -83,6 +83,7 @@ class SoundList extends PureComponent {
       isViewerInPower,
       onRefetchSounds,
       onSoundClick,
+      onSeekProgress,
     } = this.props
     return (
       <Frame>
@@ -108,6 +109,7 @@ class SoundList extends PureComponent {
                 key={sound.id}
                 sound={sound}
                 onRefetchSounds={onRefetchSounds}
+                onSeekProgress={onSeekProgress}
                 onSoundClick={onSoundClick}
               />
             )
@@ -134,6 +136,7 @@ SoundList.propTypes = {
   isViewerInPower: PropTypes.bool,
   sounds: PropTypes.array,
   onRefetchSounds: PropTypes.func.isRequired,
+  onSeekProgress: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
 }
 

@@ -112,6 +112,25 @@ class Sounds extends PureComponent {
     this.handleSwitchSoundId(nextSound.id)
   }
 
+  onSeekProgress = (isActive, progressBarRef, event) => {
+    const { current: audioRef } = this.audioRef
+    if (!isActive) {
+      return
+    }
+    try {
+      if (progressBarRef) {
+        const percentWidth =
+          (event.clientX - progressBarRef.offsetLeft) /
+          progressBarRef.offsetWidth
+        if (audioRef) {
+          audioRef.currentTime = percentWidth * audioRef.duration
+        }
+      }
+    } catch (error) {
+      //
+    }
+  }
+
   handleSwitchSoundId = soundId => {
     if (!soundId) return
     const { current: audioRef } = this.audioRef
@@ -196,6 +215,7 @@ class Sounds extends PureComponent {
               isViewerInPower={isViewerInPower}
               sounds={allSounds}
               onRefetchSounds={onRefetchSounds}
+              onSeekProgress={this.onSeekProgress}
               onSoundClick={this.onSoundClick}
             />
           </ListsBase>
@@ -209,6 +229,7 @@ class Sounds extends PureComponent {
           currentTime={currentTime}
           isPaused={isPaused}
           sound={sound}
+          onSeekProgress={this.onSeekProgress}
           onSoundClick={this.onSoundClick}
           onSwitchSound={this.onSwitchSound}
         />

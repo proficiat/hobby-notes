@@ -19,6 +19,8 @@ export const SoundFrame = styled.div`
   justify-content: center;
   flex: 1;
   align-items: center;
+  flex-wrap: nowrap;
+  height: 100%;
 `
 
 export const PlayControls = styled.div`
@@ -60,8 +62,16 @@ export const StepMarkBox = styled.div`
   ${space}
 `
 
-export const ProgressFrame = styled.div`
+export const ProgressArea = styled.div`
+  display: flex;
+  align-items: center;
   width: 48%;
+  height: 100%;
+  cursor: pointer;
+`
+
+export const ProgressLine = styled.div`
+  width: 100%;
   height: 1px;
   background: ${colors.grey};
   display: flex;

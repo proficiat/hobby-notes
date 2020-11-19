@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { colors } from 'styles'
 
 import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
 
 import PlaySign from 'components/PlaySign'
 import PauseSign from 'components/PauseSign'
@@ -16,21 +17,30 @@ import {
   Frame,
   PlayControls,
   StepMarkBox,
-  ProgressFrame,
+  ProgressLine,
   TimeDuration,
   SoundFrame,
+  ProgressArea,
 } from './styles'
 
 class SoundFooter extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
+    this.progressAreaRef = React.createRef()
   }
 
   handlePlayPress = () => {
     const { sound, onSoundClick } = this.props
     const soundId = get(sound, 'id')
     onSoundClick(soundId)
+  }
+
+  handleSeekProgress = event => {
+    const { sound, onSeekProgress } = this.props
+    const { current: progressAreaRef } = this.progressAreaRef
+    const isActive = !isEmpty(sound)
+    onSeekProgress(isActive, progressAreaRef, event)
   }
 
   render() {
@@ -64,13 +74,18 @@ class SoundFooter extends PureComponent {
             </StepMarkBox>
           </PlayControls>
           <TimeDuration current>{currentDuration}</TimeDuration>
-          <ProgressFrame>
-            <BufferingFeedback
-              dot
-              progressColor={colors.lushLava}
-              soundId={get(sound, 'id', null)}
-            />
-          </ProgressFrame>
+          <ProgressArea
+            ref={this.progressAreaRef}
+            onClick={this.handleSeekProgress}
+          >
+            <ProgressLine>
+              <BufferingFeedback
+                dot
+                progressColor={colors.lushLava}
+                soundId={get(sound, 'id', null)}
+              />
+            </ProgressLine>
+          </ProgressArea>
           <TimeDuration>{soundDuration}</TimeDuration>
         </SoundFrame>
       </Frame>
@@ -87,6 +102,7 @@ SoundFooter.propTypes = {
   currentTime: PropTypes.number.isRequired,
   isPaused: PropTypes.bool.isRequired,
   sound: PropTypes.object,
+  onSeekProgress: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
   onSwitchSound: PropTypes.func.isRequired,
 }

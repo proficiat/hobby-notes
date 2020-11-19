@@ -77,23 +77,9 @@ class SoundCard extends PureComponent {
   }
 
   handleSeekProgress = event => {
-    const { audioRef, isActive } = this.props
+    const { isActive, onSeekProgress } = this.props
     const { current: progressBarRef } = this.progressBarRef
-    if (!isActive) {
-      return
-    }
-    try {
-      if (progressBarRef) {
-        const percentWidth =
-          (event.clientX - progressBarRef.offsetLeft) /
-          progressBarRef.offsetWidth
-        if (audioRef) {
-          audioRef.currentTime = percentWidth * audioRef.duration
-        }
-      }
-    } catch (error) {
-      //
-    }
+    onSeekProgress(isActive, progressBarRef, event)
   }
 
   render() {
@@ -180,6 +166,7 @@ SoundCard.propTypes = {
   isViewerInPower: PropTypes.bool,
   sound: PropTypes.object.isRequired,
   // onRefetchSounds: PropTypes.func.isRequired,
+  onSeekProgress: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
 }
 
