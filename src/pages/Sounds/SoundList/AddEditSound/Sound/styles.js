@@ -61,11 +61,11 @@ export const DropzonePrompt = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  font-size: 14px;
+  background: ${colors.whitesmoke};
+  font-size: 16px;
   font-weight: 300;
   margin: 1px;
-  color: ${colors.grey};
+  color: ${colors.suicidePreventionBlue};
 `
 
 export const StyledCogIcon = styled(IoIosCog)``

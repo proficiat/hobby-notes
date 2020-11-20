@@ -7,10 +7,12 @@ import { Mutation, withApollo } from 'react-apollo'
 
 import map from 'lodash/map'
 
+import LogoVectorKey from 'components/LogoVectorKey'
+
 import SoundCard from './SoundCard'
 import AddEditSound from './AddEditSound'
 
-import { List, Frame } from './styles'
+import { Frame, SoundsList, VectorKey, Wrapper } from './styles'
 
 const ADD_SOUND = gql`
   mutation createSound(
@@ -60,7 +62,9 @@ const ALL_SOUNDS = gql`
 class SoundList extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      isVisibleAdd: false,
+    }
   }
 
   handleUpdateSounds = async (store, response) => {
@@ -71,6 +75,12 @@ class SoundList extends PureComponent {
       query: ALL_SOUNDS,
       data: { ...dataInStore },
     })
+  }
+
+  toggleAdd = () => {
+    const { isViewerInPower } = this.props
+    if (!isViewerInPower) return
+    this.setState(prevState => ({ isVisibleAdd: !prevState.isVisibleAdd }))
   }
 
   render() {
@@ -85,36 +95,43 @@ class SoundList extends PureComponent {
       onSoundClick,
       onSeekProgress,
     } = this.props
+    const { isVisibleAdd } = this.state
     return (
       <Frame>
-        <List>
-          {isViewerInPower && (
+        <VectorKey>
+          {isViewerInPower && isVisibleAdd && (
             <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
               {(addSound, { loading }) => {
                 return <AddEditSound addSound={addSound} isLoading={loading} />
               }}
             </Mutation>
           )}
-          {map(sounds, (sound, index) => {
-            const isSoundActive = !!activeSoundId && activeSoundId === sound.id
-            const isSoundPaused = isSoundActive ? isPaused : true
-            return (
-              <SoundCard
-                audioRef={audioRef}
-                currentTime={isSoundActive ? currentTime : 0}
-                index={index}
-                isActive={isSoundActive}
-                isSoundPaused={isSoundPaused}
-                isViewerInPower={isViewerInPower}
-                key={sound.id}
-                sound={sound}
-                onRefetchSounds={onRefetchSounds}
-                onSeekProgress={onSeekProgress}
-                onSoundClick={onSoundClick}
-              />
-            )
-          })}
-        </List>
+          <LogoVectorKey onClick={this.toggleAdd} />
+        </VectorKey>
+        <Wrapper>
+          <SoundsList>
+            {map(sounds, (sound, index) => {
+              const isSoundActive =
+                !!activeSoundId && activeSoundId === sound.id
+              const isSoundPaused = isSoundActive ? isPaused : true
+              return (
+                <SoundCard
+                  audioRef={audioRef}
+                  currentTime={isSoundActive ? currentTime : 0}
+                  index={index}
+                  isActive={isSoundActive}
+                  isSoundPaused={isSoundPaused}
+                  isViewerInPower={isViewerInPower}
+                  key={sound.id}
+                  sound={sound}
+                  onRefetchSounds={onRefetchSounds}
+                  onSeekProgress={onSeekProgress}
+                  onSoundClick={onSoundClick}
+                />
+              )
+            })}
+          </SoundsList>
+        </Wrapper>
       </Frame>
     )
   }

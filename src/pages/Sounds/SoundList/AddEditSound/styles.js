@@ -6,8 +6,9 @@ export const Container = styled.div`
   display: flex;
   flex: 0 1 0;
   min-height: 168px;
-  background: white;
-  margin: 80px 0;
+  background: ${colors.whitesmoke};
+  min-width: 800px;
+  margin-right: 9px;
   //flex-shrink: 0;
 `
 
