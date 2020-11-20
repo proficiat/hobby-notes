@@ -22,6 +22,7 @@ import {
   Input,
   TextArea,
   Settings,
+  StyledSup,
 } from './styles'
 
 const widgetSetup = {
@@ -141,7 +142,7 @@ class AddEditSound extends PureComponent {
           <Settings>
             <Field>
               <div>
-                Name<sup>*</sup>
+                Name<StyledSup>*</StyledSup>
               </div>{' '}
               <Input
                 placeholder="Name your track"

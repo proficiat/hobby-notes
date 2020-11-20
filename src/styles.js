@@ -19,6 +19,7 @@ export const colors = {
   navy: '#02075D',
   blush: '#FFC0CB',
   whitesmoke: '#f5f5f5',
+  westSide: '#f9900f',
 }
 
 export const MainWrapper = styled.div`

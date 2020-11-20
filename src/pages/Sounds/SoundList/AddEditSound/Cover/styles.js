@@ -23,9 +23,10 @@ export const AbsoluteCropCircle = styled.div`
   border-radius: 100%;
   background: white;
   position: absolute;
-  bottom: calc(100% + 16px);
-  left: 50%;
-  transform: translateX(-50%);
+  transform: translateY(50%);
+  left: -24px;
+  bottom: 50%;
+  z-index: 5;
   display: flex;
   align-items: center;
   justify-content: center;
