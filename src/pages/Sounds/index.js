@@ -13,6 +13,9 @@ import memoize from 'lodash/memoize'
 import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import findIndex from 'lodash/findIndex'
+import shuffle from 'lodash/shuffle'
+import map from 'lodash/map'
+import indexOf from 'lodash/indexOf'
 
 import SoundList from './SoundList'
 // import GroupsList from './GroupsList'
@@ -35,6 +38,9 @@ class Sounds extends PureComponent {
       isPaused: true,
       activeSoundId: null,
       currentTime: 0,
+      isRepeat: false,
+      isShuffle: false,
+      shuffleIds: [],
     }
     this.audioRef = React.createRef()
   }
@@ -59,20 +65,19 @@ class Sounds extends PureComponent {
     }
   }
 
-  onSoundClick = soundId => {
-    if (!soundId) {
-      const { allSounds } = this.props
-      const initSoundId = get(allSounds, '[0].id', null)
-      if (initSoundId) {
-        this.handleSwitchSoundId(initSoundId)
-      } else {
-        return
-      }
+  setInitSoundId = () => {
+    const { allSounds } = this.props
+    const { isShuffle, shuffleIds } = this.state
+    const initSoundId = isShuffle
+      ? shuffleIds[0]
+      : get(allSounds, '[0].id', null)
+    if (initSoundId) {
+      this.handleSwitchSoundId(initSoundId)
     }
-    const { activeSoundId } = this.state
+  }
+
+  setIsPaused = (isActive, isNewSound) => {
     const { current: audioRef } = this.audioRef
-    const isActive = soundId && activeSoundId === soundId
-    const isNewSound = soundId && activeSoundId !== soundId
     if (audioRef) {
       let isSoundPaused = false
       if (audioRef.paused || !isActive) {
@@ -88,28 +93,43 @@ class Sounds extends PureComponent {
     } else {
       this.setState({ isPaused: false })
     }
+  }
+
+  onSoundClick = soundId => {
+    const { activeSoundId } = this.state
+    if (!soundId) {
+      this.setInitSoundId()
+    }
+    const isActive = soundId && activeSoundId === soundId
+    const isNewSound = soundId && activeSoundId !== soundId
+    this.setIsPaused(isActive, isNewSound)
 
     if (isNewSound) {
       this.handleSwitchSoundId(soundId)
     }
   }
 
-  onSwitchSound = (isPrevious = false) => e => {
+  onSwitchSound = (isPrevious = false, isAutoSwitch = false) => e => {
     const { allSounds } = this.props
+    const { isShuffle, shuffleIds } = this.state
     const lastSoundIndex = allSounds.length - 1
     if (lastSoundIndex <= 0) {
       return
     }
     const { activeSoundId } = this.state
-    let soundIndex = findActiveSoundIndex(activeSoundId, allSounds)
+    let soundIndex = isShuffle
+      ? indexOf(shuffleIds, activeSoundId)
+      : findActiveSoundIndex(activeSoundId, allSounds)
     soundIndex = isPrevious ? soundIndex - 1 : soundIndex + 1
     if (soundIndex > lastSoundIndex) {
       soundIndex = 0
     } else if (soundIndex < 0) {
       soundIndex = lastSoundIndex
     }
-    const nextSound = allSounds[soundIndex]
-    this.handleSwitchSoundId(nextSound.id)
+    const nextSoundId = isShuffle
+      ? shuffleIds[soundIndex]
+      : get(allSounds[soundIndex], 'id')
+    this.handleSwitchSoundId(nextSoundId, isAutoSwitch)
   }
 
   onSeekProgress = (isActive, progressBarRef, event) => {
@@ -131,14 +151,35 @@ class Sounds extends PureComponent {
     }
   }
 
-  handleSwitchSoundId = soundId => {
-    if (!soundId) return
+  onToggleRepeatOrShuffle = (isRepeat = false) => e => {
+    const { allSounds } = this.props
+    const soundsIds = map(allSounds, 'id')
+    this.setState(prevState => ({
+      isRepeat: isRepeat ? !prevState.isRepeat : false,
+      isShuffle: !isRepeat ? !prevState.isShuffle : false,
+      shuffleIds: !(isRepeat && prevState.isShuffle)
+        ? shuffle(soundsIds)
+        : soundsIds,
+    }))
+  }
+
+  handleReloadSound = () => {
     const { current: audioRef } = this.audioRef
-    this.setState({ activeSoundId: soundId }, () => {
-      audioRef.pause()
-      audioRef.load()
-      audioRef.play()
-    })
+    audioRef.pause()
+    audioRef.load()
+    audioRef.play()
+  }
+
+  handleSwitchSoundId = (soundId, isAutoSwitch = false) => {
+    const { isRepeat } = this.state
+    if (!soundId) return
+    if (isRepeat && isAutoSwitch) {
+      this.handleReloadSound()
+    } else {
+      this.setState({ activeSoundId: soundId }, () => {
+        this.handleReloadSound()
+      })
+    }
   }
 
   handleSoundProgress = () => {
@@ -184,7 +225,7 @@ class Sounds extends PureComponent {
           element.style.width = `${filledInterest}%`
         })
         if (filledInterest >= 100) {
-          this.onSwitchSound()()
+          this.onSwitchSound(false, true)()
         }
       }
     } catch (e) {
@@ -199,7 +240,13 @@ class Sounds extends PureComponent {
       isViewerInPower,
       onRefetchSounds,
     } = this.props
-    const { currentTime, activeSoundId, isPaused } = this.state
+    const {
+      currentTime,
+      activeSoundId,
+      isPaused,
+      isRepeat,
+      isShuffle,
+    } = this.state
     const sound = findActiveSound(activeSoundId, allSounds)
 
     return (
@@ -228,10 +275,13 @@ class Sounds extends PureComponent {
         <SoundFooter
           currentTime={currentTime}
           isPaused={isPaused}
+          isRepeat={isRepeat}
+          isShuffle={isShuffle}
           sound={sound}
           onSeekProgress={this.onSeekProgress}
           onSoundClick={this.onSoundClick}
           onSwitchSound={this.onSwitchSound}
+          onToggleRepeatOrShuffle={this.onToggleRepeatOrShuffle}
         />
       </React.Fragment>
     )

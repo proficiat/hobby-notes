@@ -21,6 +21,8 @@ import {
   TimeDuration,
   SoundFrame,
   ProgressArea,
+  StyledRepeatIcon,
+  StyledShuffleIcon,
 } from './styles'
 
 class SoundFooter extends PureComponent {
@@ -44,7 +46,15 @@ class SoundFooter extends PureComponent {
   }
 
   render() {
-    const { sound, currentTime, isPaused, onSwitchSound } = this.props
+    const {
+      sound,
+      currentTime,
+      isPaused,
+      isRepeat,
+      isShuffle,
+      onSwitchSound,
+      onToggleRepeatOrShuffle,
+    } = this.props
     const { currentDuration, soundDuration } = getSoundDurations(
       sound,
       currentTime,
@@ -72,6 +82,16 @@ class SoundFooter extends PureComponent {
             <StepMarkBox ml="17px" next onClick={onSwitchSound()}>
               <PlaySign size={12} strokeWidth={5} />
             </StepMarkBox>
+            <StyledRepeatIcon
+              active={isRepeat}
+              size={22}
+              onClick={onToggleRepeatOrShuffle(true)}
+            />
+            <StyledShuffleIcon
+              active={isShuffle}
+              size={22}
+              onClick={onToggleRepeatOrShuffle(false)}
+            />
           </PlayControls>
           <TimeDuration current>{currentDuration}</TimeDuration>
           <ProgressArea
@@ -101,10 +121,13 @@ SoundFooter.defaultProps = {
 SoundFooter.propTypes = {
   currentTime: PropTypes.number.isRequired,
   isPaused: PropTypes.bool.isRequired,
+  isRepeat: PropTypes.bool.isRequired,
+  isShuffle: PropTypes.bool.isRequired,
   sound: PropTypes.object,
   onSeekProgress: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
   onSwitchSound: PropTypes.func.isRequired,
+  onToggleRepeatOrShuffle: PropTypes.func.isRequired,
 }
 
 export default SoundFooter

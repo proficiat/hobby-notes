@@ -2,6 +2,8 @@ import styled, { css } from 'styled-components'
 
 import { colors } from 'styles'
 
+import { IoMdRepeat, IoMdShuffle } from 'react-icons/io'
+
 import { space, layout } from 'styled-system'
 
 export const Frame = styled.div`
@@ -83,4 +85,24 @@ export const TimeDuration = styled.div`
   color: ${props => (props.current ? colors.lushLava : colors.luciaLash)};
   line-height: normal;
   font-weight: 700;
+`
+
+export const StyledRepeatIcon = styled(IoMdRepeat)`
+  color: ${props => (props.active ? colors.lushLava : colors.luciaLash)};
+  margin-left: 16px;
+  cursor: pointer;
+  :hover {
+    color: ${props =>
+      props.active ? colors.lushLava : colors.suicidePreventionBlue};
+  }
+`
+
+export const StyledShuffleIcon = styled(IoMdShuffle)`
+  color: ${props => (props.active ? colors.lushLava : colors.luciaLash)};
+  margin-left: 14px;
+  cursor: pointer;
+  :hover {
+    color: ${props =>
+      props.active ? colors.lushLava : colors.suicidePreventionBlue};
+  }
 `
