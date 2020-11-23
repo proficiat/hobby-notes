@@ -6,7 +6,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from 'react-apollo'
 
-import Spinner from 'components/Spinner'
+import Spinner from 'components/Icons/Spinner'
 
 import { persistCache } from 'apollo-cache-persist'
 

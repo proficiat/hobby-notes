@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { colors } from 'styles'
 
-import { IoMdRepeat, IoMdShuffle } from 'react-icons/io'
+import { IoMdRepeat, IoMdShuffle, IoMdVolumeHigh } from 'react-icons/io'
 
 import { space, layout } from 'styled-system'
 
@@ -87,9 +87,8 @@ export const TimeDuration = styled.div`
   font-weight: 700;
 `
 
-export const StyledRepeatIcon = styled(IoMdRepeat)`
+const baseIconStyle = css`
   color: ${props => (props.active ? colors.lushLava : colors.luciaLash)};
-  margin-left: 16px;
   cursor: pointer;
   :hover {
     color: ${props =>
@@ -97,9 +96,20 @@ export const StyledRepeatIcon = styled(IoMdRepeat)`
   }
 `
 
+export const StyledRepeatIcon = styled(IoMdRepeat)`
+  ${baseIconStyle};
+
+  margin-left: 16px;
+`
+
 export const StyledShuffleIcon = styled(IoMdShuffle)`
-  color: ${props => (props.active ? colors.lushLava : colors.luciaLash)};
+  ${baseIconStyle};
+
   margin-left: 14px;
+`
+
+export const StyledVolumeHeightIcon = styled(IoMdVolumeHigh)`
+  color: ${props => (props.active ? colors.lushLava : colors.luciaLash)};
   cursor: pointer;
   :hover {
     color: ${props =>

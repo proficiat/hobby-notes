@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { space, layout, color } from 'styled-system'
 
-import { colors } from '../../styles'
+import { colors } from '../../../styles'
 
 const PlaySign = styled.div`
   border-top: ${({ strokeWidth }) => strokeWidth}px solid;

@@ -6,7 +6,7 @@ import { gql } from 'apollo-boost'
 
 import { useApolloClient } from '@apollo/react-hooks'
 
-import Spinner from '../../components/Spinner'
+import Spinner from '../../components/Icons/Spinner'
 
 const FIND_PERSON = gql`
   query findPersonByName($nameToSearch: String!) {

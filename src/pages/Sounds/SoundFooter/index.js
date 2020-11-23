@@ -23,6 +23,7 @@ import {
   ProgressArea,
   StyledRepeatIcon,
   StyledShuffleIcon,
+  StyledVolumeHeightIcon,
 } from './styles'
 
 class SoundFooter extends PureComponent {
@@ -79,7 +80,7 @@ class SoundFooter extends PureComponent {
                 onClick={this.handlePlayPress}
               />
             )}
-            <StepMarkBox ml="17px" next onClick={onSwitchSound()}>
+            <StepMarkBox ml="14px" next onClick={onSwitchSound()}>
               <PlaySign size={12} strokeWidth={5} />
             </StepMarkBox>
             <StyledRepeatIcon
@@ -107,6 +108,7 @@ class SoundFooter extends PureComponent {
             </ProgressLine>
           </ProgressArea>
           <TimeDuration>{soundDuration}</TimeDuration>
+          <StyledVolumeHeightIcon size={22} />
         </SoundFrame>
       </Frame>
     )

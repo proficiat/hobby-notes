@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withApollo } from 'react-apollo'
 
 import Launch from 'pages/Launch'
-import GhostLogo from '../GhostLogo'
+import GhostLogo from '../Icons/GhostLogo'
 
 import { Container, Item } from './styles'
 

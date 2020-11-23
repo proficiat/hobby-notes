@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { ReactComponent as Logo } from '../../assets/logo_vector_key.svg'
+import { ReactComponent as Logo } from '../../../assets/logo_vector_key.svg'
 
 const LogoVectorKey = styled(Logo)`
   display: block;
