@@ -107,12 +107,3 @@ export const StyledShuffleIcon = styled(IoMdShuffle)`
 
   margin-left: 14px;
 `
-
-export const StyledVolumeHeightIcon = styled(IoMdVolumeHigh)`
-  color: ${props => (props.active ? colors.lushLava : colors.luciaLash)};
-  cursor: pointer;
-  :hover {
-    color: ${props =>
-      props.active ? colors.lushLava : colors.suicidePreventionBlue};
-  }
-`

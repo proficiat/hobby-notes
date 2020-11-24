@@ -7,7 +7,7 @@ import { Mutation, withApollo } from 'react-apollo'
 
 import map from 'lodash/map'
 
-import LogoVectorKey from 'components/LogoVectorKey'
+import LogoVectorKey from 'components/Icons/LogoVectorKey'
 
 import SoundCard from './SoundCard'
 import AddEditSound from './AddEditSound'

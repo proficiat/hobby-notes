@@ -6,12 +6,13 @@ import { colors } from 'styles'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
-import PlaySign from 'components/PlaySign'
-import PauseSign from 'components/PauseSign'
+import PlaySign from 'components/Icons/PlaySign'
+import PauseSign from 'components/Icons/PauseSign'
 
 import { getSoundDurations } from 'helpers/sounds'
 
 import BufferingFeedback from '../SoundList/SoundCard/BufferingFeedback'
+import VolumeSlider from './VolumeSlider'
 
 import {
   Frame,
@@ -23,7 +24,6 @@ import {
   ProgressArea,
   StyledRepeatIcon,
   StyledShuffleIcon,
-  StyledVolumeHeightIcon,
 } from './styles'
 
 class SoundFooter extends PureComponent {
@@ -108,7 +108,7 @@ class SoundFooter extends PureComponent {
             </ProgressLine>
           </ProgressArea>
           <TimeDuration>{soundDuration}</TimeDuration>
-          <StyledVolumeHeightIcon size={22} />
+          <VolumeSlider />
         </SoundFrame>
       </Frame>
     )

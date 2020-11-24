@@ -6,7 +6,7 @@ import { gql } from 'apollo-boost'
 
 import { compose } from 'recompose'
 
-import Spinner from 'components/Spinner'
+import Spinner from 'components/Icons/Spinner'
 
 import get from 'lodash/get'
 import memoize from 'lodash/memoize'

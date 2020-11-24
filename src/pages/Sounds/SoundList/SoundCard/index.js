@@ -18,7 +18,7 @@ import { getSoundDurations } from 'helpers/sounds'
 
 // import WaveformData from 'waveform-data'
 
-import Spinner from 'components/Spinner'
+import Spinner from 'components/Icons/Spinner'
 import PuzzleIcon from 'components/Icons/Puzzle'
 
 import BufferingFeedback from './BufferingFeedback'
