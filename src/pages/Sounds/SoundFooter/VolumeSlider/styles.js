@@ -2,9 +2,15 @@ import styled from 'styled-components'
 
 import { colors } from 'styles'
 
+import { DEFAULT_AUDIO_VOLUME } from 'helpers/sounds'
+
 import { IoMdVolumeHigh } from 'react-icons/io'
 
 export const ABSOLUTE_FRAME_VERTICAL_PADDING = 22
+const ABSOLUTE_FRAME_HEIGHT = 180
+const BASE_VOLUME_HEIGHT =
+  ABSOLUTE_FRAME_HEIGHT - ABSOLUTE_FRAME_VERTICAL_PADDING * 2
+const INIT_ACTIVE_VOLUME_HEIGHT = DEFAULT_AUDIO_VOLUME * BASE_VOLUME_HEIGHT
 
 export const AbsoluteFrame = styled.div`
   position: absolute;
@@ -19,7 +25,7 @@ export const AbsoluteFrame = styled.div`
   transform: translateX(50%);
   background: ${colors.luciaLash};
   width: 44px;
-  height: 180px;
+  height: ${ABSOLUTE_FRAME_HEIGHT}px;
   z-index: 6;
   box-shadow: 1px 0 11px 0 rgba(10, 10, 10, 0.8);
   padding: ${ABSOLUTE_FRAME_VERTICAL_PADDING}px 0;
@@ -80,7 +86,7 @@ export const ActiveVolumeHeight = styled.div`
   display: block;
   width: 100%;
   background: ${colors.suicidePreventionBlue};
-  height: 20px;
+  height: ${INIT_ACTIVE_VOLUME_HEIGHT}px;
   transition: height 0.5s linear;
 
   ${Point} {

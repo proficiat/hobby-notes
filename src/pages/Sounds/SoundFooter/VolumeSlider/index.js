@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react'
 // import get from 'lodash/get'
 import round from 'lodash/round'
 
+import PropTypes from 'prop-types'
 import {
   Frame,
   StyledVolumeHeightIcon,
@@ -24,6 +25,7 @@ class VolumeSlider extends PureComponent {
   }
 
   handleClickSlider = event => {
+    const { onChangeAudioVolume } = this.props
     const { current: frameRef } = this.frame
     const { current: absoluteFrameRef } = this.absoluteFrame
     const { current: activeVolumeHeightRef } = this.activeVolumeHeight
@@ -35,14 +37,20 @@ class VolumeSlider extends PureComponent {
     const baseVolumeHeight =
       absoluteFrameRef.offsetHeight - ABSOLUTE_FRAME_VERTICAL_PADDING * 2
     // represents a part of a whole or, more generally, any number of equal parts.
-    const fraction = updatedActiveVolumeHeight / baseVolumeHeight
-    let percent = round(fraction * 100)
+    let fraction = round(updatedActiveVolumeHeight / baseVolumeHeight, 1)
+    if (fraction < 0) {
+      fraction = 0
+    } else if (fraction > 1) {
+      fraction = 1
+    }
+    let percent = fraction * 100
     if (percent < 0) {
       percent = 0
     } else if (percent > 100) {
       percent = 100
     }
     activeVolumeHeightRef.style.height = `${percent}%`
+    onChangeAudioVolume(fraction)
   }
 
   render() {
@@ -66,6 +74,8 @@ class VolumeSlider extends PureComponent {
 
 VolumeSlider.defaultProps = {}
 
-VolumeSlider.propTypes = {}
+VolumeSlider.propTypes = {
+  onChangeAudioVolume: PropTypes.func.isRequired,
+}
 
 export default VolumeSlider

@@ -8,11 +8,14 @@ import { compose } from 'recompose'
 
 import Spinner from 'components/Icons/Spinner'
 
+import {
+  DEFAULT_AUDIO_VOLUME,
+  findActiveSound,
+  findActiveSoundIndex,
+} from 'helpers/sounds'
+
 import get from 'lodash/get'
-import memoize from 'lodash/memoize'
-import find from 'lodash/find'
 import forEach from 'lodash/forEach'
-import findIndex from 'lodash/findIndex'
 import shuffle from 'lodash/shuffle'
 import map from 'lodash/map'
 import indexOf from 'lodash/indexOf'
@@ -22,14 +25,6 @@ import SoundList from './SoundList'
 import SoundFooter from './SoundFooter'
 
 import { ListsBase } from './styles'
-
-const findActiveSound = memoize((activeSoundId, sounds) =>
-  find(sounds, sound => get(sound, 'id') === activeSoundId),
-)
-
-const findActiveSoundIndex = memoize((activeSoundId, sounds) =>
-  findIndex(sounds, ['id', activeSoundId]),
-)
 
 class Sounds extends PureComponent {
   constructor(props) {
@@ -50,6 +45,7 @@ class Sounds extends PureComponent {
     if (audioRef) {
       audioRef.addEventListener('timeupdate', this.handleSoundTimeUpdate)
       audioRef.addEventListener('progress', this.handleSoundProgress)
+      audioRef.volume = DEFAULT_AUDIO_VOLUME
     }
   }
 
@@ -148,6 +144,13 @@ class Sounds extends PureComponent {
       }
     } catch (error) {
       //
+    }
+  }
+
+  onChangeAudioVolume = volumeFraction => {
+    const { current: audioRef } = this.audioRef
+    if (audioRef) {
+      audioRef.volume = volumeFraction
     }
   }
 
@@ -278,6 +281,7 @@ class Sounds extends PureComponent {
           isRepeat={isRepeat}
           isShuffle={isShuffle}
           sound={sound}
+          onChangeAudioVolume={this.onChangeAudioVolume}
           onSeekProgress={this.onSeekProgress}
           onSoundClick={this.onSoundClick}
           onSwitchSound={this.onSwitchSound}

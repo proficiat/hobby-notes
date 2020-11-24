@@ -53,6 +53,7 @@ class SoundFooter extends PureComponent {
       isPaused,
       isRepeat,
       isShuffle,
+      onChangeAudioVolume,
       onSwitchSound,
       onToggleRepeatOrShuffle,
     } = this.props
@@ -108,7 +109,7 @@ class SoundFooter extends PureComponent {
             </ProgressLine>
           </ProgressArea>
           <TimeDuration>{soundDuration}</TimeDuration>
-          <VolumeSlider />
+          <VolumeSlider onChangeAudioVolume={onChangeAudioVolume} />
         </SoundFrame>
       </Frame>
     )
@@ -126,6 +127,7 @@ SoundFooter.propTypes = {
   isRepeat: PropTypes.bool.isRequired,
   isShuffle: PropTypes.bool.isRequired,
   sound: PropTypes.object,
+  onChangeAudioVolume: PropTypes.func.isRequired,
   onSeekProgress: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
   onSwitchSound: PropTypes.func.isRequired,
