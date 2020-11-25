@@ -1,10 +1,10 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { colors } from 'styles'
 
 import { DEFAULT_AUDIO_VOLUME } from 'helpers/sounds'
 
-import { IoMdVolumeHigh } from 'react-icons/io'
+import { IoMdVolumeHigh, IoMdVolumeLow, IoMdVolumeOff } from 'react-icons/io'
 
 export const ABSOLUTE_FRAME_VERTICAL_PADDING = 22
 const ABSOLUTE_FRAME_HEIGHT = 180
@@ -102,11 +102,24 @@ export const ActiveVolumeHeight = styled.div`
   }
 `
 
-export const StyledVolumeHeightIcon = styled(IoMdVolumeHigh)`
+const baseIconStyle = css`
   color: ${props => (props.active ? colors.lushLava : colors.luciaLash)};
   cursor: pointer;
+  height: 22px;
+  width: 22px;
   :hover {
     color: ${props =>
       props.active ? colors.lushLava : colors.suicidePreventionBlue};
   }
+`
+export const StyledVolumeHeightIcon = styled(IoMdVolumeHigh)`
+  ${baseIconStyle};
+`
+
+export const StyledVolumeLowIcon = styled(IoMdVolumeLow)`
+  ${baseIconStyle};
+`
+
+export const StyledVolumeOffIcon = styled(IoMdVolumeOff)`
+  ${baseIconStyle};
 `

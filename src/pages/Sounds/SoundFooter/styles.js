@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { colors } from 'styles'
 
-import { IoMdRepeat, IoMdShuffle, IoMdVolumeHigh } from 'react-icons/io'
+import { IoMdRepeat, IoMdShuffle } from 'react-icons/io'
 
 import { space, layout } from 'styled-system'
 
@@ -14,6 +14,7 @@ export const Frame = styled.div`
   margin-top: auto;
   align-items: center;
   flex-shrink: 0;
+  padding: 0 28px;
 `
 
 export const SoundFrame = styled.div`
@@ -67,7 +68,7 @@ export const StepMarkBox = styled.div`
 export const ProgressArea = styled.div`
   display: flex;
   align-items: center;
-  width: 48%;
+  width: 42%;
   height: 100%;
   cursor: pointer;
 `
