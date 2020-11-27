@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import get from 'lodash/get'
 
-import { useMutation } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
-import { withApollo } from 'react-apollo'
+import { gql, useMutation } from '@apollo/client'
+
+import { withApollo } from '@apollo/client/react/hoc'
 
 import {
   Container,
@@ -16,6 +16,7 @@ import {
   StyledForm,
   Error,
 } from './styles'
+import { IS_USER_LOGGED_IN } from '../../cache'
 
 const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
@@ -43,10 +44,17 @@ const Launch = props => {
 
   const [login] = useMutation(LOGIN, {
     onError: handleError,
+    ignoreResults: false,
+    onCompleted( data ) {
+      //
+  },
     update(cache, { data }) {
       const isViewerInPower = get(data, 'login.isViewerInPower', false)
-      cache.writeData({
-        data: { isViewerInPower },
+      cache.writeQuery({
+        query: IS_USER_LOGGED_IN,
+        data: {
+          isViewerInPower,
+        },
       })
     },
   })

@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react'
 
 import get from 'lodash/get'
 
-import { gql } from 'apollo-boost'
-import { Query } from 'react-apollo'
+import { gql } from '@apollo/client'
+
+import { Query } from '@apollo/client/react/components';
 
 class Notes extends PureComponent {
   constructor(props) {

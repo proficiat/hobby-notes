@@ -9,9 +9,7 @@ import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
 
 import get from 'lodash/get'
-// import { colors } from 'styles'
 import Spinner from 'components/Icons/Spinner'
-// import { Mutation, Query } from 'react-apollo'
 import Cover from './Cover'
 import Sound from './Sound'
 

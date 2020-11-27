@@ -6,8 +6,8 @@ import { colors } from 'styles'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
-import { gql } from 'apollo-boost'
-import { graphql } from 'react-apollo'
+import { gql } from '@apollo/client'
+import { graphql } from '@apollo/client/react/hoc'
 
 import {
   // subscribeWaveForm,

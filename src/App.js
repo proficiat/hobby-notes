@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 
-import { ApolloClient, makeVar } from 'apollo-client'
-import { ApolloLink } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloProvider } from 'react-apollo'
+import {
+  ApolloClient,
+  ApolloLink,
+  createHttpLink,
+  ApolloProvider, gql,
+} from '@apollo/client'
+import { cache, IS_USER_LOGGED_IN } from './cache'
 
 import Spinner from 'components/Icons/Spinner'
 
@@ -40,8 +42,6 @@ class App extends Component {
     })
     const link = middlewareLink.concat(httpLink)
 
-    const cache = new InMemoryCache()
-
     const client = new ApolloClient({
       link,
       cache,
@@ -49,8 +49,11 @@ class App extends Component {
       resolvers,
     })
     // init default state
-    cache.writeData({
-      data: { isViewerInPower: false },
+    cache.writeQuery({
+      query: IS_USER_LOGGED_IN,
+      data: {
+        isViewerInPower: false,
+      },
     })
 
     try {

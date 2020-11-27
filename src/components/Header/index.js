@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 // import { colors } from 'styles'
 
+import { headerSearchValueVar } from 'cache'
+
 import get from 'lodash/get'
 
 import { Frame, Name, SearchInput } from './styles'
@@ -18,8 +20,9 @@ class Header extends PureComponent {
   handleChangeSearchValue = event => {
     const { onChangeSearchValue } = this.props
     const value = get(event, 'target.value', '')
-    this.setState({ searchValue: value })
-    onChangeSearchValue(value)
+    this.setState({ searchValue: value }, () => {
+      headerSearchValueVar(value)
+    })
   }
 
   render() {
@@ -39,8 +42,6 @@ class Header extends PureComponent {
 
 Header.defaultProps = {}
 
-Header.propTypes = {
-  onChangeSearchValue: PropTypes.func.isRequired,
-}
+Header.propTypes = {}
 
 export default Header

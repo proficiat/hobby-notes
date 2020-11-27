@@ -2,9 +2,7 @@ import React, { useState } from 'react'
 
 import PropTypes from 'prop-types'
 
-import { gql } from 'apollo-boost'
-
-import { useApolloClient } from '@apollo/react-hooks'
+import { gql, useApolloClient } from '@apollo/client'
 
 import Spinner from '../../components/Icons/Spinner'
 

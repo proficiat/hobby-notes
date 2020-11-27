@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import { graphql } from 'react-apollo'
-import { gql } from 'apollo-boost'
+import { gql } from '@apollo/client'
+
+import { graphql } from '@apollo/client/react/hoc'
 
 import { compose } from 'recompose'
 
@@ -239,6 +240,7 @@ class Sounds extends PureComponent {
   render() {
     const {
       allSounds,
+      // headerSearchValue,
       isSoundsLoading,
       isViewerInPower,
       onRefetchSounds,
@@ -295,12 +297,14 @@ class Sounds extends PureComponent {
 Sounds.defaultProps = {
   isViewerInPower: false,
   allSounds: [],
+  headerSearchValue: ''
 }
 
 Sounds.propTypes = {
   allSounds: PropTypes.array,
   isSoundsLoading: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
+  headerSearchValue: PropTypes.string,
   onRefetchSounds: PropTypes.func.isRequired,
 }
 
@@ -341,4 +345,15 @@ export default compose(
       }),
     },
   ),
+  graphql(
+    gql`
+      query GetHeaderSearchValue {
+        headerSearchValue @client
+      }
+    `,
+    {
+      name: 'headerSearchValue',
+      props: ({ headerSearchValue: { headerSearchValue } }) => ({ headerSearchValue })
+    },
+  )
 )(Sounds)

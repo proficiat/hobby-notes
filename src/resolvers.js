@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost'
+import { gql } from '@apollo/client'
 
 // We recommend managing local state in the Apollo cache instead of
 // bringing in another state management library like Redux

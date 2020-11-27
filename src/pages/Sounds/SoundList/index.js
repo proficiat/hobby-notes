@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import { gql } from 'apollo-boost'
+import { gql } from '@apollo/client'
 
-import { Mutation, withApollo } from 'react-apollo'
+import { withApollo } from '@apollo/client/react/hoc'
+import { Mutation } from '@apollo/client/react/components';
 
 import map from 'lodash/map'
 
