@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { ApolloClient } from 'apollo-client'
+import { ApolloClient, makeVar } from 'apollo-client'
 import { ApolloLink } from 'apollo-link'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -70,6 +70,10 @@ class App extends Component {
 
   setToken = token => this.setState({ token })
 
+  onChangeSearchValue = value => {
+    // console.log({ value })
+  }
+
   render() {
     const { token, client, isLoadedCache } = this.state
     if (!isLoadedCache) {
@@ -78,7 +82,7 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <MainWrapper>
-          <Header />
+          <Header onChangeSearchValue={this.onChangeSearchValue} />
           <SideBar token={token} onSetToken={this.setToken} />
           <PageContent>
             <Sounds />
