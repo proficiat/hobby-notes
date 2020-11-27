@@ -16,7 +16,7 @@ import {
   StyledForm,
   Error,
 } from './styles'
-import { IS_USER_LOGGED_IN } from '../../cache'
+import { GET_IS_USER_LOGGED_IN } from '../../cache'
 
 const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
@@ -45,13 +45,13 @@ const Launch = props => {
   const [login] = useMutation(LOGIN, {
     onError: handleError,
     ignoreResults: false,
-    onCompleted( data ) {
+    onCompleted(data) {
       //
-  },
+    },
     update(cache, { data }) {
       const isViewerInPower = get(data, 'login.isViewerInPower', false)
       cache.writeQuery({
-        query: IS_USER_LOGGED_IN,
+        query: GET_IS_USER_LOGGED_IN,
         data: {
           isViewerInPower,
         },

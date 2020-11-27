@@ -8,6 +8,7 @@ import isEmpty from 'lodash/isEmpty'
 
 import { gql } from '@apollo/client'
 import { graphql } from '@apollo/client/react/hoc'
+import { compose } from 'recompose'
 
 import {
   // subscribeWaveForm,
@@ -170,26 +171,28 @@ SoundCard.propTypes = {
   onSoundClick: PropTypes.func.isRequired,
 }
 
-export default graphql(
-  gql`
-    mutation deleteSound($id: String!) {
-      deleteSound(id: $id) {
-        id
-        name
+export default compose(
+  graphql(
+    gql`
+      mutation deleteSound($id: String!) {
+        deleteSound(id: $id) {
+          id
+          name
+        }
       }
-    }
-  `,
-  {
-    name: 'deleteSound',
-    options: props => ({
-      update: props.onRefetchSounds,
-      variables: {
-        id: get(props, 'sound.id'),
-      },
-    }),
-    props: ({ deleteSound, deleteSoundResult: { loading } }) => ({
-      deleteSound,
-      isSoundDeleting: loading,
-    }),
-  },
+    `,
+    {
+      name: 'deleteSound',
+      options: props => ({
+        update: props.onRefetchSounds,
+        variables: {
+          id: get(props, 'sound.id'),
+        },
+      }),
+      props: ({ deleteSound, deleteSoundResult: { loading } }) => ({
+        deleteSound,
+        isSoundDeleting: loading,
+      }),
+    },
+  ),
 )(SoundCard)

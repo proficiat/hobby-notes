@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 // import { colors } from 'styles'
 
@@ -18,7 +18,6 @@ class Header extends PureComponent {
   }
 
   handleChangeSearchValue = event => {
-    const { onChangeSearchValue } = this.props
     const value = get(event, 'target.value', '')
     this.setState({ searchValue: value }, () => {
       headerSearchValueVar(value)

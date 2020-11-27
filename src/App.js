@@ -4,9 +4,9 @@ import {
   ApolloClient,
   ApolloLink,
   createHttpLink,
-  ApolloProvider, gql,
+  ApolloProvider,
 } from '@apollo/client'
-import { cache, IS_USER_LOGGED_IN } from './cache'
+import { cache, GET_IS_USER_LOGGED_IN } from 'cache'
 
 import Spinner from 'components/Icons/Spinner'
 
@@ -50,7 +50,7 @@ class App extends Component {
     })
     // init default state
     cache.writeQuery({
-      query: IS_USER_LOGGED_IN,
+      query: GET_IS_USER_LOGGED_IN,
       data: {
         isViewerInPower: false,
       },
@@ -73,10 +73,6 @@ class App extends Component {
 
   setToken = token => this.setState({ token })
 
-  onChangeSearchValue = value => {
-    // console.log({ value })
-  }
-
   render() {
     const { token, client, isLoadedCache } = this.state
     if (!isLoadedCache) {
@@ -85,7 +81,7 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <MainWrapper>
-          <Header onChangeSearchValue={this.onChangeSearchValue} />
+          <Header />
           <SideBar token={token} onSetToken={this.setToken} />
           <PageContent>
             <Sounds />

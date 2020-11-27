@@ -20,7 +20,14 @@ import forEach from 'lodash/forEach'
 import shuffle from 'lodash/shuffle'
 import map from 'lodash/map'
 import indexOf from 'lodash/indexOf'
+import filter from 'lodash/filter'
+import includes from 'lodash/includes'
 
+import {
+  GET_IS_USER_LOGGED_IN,
+  GET_HEADER_SEARCH_VALUE,
+  audioCurrentTimeVar,
+} from 'cache'
 import SoundList from './SoundList'
 // import GroupsList from './GroupsList'
 import SoundFooter from './SoundFooter'
@@ -33,7 +40,6 @@ class Sounds extends PureComponent {
     this.state = {
       isPaused: true,
       activeSoundId: null,
-      currentTime: 0,
       isRepeat: false,
       isShuffle: false,
       shuffleIds: [],
@@ -217,7 +223,7 @@ class Sounds extends PureComponent {
     try {
       const { activeSoundId } = this.state
       const { current: audioRef } = this.audioRef
-      this.setState({ currentTime: get(event, 'target.currentTime', 0) })
+      audioCurrentTimeVar(get(event, 'target.currentTime', 0))
       const duration = get(audioRef, 'duration')
       const currentTime = get(audioRef, 'currentTime')
       if (activeSoundId && duration > 0) {
@@ -237,6 +243,17 @@ class Sounds extends PureComponent {
     }
   }
 
+  handleSearchSounds = () => {
+    const { allSounds, headerSearchValue } = this.props
+    if (headerSearchValue === '') {
+      return allSounds
+    }
+    return filter(allSounds, sound => {
+      const soundName = get(sound, 'name', '').toLowerCase()
+      return includes(soundName, headerSearchValue.toLowerCase())
+    })
+  }
+
   render() {
     const {
       allSounds,
@@ -245,13 +262,7 @@ class Sounds extends PureComponent {
       isViewerInPower,
       onRefetchSounds,
     } = this.props
-    const {
-      currentTime,
-      activeSoundId,
-      isPaused,
-      isRepeat,
-      isShuffle,
-    } = this.state
+    const { activeSoundId, isPaused, isRepeat, isShuffle } = this.state
     const sound = findActiveSound(activeSoundId, allSounds)
 
     return (
@@ -262,10 +273,9 @@ class Sounds extends PureComponent {
             <SoundList
               activeSoundId={activeSoundId}
               audioRef={this.audioRef.current}
-              currentTime={currentTime}
               isPaused={isPaused}
               isViewerInPower={isViewerInPower}
-              sounds={allSounds}
+              sounds={this.handleSearchSounds()}
               onRefetchSounds={onRefetchSounds}
               onSeekProgress={this.onSeekProgress}
               onSoundClick={this.onSoundClick}
@@ -278,7 +288,6 @@ class Sounds extends PureComponent {
           <source src={get(sound, 'audioUrl')} />
         </audio>
         <SoundFooter
-          currentTime={currentTime}
           isPaused={isPaused}
           isRepeat={isRepeat}
           isShuffle={isShuffle}
@@ -297,14 +306,14 @@ class Sounds extends PureComponent {
 Sounds.defaultProps = {
   isViewerInPower: false,
   allSounds: [],
-  headerSearchValue: ''
+  headerSearchValue: '',
 }
 
 Sounds.propTypes = {
   allSounds: PropTypes.array,
+  headerSearchValue: PropTypes.string,
   isSoundsLoading: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
-  headerSearchValue: PropTypes.string,
   onRefetchSounds: PropTypes.func.isRequired,
 }
 
@@ -332,28 +341,16 @@ export default compose(
       }),
     },
   ),
-  graphql(
-    gql`
-      query IsUserLoggedIn {
-        isViewerInPower @client
-      }
-    `,
-    {
-      name: 'isViewerInPower',
-      props: ({ isViewerInPower: { isViewerInPower } }) => ({
-        isViewerInPower,
-      }),
-    },
-  ),
-  graphql(
-    gql`
-      query GetHeaderSearchValue {
-        headerSearchValue @client
-      }
-    `,
-    {
-      name: 'headerSearchValue',
-      props: ({ headerSearchValue: { headerSearchValue } }) => ({ headerSearchValue })
-    },
-  )
+  graphql(GET_IS_USER_LOGGED_IN, {
+    name: 'isViewerInPower',
+    props: ({ isViewerInPower: { isViewerInPower } }) => ({
+      isViewerInPower,
+    }),
+  }),
+  graphql(GET_HEADER_SEARCH_VALUE, {
+    name: 'headerSearchValue',
+    props: ({ headerSearchValue: { headerSearchValue } }) => ({
+      headerSearchValue,
+    }),
+  }),
 )(Sounds)
