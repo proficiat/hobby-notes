@@ -7,7 +7,13 @@ import { headerSearchValueVar } from 'cache'
 
 import get from 'lodash/get'
 
-import { Frame, Name, SearchInput } from './styles'
+import {
+  Frame,
+  Name,
+  SearchInput,
+  SearchBase,
+  StyledSearchIcon,
+} from './styles'
 
 class Header extends PureComponent {
   constructor(props) {
@@ -29,11 +35,14 @@ class Header extends PureComponent {
     return (
       <Frame>
         <Name>Adsum</Name>
-        <SearchInput
-          type="text"
-          value={searchValue}
-          onChange={this.handleChangeSearchValue}
-        />
+        <SearchBase>
+          <StyledSearchIcon />
+          <SearchInput
+            type="text"
+            value={searchValue}
+            onChange={this.handleChangeSearchValue}
+          />
+        </SearchBase>
       </Frame>
     )
   }
