@@ -3,10 +3,8 @@ import PropTypes from 'prop-types'
 
 import { gql } from '@apollo/client'
 
-import { graphql, withApollo } from '@apollo/client/react/hoc'
+import { withApollo } from '@apollo/client/react/hoc'
 import { Mutation } from '@apollo/client/react/components'
-
-import { GET_AUDIO_CURRENT_TIME } from 'cache'
 
 import map from 'lodash/map'
 
@@ -90,7 +88,6 @@ class SoundList extends PureComponent {
     const {
       activeSoundId,
       audioRef,
-      audioCurrentTime,
       sounds,
       isPaused,
       isViewerInPower,
@@ -120,7 +117,6 @@ class SoundList extends PureComponent {
               return (
                 <SoundCard
                   audioRef={audioRef}
-                  currentTime={isSoundActive ? audioCurrentTime : 0}
                   index={index}
                   isActive={isSoundActive}
                   isSoundPaused={isSoundPaused}
@@ -149,7 +145,6 @@ SoundList.defaultProps = {
 
 SoundList.propTypes = {
   activeSoundId: PropTypes.string,
-  audioCurrentTime: PropTypes.number.isRequired,
   audioRef: PropTypes.object,
   client: PropTypes.object.isRequired,
   isPaused: PropTypes.bool.isRequired,
@@ -160,9 +155,4 @@ SoundList.propTypes = {
   onSoundClick: PropTypes.func.isRequired,
 }
 
-export default graphql(GET_AUDIO_CURRENT_TIME, {
-  name: 'audioCurrentTime',
-  props: ({ audioCurrentTime: { audioCurrentTime } }) => ({
-    audioCurrentTime,
-  }),
-})(withApollo(SoundList))
+export default withApollo(SoundList)

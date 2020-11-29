@@ -18,7 +18,7 @@ export const Frame = styled.div`
 `
 
 export const Name = styled.div`
-  width: 88px;
+  min-width: 88px;
   text-align: center;
   color: white;
   text-transform: uppercase;

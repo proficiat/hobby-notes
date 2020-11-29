@@ -10,6 +10,8 @@ import { gql } from '@apollo/client'
 import { graphql } from '@apollo/client/react/hoc'
 import { compose } from 'recompose'
 
+import { GET_AUDIO_CURRENT_TIME } from 'cache'
+
 import {
   // subscribeWaveForm,
   drawLinearWaveForm,
@@ -87,18 +89,18 @@ class SoundCard extends PureComponent {
     const {
       sound,
       isViewerInPower,
-      currentTime,
       deleteSound,
       isSoundDeleting,
       isSoundPaused,
       isActive,
+      audioCurrentTime,
     } = this.props
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
     const soundName = get(sound, 'name', '')
     const { currentDuration, soundDuration } = getSoundDurations(
       sound,
-      currentTime,
+      audioCurrentTime,
     )
     return (
       <HoverFrame>
@@ -158,8 +160,8 @@ SoundCard.defaultProps = {
 }
 
 SoundCard.propTypes = {
+  audioCurrentTime: PropTypes.number.isRequired,
   audioRef: PropTypes.object,
-  currentTime: PropTypes.number.isRequired,
   deleteSound: PropTypes.func.isRequired,
   isActive: PropTypes.bool.isRequired,
   isSoundDeleting: PropTypes.bool.isRequired,
@@ -195,4 +197,11 @@ export default compose(
       }),
     },
   ),
+  graphql(GET_AUDIO_CURRENT_TIME, {
+    name: 'audioCurrentTime',
+    skip: props => !props.isActive,
+    props: ({ audioCurrentTime: { audioCurrentTime } }) => ({
+      audioCurrentTime,
+    }),
+  }),
 )(SoundCard)

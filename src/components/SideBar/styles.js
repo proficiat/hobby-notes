@@ -5,6 +5,7 @@ import { colors } from 'styles'
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   width: 88px;
   background: white;
   margin-left: auto;
