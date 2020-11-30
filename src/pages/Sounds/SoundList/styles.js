@@ -37,6 +37,18 @@ export const VectorKey = styled.div`
   justify-content: center;
   background: ${colors.whitesmoke};
   min-height: 280px;
+  padding-top: 1px;
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+    flex-shrink: 0;
+    padding-bottom: 60px;
+
+    > div:first-child {
+      order: 2;
+      margin-right: 0;
+    }
+  }
 `
 
 export const Info = styled.div``

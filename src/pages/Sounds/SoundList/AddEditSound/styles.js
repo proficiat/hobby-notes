@@ -77,7 +77,6 @@ export const Settings = styled.div`
   flex: 1;
   cursor: pointer;
   padding: ${SETTINGS_PADDING}px;
-  margin-left: 22px;
 `
 
 export const Field = styled.div`
