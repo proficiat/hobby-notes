@@ -87,7 +87,12 @@ const createAnalyser = (audioRef, canvasRef, fftSize) => {
   return { analyser, canvas: canvasRef, canvasContext }
 }
 
-export const drawLinearWaveForm = (normalizedData, waveformImageRef) => {
+export const drawLinearWaveForm = (
+  normalizedData,
+  waveformImageRef,
+  fillStyle = colors.background,
+  compositionOperation = 'xor',
+) => {
   // Set up the canvas
   const canvas = waveformImageRef
   const dpr = window.devicePixelRatio || 1
@@ -111,8 +116,8 @@ export const drawLinearWaveForm = (normalizedData, waveformImageRef) => {
     const isLast = i === normalizedData.length - 1
     drawLineSegment(ctx, x, height, width, (i + 1) % 2, isLast)
   }
-  ctx.globalCompositeOperation = 'xor'
-  ctx.fillStyle = colors.background // '#B4D0E7' // what color our line is
+  ctx.globalCompositeOperation = compositionOperation
+  ctx.fillStyle = fillStyle // '#B4D0E7' // what color our line is
   ctx.fillRect(0, -80, canvas.width + 100, canvas.height)
   ctx.fill()
   ctx.closePath()

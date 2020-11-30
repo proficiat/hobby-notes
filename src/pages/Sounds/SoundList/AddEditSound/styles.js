@@ -1,20 +1,60 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 import { colors } from 'styles'
 
-export const Container = styled.div`
+const SETTINGS_PADDING = 18
+
+const gradientAnimation = keyframes`
+  25% {
+    background-position: 25% 50%;
+  }
+  50% {
+    background-position: 50% 75%;
+  }
+  75% {
+    background-position: 75% 50%;
+  }
+  100% {
+    background-position: 50% 25%;
+  }
+`
+export const GradientBG = styled.div`
+  --lineWidth: 1px;
+  position: relative;
   display: flex;
-  flex: 0 1 0;
+  flex: 1;
   min-height: 168px;
   background: ${colors.whitesmoke};
-  min-width: 1000px;
   margin-right: 9px;
-  //flex-shrink: 0;
+  max-width: 720px;
+  padding: var(--lineWidth);
+
+  background: linear-gradient(
+    to right,
+    ${colors.whitesmoke},
+    ${colors.whitesmoke},
+    ${colors.red},
+    ${colors.whitesmoke},
+    ${colors.whitesmoke}
+  );
+
+  animation-name: ${gradientAnimation};
+  animation-duration: 3s;
+  animation-timing-function: ease;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  background-size: 80% 80%;
+`
+
+export const Container = styled.div`
+  display: flex;
+  flex: 1;
+  background: ${colors.whitesmoke};
 `
 
 export const BottomInfoTip = styled.div`
   position: absolute;
-  bottom: -9px;
+  top: calc(100% + ${SETTINGS_PADDING}px);
   right: 50%;
   white-space: nowrap;
   -webkit-transform: translateX(50%);
@@ -34,10 +74,9 @@ export const BottomInfoTip = styled.div`
 export const Settings = styled.div`
   display: flex;
   flex-direction: column;
-  position: relative;
   flex: 1;
   cursor: pointer;
-  padding: 18px;
+  padding: ${SETTINGS_PADDING}px;
   margin-left: 22px;
 `
 
@@ -95,7 +134,7 @@ export const AbsoluteTopCircle = styled.div`
   position: absolute;
 
   transform: translateY(50%);
-  right: 5px;
+  right: -24px;
   bottom: 50%;
 
   z-index: 5;

@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 import { colors } from 'styles'
 
@@ -10,62 +10,42 @@ export const Container = styled.div`
   flex-direction: column;
   flex: 1;
   cursor: pointer;
-  padding: 28px 28px 28px 0;
   z-index: 1;
-`
-
-const gradientAnimation = keyframes`
-  25% {
-    background-position: 25% 50%;
-  }
-  50% {
-    background-position: 50% 75%;
-  }
-  75% {
-    background-position: 75% 50%;
-  }
-  100% {
-    background-position: 50% 25%;
-  }
+  min-width: 340px;
+  max-width: 800px;
 `
 
 export const DropzoneRoot = styled.div`
-  height: 100%;
-  width: 100%;
-  outline: none;
-  position: relative;
-  background: linear-gradient(
-    to right,
-    ghostwhite,
-    ${colors.background},
-    ${colors.red},
-    ${colors.background},
-    ghostwhite
-  );
-  animation-name: ${gradientAnimation};
-  animation-duration: 3s;
-  animation-timing-function: ease;
-  animation-direction: alternate;
-  animation-iteration-count: infinite;
-  background-size: 80% 80%;
-`
-
-export const DropzonePrompt = styled.div`
-  --gradientWidth: 1px;
-
-  position: absolute;
-  top: var(--gradientWidth);
-  bottom: var(--gradientWidth);
-  left: var(--gradientWidth);
-  right: var(--gradientWidth);
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
+  width: 100%;
+  outline: none;
   background: ${colors.whitesmoke};
-  font-size: 16px;
+  padding: 0 22px;
+`
+
+export const DropzonePrompt = styled.div`
+  text-align: center;
+  font-size: 18px;
   font-weight: 300;
-  margin: 1px;
   color: ${colors.suicidePreventionBlue};
+  flex: 1;
+  padding: 0 17px;
 `
 
 export const StyledCogIcon = styled(IoIosCog)``
+
+export const WaveformWrapper = styled.div`
+  position: relative;
+  height: 40%;
+  display: flex;
+  flex: 1;
+`
+
+export const WaveformImageCanvas = styled.canvas`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`

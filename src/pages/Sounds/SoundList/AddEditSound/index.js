@@ -14,6 +14,7 @@ import Cover from './Cover'
 import Sound from './Sound'
 
 import {
+  GradientBG,
   Container,
   BottomInfoTip,
   Field,
@@ -130,37 +131,39 @@ class AddEditSound extends PureComponent {
     const { isLoading } = this.props
     const isLoad = isLoading || isPreUploading
     return (
-      <Container>
-        <Cover onImageCrop={this.onImageCrop} />
-        {isLoad && <Spinner />}
-        {!isActiveSettings && !isLoad && (
-          <Sound onDescriptionSwitch={this.onDescriptionSwitch} />
-        )}
-        {isActiveSettings && !isLoad && (
-          <Settings>
-            <Field>
-              <div>
-                Name<StyledSup>*</StyledSup>
-              </div>{' '}
-              <Input
-                placeholder="Name your track"
-                type="text"
-                value={audioName}
-                onChange={this.handleChangeName}
-              />
-            </Field>
-            <Field>
-              Description{' '}
-              <TextArea
-                placeholder="Describe your track"
-                value={description}
-                onChange={this.handleChangeDescription}
-              />
-            </Field>
-            <BottomInfoTip onClick={this.uploadSound}>Upload</BottomInfoTip>
-          </Settings>
-        )}
-      </Container>
+      <GradientBG>
+        <Container>
+          <Cover onImageCrop={this.onImageCrop} />
+          {isLoad && <Spinner />}
+          {!isActiveSettings && !isLoad && (
+            <Sound onDescriptionSwitch={this.onDescriptionSwitch} />
+          )}
+          {isActiveSettings && !isLoad && (
+            <Settings>
+              <Field>
+                <div>
+                  Name<StyledSup>*</StyledSup>
+                </div>{' '}
+                <Input
+                  placeholder="Name your track"
+                  type="text"
+                  value={audioName}
+                  onChange={this.handleChangeName}
+                />
+              </Field>
+              <Field>
+                Description{' '}
+                <TextArea
+                  placeholder="Describe your track"
+                  value={description}
+                  onChange={this.handleChangeDescription}
+                />
+              </Field>
+              <BottomInfoTip onClick={this.uploadSound}>Upload</BottomInfoTip>
+            </Settings>
+          )}
+        </Container>
+      </GradientBG>
     )
   }
 }

@@ -2,16 +2,22 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
+import { colors } from 'styles'
+
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 
 import Dropzone from 'react-dropzone'
+
+import { drawLinearWaveForm } from 'helpers/audioVisualizations'
 
 import {
   Container,
   DropzoneRoot,
   StyledCogIcon,
   DropzonePrompt,
+  WaveformImageCanvas,
+  WaveformWrapper,
 } from './styles'
 import { AbsoluteTopCircle } from '../styles'
 
@@ -23,6 +29,7 @@ class Sound extends PureComponent {
       waveformData: [],
       soundDuration: null,
     }
+    this.waveformImageRef = React.createRef()
   }
 
   filterData = audioBuffer => {
@@ -57,6 +64,13 @@ class Sound extends PureComponent {
         const normalized = this.normalizeData(filtered)
         const duration = get(audioBuffer, 'duration')
         this.setState({ waveformData: normalized, soundDuration: duration })
+        const { current: waveformImageRef } = this.waveformImageRef
+        drawLinearWaveForm(
+          normalized,
+          waveformImageRef,
+          colors.lushLava,
+          'source-atop',
+        )
       })
     })
     const soundFile = files[0]
@@ -72,9 +86,10 @@ class Sound extends PureComponent {
 
   render() {
     const { waveformData } = this.state
+    const isAvailableWaveform = !isEmpty(waveformData)
     return (
       <Container>
-        {!isEmpty(waveformData) && (
+        {isAvailableWaveform && (
           <AbsoluteTopCircle onClick={this.handleClickCog}>
             <StyledCogIcon size={24} />
           </AbsoluteTopCircle>
@@ -91,10 +106,16 @@ class Sound extends PureComponent {
                 // onDrop: event => event.stopPropagation(),
               })}
             >
-              <DropzonePrompt>
-                Attach files by dragging & dropping, selecting or pasting them.
-              </DropzonePrompt>
-
+              {isAvailableWaveform ? (
+                <WaveformWrapper>
+                  <WaveformImageCanvas ref={this.waveformImageRef} />
+                </WaveformWrapper>
+              ) : (
+                <DropzonePrompt>
+                  Attach files by dragging & dropping, selecting or pasting
+                  them.
+                </DropzonePrompt>
+              )}
               <input {...getInputProps()} />
             </DropzoneRoot>
           )}
