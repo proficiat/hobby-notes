@@ -94,6 +94,7 @@ class SoundCard extends PureComponent {
       isSoundPaused,
       isActive,
       audioCurrentTime,
+      onToggleUpdate,
     } = this.props
     const soundId = get(sound, 'id')
     const imageUrl = get(sound, 'imageUrl')
@@ -107,7 +108,7 @@ class SoundCard extends PureComponent {
         {isViewerInPower && !isSoundDeleting && (
           <SoundControlsBar>
             <IconsCircleFrame>
-              <StyledEditIcon />
+              <StyledEditIcon onClick={() => onToggleUpdate(soundId)} />
             </IconsCircleFrame>
             <IconsCircleFrame>
               <StyledTrashIcon onClick={deleteSound} />
@@ -171,6 +172,7 @@ SoundCard.propTypes = {
   // onRefetchSounds: PropTypes.func.isRequired,
   onSeekProgress: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
+  onToggleUpdate: PropTypes.func.isRequired,
 }
 
 export default compose(

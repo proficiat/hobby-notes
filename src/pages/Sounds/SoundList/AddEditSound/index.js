@@ -9,6 +9,8 @@ import PropTypes from 'prop-types'
 import { DateTime } from 'luxon'
 
 import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
+
 import Spinner from 'components/Icons/Spinner'
 import Cover from './Cover'
 import Sound from './Sound'
@@ -40,6 +42,12 @@ const INIT_STATE = {
   isPreUploading: false,
 }
 
+const getInitSoundData = soundToEdit => {
+  const initImageUrl = get(soundToEdit, 'imageUrl', null)
+  const initWaveformData = get(soundToEdit, 'waveform', [])
+  return { initImageUrl, initWaveformData }
+}
+
 class AddEditSound extends PureComponent {
   constructor(props) {
     super(props)
@@ -48,6 +56,22 @@ class AddEditSound extends PureComponent {
     }
 
     this.fileInputRef = null
+  }
+
+  componentDidMount() {
+    const { soundToEdit } = this.props
+    if (soundToEdit) {
+      const audioName = get(soundToEdit, 'name', '')
+      const description = get(soundToEdit, 'description', '')
+      const waveFormData = get(soundToEdit, 'waveform', [])
+      const duration = get(soundToEdit, 'duration', null)
+      this.setState({
+        audioName,
+        description,
+        waveFormData,
+        soundDuration: duration,
+      })
+    }
   }
 
   onDescriptionSwitch = (soundFile, waveFormData, soundDuration) => {
@@ -103,6 +127,17 @@ class AddEditSound extends PureComponent {
     })
   }
 
+  updateSound = () => {
+    const { addSound, soundToEdit } = this.props
+    const { audioName } = this.state
+    addSound({
+      variables: {
+        id: soundToEdit.id,
+        name: audioName,
+      },
+    })
+  }
+
   handleUploadFile = async file => {
     // if (isEmpty(file)) {
     //   return ''
@@ -128,15 +163,20 @@ class AddEditSound extends PureComponent {
       isActiveSettings,
       isPreUploading,
     } = this.state
-    const { isLoading } = this.props
+    const { isLoading, soundToEdit } = this.props
     const isLoad = isLoading || isPreUploading
+    const { initImageUrl, initWaveformData } = getInitSoundData(soundToEdit)
+    const isAdd = isEmpty(initWaveformData)
     return (
       <GradientBG>
         <Container>
-          <Cover onImageCrop={this.onImageCrop} />
+          <Cover initImageUrl={initImageUrl} onImageCrop={this.onImageCrop} />
           {isLoad && <Spinner />}
           {!isActiveSettings && !isLoad && (
-            <Sound onDescriptionSwitch={this.onDescriptionSwitch} />
+            <Sound
+              initWaveformData={initWaveformData}
+              onDescriptionSwitch={this.onDescriptionSwitch}
+            />
           )}
           {isActiveSettings && !isLoad && (
             <Settings>
@@ -159,7 +199,11 @@ class AddEditSound extends PureComponent {
                   onChange={this.handleChangeDescription}
                 />
               </Field>
-              <BottomInfoTip onClick={this.uploadSound}>Upload</BottomInfoTip>
+              <BottomInfoTip
+                onClick={isAdd ? this.uploadSound : this.updateSound}
+              >
+                {isAdd ? 'Upload' : 'Update'}
+              </BottomInfoTip>
             </Settings>
           )}
         </Container>
@@ -168,9 +212,14 @@ class AddEditSound extends PureComponent {
   }
 }
 
+AddEditSound.defaultProps = {
+  soundToEdit: null,
+}
+
 AddEditSound.propTypes = {
   addSound: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  soundToEdit: PropTypes.object,
 }
 
 export default AddEditSound

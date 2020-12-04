@@ -24,12 +24,26 @@ import { AbsoluteTopCircle } from '../styles'
 class Sound extends PureComponent {
   constructor(props) {
     super(props)
+    const { initWaveformData } = props
     this.state = {
       soundFile: null,
-      waveformData: [],
+      waveformData: initWaveformData,
       soundDuration: null,
     }
     this.waveformImageRef = React.createRef()
+  }
+
+  componentDidMount() {
+    const { initWaveformData } = this.props
+    if (!isEmpty(initWaveformData)) {
+      const { current: waveformImageRef } = this.waveformImageRef
+      drawLinearWaveForm(
+        initWaveformData,
+        waveformImageRef,
+        colors.lushLava,
+        'source-atop',
+      )
+    }
   }
 
   filterData = audioBuffer => {
@@ -125,7 +139,12 @@ class Sound extends PureComponent {
   }
 }
 
+Sound.defaultProps = {
+  initWaveformData: [],
+}
+
 Sound.propTypes = {
+  initWaveformData: PropTypes.array,
   onDescriptionSwitch: PropTypes.func.isRequired,
 }
 

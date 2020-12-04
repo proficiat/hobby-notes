@@ -24,6 +24,11 @@ const resolvers = {
       const deleted = await Sound.findByIdAndRemove(id)
       return deleted
     },
+    updateSound: (root, args) => {
+      const { id, name } = args
+
+      return Sound.findByIdAndUpdate(id, { name })
+    },
   },
 }
 

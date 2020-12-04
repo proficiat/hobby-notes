@@ -20,10 +20,11 @@ import {
 class Cover extends PureComponent {
   constructor(props) {
     super(props)
+    const { initImageUrl } = props
     this.state = {
       coverImageSrc: null,
-      croppedImageUrl: null,
-      cropperdImageFile: null,
+      croppedImageUrl: initImageUrl,
+      croppedImageFile: null,
       crop: {
         aspect: 16 / 16,
       },
@@ -98,12 +99,12 @@ class Cover extends PureComponent {
   }
 
   handleImageCrop = () => {
-    const { cropperdImageFile } = this.state
+    const { croppedImageFile } = this.state
     const { onImageCrop } = this.props
-    onImageCrop(cropperdImageFile)
+    onImageCrop(croppedImageFile)
     this.setState({
       coverImageSrc: null,
-      cropperdImageFile: null,
+      croppedImageFile: null,
     })
   }
 
@@ -122,7 +123,7 @@ class Cover extends PureComponent {
         crop,
         'newFile.jpeg',
       )
-      this.setState({ croppedImageUrl: fileUrl, cropperdImageFile: file })
+      this.setState({ croppedImageUrl: fileUrl, croppedImageFile: file })
     }
   }
 
@@ -176,7 +177,12 @@ class Cover extends PureComponent {
   }
 }
 
+Cover.defaultProps = {
+  initImageUrl: null,
+}
+
 Cover.propTypes = {
+  initImageUrl: PropTypes.string,
   onImageCrop: PropTypes.func.isRequired,
 }
 

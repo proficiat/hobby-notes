@@ -27,6 +27,15 @@ const typeDef = gql`
       uploadedAt: String!
     ): Sound
     deleteSound(id: String!): Sound
+    updateSound(
+      id: String!
+      name: String!
+      imageUrl: String
+      audioUrl: String
+      description: String
+      waveform: [Float]
+      duration: Float
+    ): Sound
   }
 `
 

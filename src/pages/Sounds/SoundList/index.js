@@ -7,13 +7,45 @@ import { withApollo } from '@apollo/client/react/hoc'
 import { Mutation } from '@apollo/client/react/components'
 
 import map from 'lodash/map'
+import get from 'lodash/get'
 
 import LogoVectorKey from 'components/Icons/LogoVectorKey'
+import { getId, findIndexAndUpdateById } from 'helpers/utility'
 
 import SoundCard from './SoundCard'
 import AddEditSound from './AddEditSound'
 
 import { Frame, SoundsList, VectorKey, Wrapper } from './styles'
+
+const UPDATE_SOUND = gql`
+  mutation updateSound(
+    $id: String!
+    $name: String!
+    $imageUrl: String
+    $audioUrl: String
+    $description: String
+    $waveform: [Float]
+    $duration: Float
+  ) {
+    updateSound(
+      id: $id
+      name: $name
+      imageUrl: $imageUrl
+      audioUrl: $audioUrl
+      description: $description
+      waveform: $waveform
+      duration: $duration
+    ) {
+      id
+      name
+      imageUrl
+      audioUrl
+      description
+      waveform
+      duration
+    }
+  }
+`
 
 const ADD_SOUND = gql`
   mutation createSound(
@@ -65,16 +97,32 @@ class SoundList extends PureComponent {
     super(props)
     this.state = {
       isVisibleAdd: false,
+      updateSoundId: null,
     }
   }
 
-  handleUpdateSounds = async (store, response) => {
+  handleUpdateSounds = isUpdate => async (store, response) => {
     const { client } = this.props
     const dataInStore = store.readQuery({ query: ALL_SOUNDS })
-    dataInStore.allSounds.push(response.data.addSound)
-    await client.writeData({
+    const allSounds = [...get(dataInStore, 'allSounds', [])]
+
+    const responseSound = isUpdate
+      ? response.data.updateSound
+      : response.data.addSound
+
+    if (isUpdate) {
+      const { updateSoundId } = this.state
+      findIndexAndUpdateById(allSounds, responseSound)
+      const responseSoundId = getId(responseSound)
+      if (updateSoundId === responseSoundId) {
+        this.onToggleUpdate(responseSoundId)
+      }
+    } else {
+      allSounds.push(responseSound)
+    }
+    await client.writeQuery({
       query: ALL_SOUNDS,
-      data: { ...dataInStore },
+      data: { allSounds },
     })
   }
 
@@ -82,6 +130,33 @@ class SoundList extends PureComponent {
     const { isViewerInPower } = this.props
     if (!isViewerInPower) return
     this.setState(prevState => ({ isVisibleAdd: !prevState.isVisibleAdd }))
+  }
+
+  onToggleUpdate = (soundId = null) => {
+    this.setState(prevState => ({
+      updateSoundId: prevState.updateSoundId === soundId ? null : soundId,
+    }))
+  }
+
+  renderAddUpdate = (isUpdate = false, sound = null) => {
+    const { isViewerInPower } = this.props
+    if (!isViewerInPower) {
+      return null
+    }
+    const mutation = isUpdate ? UPDATE_SOUND : ADD_SOUND
+    return (
+      <Mutation mutation={mutation} update={this.handleUpdateSounds(isUpdate)}>
+        {(addSound, { loading }) => {
+          return (
+            <AddEditSound
+              addSound={addSound}
+              isLoading={loading}
+              soundToEdit={sound}
+            />
+          )
+        }}
+      </Mutation>
+    )
   }
 
   render() {
@@ -95,25 +170,23 @@ class SoundList extends PureComponent {
       onSoundClick,
       onSeekProgress,
     } = this.props
-    const { isVisibleAdd } = this.state
+    const { isVisibleAdd, updateSoundId } = this.state
     return (
       <Frame>
         <VectorKey>
-          {isViewerInPower && isVisibleAdd && (
-            <Mutation mutation={ADD_SOUND} update={this.handleUpdateSounds}>
-              {(addSound, { loading }) => {
-                return <AddEditSound addSound={addSound} isLoading={loading} />
-              }}
-            </Mutation>
-          )}
+          {isVisibleAdd && this.renderAddUpdate()}
           <LogoVectorKey onClick={this.toggleAdd} />
         </VectorKey>
         <Wrapper>
           <SoundsList>
             {map(sounds, (sound, index) => {
-              const isSoundActive =
-                !!activeSoundId && activeSoundId === sound.id
+              const soundId = getId(sound)
+              const isSoundActive = !!activeSoundId && activeSoundId === soundId
               const isSoundPaused = isSoundActive ? isPaused : true
+              const isUpdate = updateSoundId === soundId
+              if (isUpdate) {
+                return this.renderAddUpdate(true, sound)
+              }
               return (
                 <SoundCard
                   audioRef={audioRef}
@@ -121,11 +194,12 @@ class SoundList extends PureComponent {
                   isActive={isSoundActive}
                   isSoundPaused={isSoundPaused}
                   isViewerInPower={isViewerInPower}
-                  key={sound.id}
+                  key={soundId}
                   sound={sound}
                   onRefetchSounds={onRefetchSounds}
                   onSeekProgress={onSeekProgress}
                   onSoundClick={onSoundClick}
+                  onToggleUpdate={this.onToggleUpdate}
                 />
               )
             })}
