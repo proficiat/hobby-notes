@@ -100,6 +100,10 @@ class Sound extends PureComponent {
 
   render() {
     const { waveformData } = this.state
+    const { isVisible } = this.props
+    if (!isVisible) {
+      return null
+    }
     const isAvailableWaveform = !isEmpty(waveformData)
     return (
       <Container>
@@ -145,6 +149,7 @@ Sound.defaultProps = {
 
 Sound.propTypes = {
   initWaveformData: PropTypes.array,
+  isVisible: PropTypes.bool.isRequired,
   onDescriptionSwitch: PropTypes.func.isRequired,
 }
 

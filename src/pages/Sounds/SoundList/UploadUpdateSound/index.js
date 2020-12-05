@@ -10,17 +10,9 @@ import isEmpty from 'lodash/isEmpty'
 import Spinner from 'components/Icons/Spinner'
 import Cover from './Cover'
 import Sound from './Sound'
+import Info from './Info'
 
-import {
-  GradientBG,
-  Container,
-  BottomInfoTip,
-  Field,
-  Input,
-  TextArea,
-  Settings,
-  StyledSup,
-} from './styles'
+import { GradientBG, Container, UploadButton } from './styles'
 
 const widgetSetup = {
   cloudName: process.env.REACT_APP_CLOUD_NAME,
@@ -28,8 +20,6 @@ const widgetSetup = {
 }
 
 const INIT_STATE = {
-  audioName: '',
-  description: '',
   isActiveSettings: false,
   croppedImageFile: null,
   soundFile: null,
@@ -39,9 +29,11 @@ const INIT_STATE = {
 }
 
 const getInitSoundData = soundToEdit => {
-  const initImageUrl = get(soundToEdit, 'imageUrl', null)
-  const initWaveformData = get(soundToEdit, 'waveform', [])
-  return { initImageUrl, initWaveformData }
+  const imageUrl = get(soundToEdit, 'imageUrl', null)
+  const waveformData = get(soundToEdit, 'waveform', [])
+  const name = get(soundToEdit, 'name', '')
+  const description = get(soundToEdit, 'description', '')
+  return { imageUrl, waveformData, name, description }
 }
 
 class UploadUpdateSound extends PureComponent {
@@ -50,22 +42,25 @@ class UploadUpdateSound extends PureComponent {
     this.state = {
       ...INIT_STATE,
     }
+    this.infoRef = React.createRef()
   }
 
   componentDidMount() {
     const { soundToEdit } = this.props
     if (soundToEdit) {
-      const audioName = get(soundToEdit, 'name', '')
-      const description = get(soundToEdit, 'description', '')
       const waveFormData = get(soundToEdit, 'waveform', [])
       const duration = get(soundToEdit, 'duration', null)
       this.setState({
-        audioName,
-        description,
         waveFormData,
         soundDuration: duration,
       })
     }
+  }
+
+  getInfoData = () => {
+    const { current } = this.infoRef
+    const { name, description } = current.state
+    return { name, description }
   }
 
   onDescriptionSwitch = (soundFile, waveFormData, soundDuration) => {
@@ -81,33 +76,24 @@ class UploadUpdateSound extends PureComponent {
     this.setState({ croppedImageFile })
   }
 
-  handleChangeName = target => {
-    const audioName = get(target, 'target.value')
-    this.setState({ audioName })
-  }
-
-  handleChangeDescription = target => {
-    const description = get(target, 'target.value')
-    this.setState({ description })
-  }
-
   uploadSound = async () => {
     const { onMutateSound } = this.props
     this.setState({ isPreUploading: true })
+
+    const { name, description } = this.getInfoData()
     const {
       croppedImageFile,
       soundFile,
-      audioName,
       waveFormData,
-      description,
       soundDuration,
     } = this.state
     const imageUrl = await this.handleUploadFile(croppedImageFile)
     const audioUrl = await this.handleUploadFile(soundFile)
     const uploadedAt = DateTime.local()
+
     await onMutateSound({
       variables: {
-        name: audioName,
+        name,
         waveform: waveFormData,
         imageUrl,
         audioUrl,
@@ -123,11 +109,13 @@ class UploadUpdateSound extends PureComponent {
 
   updateSound = () => {
     const { onMutateSound, soundToEdit } = this.props
-    const { audioName } = this.state
+    const { name, description } = this.getInfoData()
+
     onMutateSound({
       variables: {
         id: soundToEdit.id,
-        name: audioName,
+        name,
+        description,
       },
     })
   }
@@ -151,55 +139,36 @@ class UploadUpdateSound extends PureComponent {
   }
 
   render() {
-    const {
-      audioName,
-      description,
-      isActiveSettings,
-      isPreUploading,
-    } = this.state
+    const { isActiveSettings, isPreUploading } = this.state
     const { isLoading, soundToEdit } = this.props
     const isLoad = isLoading || isPreUploading
-    const { initImageUrl, initWaveformData } = getInitSoundData(soundToEdit)
+    const {
+      imageUrl: initImageUrl,
+      waveformData: initWaveformData,
+      name,
+      description,
+    } = getInitSoundData(soundToEdit)
     const isUpload = isEmpty(initWaveformData)
     return (
       <GradientBG>
         <Container>
           <Cover initImageUrl={initImageUrl} onImageCrop={this.onImageCrop} />
           {isLoad && <Spinner />}
-          {!isActiveSettings && !isLoad && (
-            <Sound
-              initWaveformData={initWaveformData}
-              onDescriptionSwitch={this.onDescriptionSwitch}
-            />
-          )}
-          {isActiveSettings && !isLoad && (
-            <Settings>
-              <Field>
-                <div>
-                  Name<StyledSup>*</StyledSup>
-                </div>{' '}
-                <Input
-                  placeholder="Name your track"
-                  type="text"
-                  value={audioName}
-                  onChange={this.handleChangeName}
-                />
-              </Field>
-              <Field>
-                Description{' '}
-                <TextArea
-                  placeholder="Describe your track"
-                  value={description}
-                  onChange={this.handleChangeDescription}
-                />
-              </Field>
-              <BottomInfoTip
-                onClick={isUpload ? this.uploadSound : this.updateSound}
-              >
-                {isUpload ? 'Upload' : 'Update'}
-              </BottomInfoTip>
-            </Settings>
-          )}
+          <Sound
+            initWaveformData={initWaveformData}
+            isVisible={!isActiveSettings && !isLoad}
+            onDescriptionSwitch={this.onDescriptionSwitch}
+          />
+          <Info
+            initData={{ name, description }}
+            isVisible={isActiveSettings && !isLoad}
+            ref={this.infoRef}
+          />
+          <UploadButton
+            onClick={isUpload ? this.uploadSound : this.updateSound}
+          >
+            {isUpload ? 'Upload' : 'Update'}
+          </UploadButton>
         </Container>
       </GradientBG>
     )
