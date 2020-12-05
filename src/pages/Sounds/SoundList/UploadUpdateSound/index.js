@@ -2,10 +2,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-// import 'react-image-crop/dist/ReactCrop.css'
-
-// import { gql } from 'apollo-boost'
-
 import { DateTime } from 'luxon'
 
 import get from 'lodash/get'
@@ -48,14 +44,12 @@ const getInitSoundData = soundToEdit => {
   return { initImageUrl, initWaveformData }
 }
 
-class AddEditSound extends PureComponent {
+class UploadUpdateSound extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
       ...INIT_STATE,
     }
-
-    this.fileInputRef = null
   }
 
   componentDidMount() {
@@ -98,7 +92,7 @@ class AddEditSound extends PureComponent {
   }
 
   uploadSound = async () => {
-    const { addSound } = this.props
+    const { onMutateSound } = this.props
     this.setState({ isPreUploading: true })
     const {
       croppedImageFile,
@@ -111,7 +105,7 @@ class AddEditSound extends PureComponent {
     const imageUrl = await this.handleUploadFile(croppedImageFile)
     const audioUrl = await this.handleUploadFile(soundFile)
     const uploadedAt = DateTime.local()
-    await addSound({
+    await onMutateSound({
       variables: {
         name: audioName,
         waveform: waveFormData,
@@ -128,9 +122,9 @@ class AddEditSound extends PureComponent {
   }
 
   updateSound = () => {
-    const { addSound, soundToEdit } = this.props
+    const { onMutateSound, soundToEdit } = this.props
     const { audioName } = this.state
-    addSound({
+    onMutateSound({
       variables: {
         id: soundToEdit.id,
         name: audioName,
@@ -166,7 +160,7 @@ class AddEditSound extends PureComponent {
     const { isLoading, soundToEdit } = this.props
     const isLoad = isLoading || isPreUploading
     const { initImageUrl, initWaveformData } = getInitSoundData(soundToEdit)
-    const isAdd = isEmpty(initWaveformData)
+    const isUpload = isEmpty(initWaveformData)
     return (
       <GradientBG>
         <Container>
@@ -200,9 +194,9 @@ class AddEditSound extends PureComponent {
                 />
               </Field>
               <BottomInfoTip
-                onClick={isAdd ? this.uploadSound : this.updateSound}
+                onClick={isUpload ? this.uploadSound : this.updateSound}
               >
-                {isAdd ? 'Upload' : 'Update'}
+                {isUpload ? 'Upload' : 'Update'}
               </BottomInfoTip>
             </Settings>
           )}
@@ -212,14 +206,14 @@ class AddEditSound extends PureComponent {
   }
 }
 
-AddEditSound.defaultProps = {
+UploadUpdateSound.defaultProps = {
   soundToEdit: null,
 }
 
-AddEditSound.propTypes = {
-  addSound: PropTypes.func.isRequired,
+UploadUpdateSound.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   soundToEdit: PropTypes.object,
+  onMutateSound: PropTypes.func.isRequired,
 }
 
-export default AddEditSound
+export default UploadUpdateSound
