@@ -1,26 +1,31 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { colors } from 'styles'
 
-import { IoIosCog } from 'react-icons/io'
-
 export const Container = styled.div`
+  cursor: pointer;
   position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
-  cursor: pointer;
   z-index: 1;
   min-width: 340px;
   max-width: 800px;
+  visibility: ${props => (props.visible ? 'visible' : 'hidden')};
+  ${props =>
+    !props.visible &&
+    css`
+      flex: 0;
+      min-width: 0;
+    `}
 `
 
 export const DropzoneRoot = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 100%;
+  flex: 1;
   outline: none;
   background: ${colors.whitesmoke};
   padding: 0 22px;
@@ -35,17 +40,10 @@ export const DropzonePrompt = styled.div`
   padding: 0 17px;
 `
 
-export const StyledCogIcon = styled(IoIosCog)``
-
-export const WaveformWrapper = styled.div`
-  position: relative;
-  height: 40%;
-  display: flex;
-  flex: 1;
-`
-
 export const WaveformImageCanvas = styled.canvas`
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 40%;
+  bottom: 50%;
+  transform: translateY(50%);
 `

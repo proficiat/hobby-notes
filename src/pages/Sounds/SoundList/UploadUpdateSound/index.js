@@ -12,7 +12,14 @@ import Cover from './Cover'
 import Sound from './Sound'
 import Info from './Info'
 
-import { GradientBG, Container, UploadButton } from './styles'
+import {
+  GradientBG,
+  Container,
+  UploadButton,
+  AbsoluteTopCircle,
+  SoundWaveIcon,
+  StyledCogIcon,
+} from './styles'
 
 const widgetSetup = {
   cloudName: process.env.REACT_APP_CLOUD_NAME,
@@ -23,8 +30,8 @@ const INIT_STATE = {
   isActiveSettings: false,
   croppedImageFile: null,
   soundFile: null,
-  waveFormData: null,
-  soundDuration: null,
+  waveform: null,
+  duration: null,
   isPreUploading: false,
 }
 
@@ -48,11 +55,11 @@ class UploadUpdateSound extends PureComponent {
   componentDidMount() {
     const { soundToEdit } = this.props
     if (soundToEdit) {
-      const waveFormData = get(soundToEdit, 'waveform', [])
+      const waveform = get(soundToEdit, 'waveform', [])
       const duration = get(soundToEdit, 'duration', null)
       this.setState({
-        waveFormData,
-        soundDuration: duration,
+        waveform,
+        duration,
       })
     }
   }
@@ -63,12 +70,11 @@ class UploadUpdateSound extends PureComponent {
     return { name, description }
   }
 
-  onDescriptionSwitch = (soundFile, waveFormData, soundDuration) => {
+  onDropSoundFile = (soundFile, waveform, duration) => {
     this.setState({
       soundFile,
-      waveFormData,
-      isActiveSettings: true,
-      soundDuration,
+      waveform,
+      duration,
     })
   }
 
@@ -81,12 +87,7 @@ class UploadUpdateSound extends PureComponent {
     this.setState({ isPreUploading: true })
 
     const { name, description } = this.getInfoData()
-    const {
-      croppedImageFile,
-      soundFile,
-      waveFormData,
-      soundDuration,
-    } = this.state
+    const { croppedImageFile, soundFile, waveform, duration } = this.state
     const imageUrl = await this.handleUploadFile(croppedImageFile)
     const audioUrl = await this.handleUploadFile(soundFile)
     const uploadedAt = DateTime.local()
@@ -94,11 +95,11 @@ class UploadUpdateSound extends PureComponent {
     await onMutateSound({
       variables: {
         name,
-        waveform: waveFormData,
+        waveform,
         imageUrl,
         audioUrl,
         description,
-        duration: soundDuration,
+        duration,
         uploadedAt,
       },
     })
@@ -118,6 +119,12 @@ class UploadUpdateSound extends PureComponent {
         description,
       },
     })
+  }
+
+  handleSwitchSettings = () => {
+    this.setState(prevState => ({
+      isActiveSettings: !prevState.isActiveSettings,
+    }))
   }
 
   handleUploadFile = async file => {
@@ -144,26 +151,35 @@ class UploadUpdateSound extends PureComponent {
     const isLoad = isLoading || isPreUploading
     const {
       imageUrl: initImageUrl,
-      waveformData: initWaveformData,
+      waveformData: initWaveform,
       name,
       description,
     } = getInitSoundData(soundToEdit)
-    const isUpload = isEmpty(initWaveformData)
+    const isUpload = isEmpty(initWaveform)
     return (
       <GradientBG>
         <Container>
           <Cover initImageUrl={initImageUrl} onImageCrop={this.onImageCrop} />
           {isLoad && <Spinner />}
           <Sound
-            initWaveformData={initWaveformData}
+            initWaveform={initWaveform}
             isVisible={!isActiveSettings && !isLoad}
-            onDescriptionSwitch={this.onDescriptionSwitch}
+            onDropSoundFile={this.onDropSoundFile}
           />
           <Info
             initData={{ name, description }}
             isVisible={isActiveSettings && !isLoad}
             ref={this.infoRef}
           />
+          {!isLoad && (
+            <AbsoluteTopCircle onClick={this.handleSwitchSettings}>
+              {isActiveSettings ? (
+                <SoundWaveIcon size={24} />
+              ) : (
+                <StyledCogIcon size={24} />
+              )}
+            </AbsoluteTopCircle>
+          )}
           <UploadButton
             onClick={isUpload ? this.uploadSound : this.updateSound}
           >

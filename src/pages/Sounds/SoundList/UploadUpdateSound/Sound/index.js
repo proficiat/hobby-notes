@@ -14,31 +14,26 @@ import { drawLinearWaveForm } from 'helpers/audioVisualizations'
 import {
   Container,
   DropzoneRoot,
-  StyledCogIcon,
   DropzonePrompt,
   WaveformImageCanvas,
-  WaveformWrapper,
 } from './styles'
-import { AbsoluteTopCircle } from '../styles'
 
 class Sound extends PureComponent {
   constructor(props) {
     super(props)
-    const { initWaveformData } = props
+    const { initWaveform } = props
     this.state = {
-      soundFile: null,
-      waveformData: initWaveformData,
-      soundDuration: null,
+      waveform: initWaveform,
     }
     this.waveformImageRef = React.createRef()
   }
 
   componentDidMount() {
-    const { initWaveformData } = this.props
-    if (!isEmpty(initWaveformData)) {
+    const { initWaveform } = this.props
+    if (!isEmpty(initWaveform)) {
       const { current: waveformImageRef } = this.waveformImageRef
       drawLinearWaveForm(
-        initWaveformData,
+        initWaveform,
         waveformImageRef,
         colors.lushLava,
         'source-atop',
@@ -69,15 +64,17 @@ class Sound extends PureComponent {
   }
 
   handleDropSound = files => {
+    const { onDropSoundFile } = this.props
     const reader = new FileReader()
+    const soundFile = files[0]
     reader.addEventListener('load', () => {
       const buffer = reader.result
       const audioContext = new AudioContext()
       audioContext.decodeAudioData(buffer).then(audioBuffer => {
         const filtered = this.filterData(audioBuffer)
-        const normalized = this.normalizeData(filtered)
+        const normalized = this.normalizeData(filtered) // waveform []
         const duration = get(audioBuffer, 'duration')
-        this.setState({ waveformData: normalized, soundDuration: duration })
+
         const { current: waveformImageRef } = this.waveformImageRef
         drawLinearWaveForm(
           normalized,
@@ -85,33 +82,20 @@ class Sound extends PureComponent {
           colors.lushLava,
           'source-atop',
         )
+        this.setState({ waveform: normalized }, () => {
+          onDropSoundFile(soundFile, normalized, duration)
+        })
       })
     })
-    const soundFile = files[0]
-    this.setState({ soundFile })
     reader.readAsArrayBuffer(soundFile)
   }
 
-  handleClickCog = () => {
-    const { onDescriptionSwitch } = this.props
-    const { soundFile, waveformData, soundDuration } = this.state
-    onDescriptionSwitch(soundFile, waveformData, soundDuration)
-  }
-
   render() {
-    const { waveformData } = this.state
+    const { waveform } = this.state
     const { isVisible } = this.props
-    if (!isVisible) {
-      return null
-    }
-    const isAvailableWaveform = !isEmpty(waveformData)
+    const isEmptyWaveform = isEmpty(waveform)
     return (
-      <Container>
-        {isAvailableWaveform && (
-          <AbsoluteTopCircle onClick={this.handleClickCog}>
-            <StyledCogIcon size={24} />
-          </AbsoluteTopCircle>
-        )}
+      <Container visible={isVisible}>
         <Dropzone
           accept="audio/*"
           multiple={false}
@@ -124,16 +108,14 @@ class Sound extends PureComponent {
                 // onDrop: event => event.stopPropagation(),
               })}
             >
-              {isAvailableWaveform ? (
-                <WaveformWrapper>
-                  <WaveformImageCanvas ref={this.waveformImageRef} />
-                </WaveformWrapper>
-              ) : (
+              <WaveformImageCanvas ref={this.waveformImageRef} />
+              {isEmptyWaveform && (
                 <DropzonePrompt>
                   Attach files by dragging & dropping, selecting or pasting
                   them.
                 </DropzonePrompt>
               )}
+
               <input {...getInputProps()} />
             </DropzoneRoot>
           )}
@@ -144,13 +126,13 @@ class Sound extends PureComponent {
 }
 
 Sound.defaultProps = {
-  initWaveformData: [],
+  initWaveform: [],
 }
 
 Sound.propTypes = {
-  initWaveformData: PropTypes.array,
+  initWaveform: PropTypes.array,
   isVisible: PropTypes.bool.isRequired,
-  onDescriptionSwitch: PropTypes.func.isRequired,
+  onDropSoundFile: PropTypes.func.isRequired,
 }
 
 export default Sound

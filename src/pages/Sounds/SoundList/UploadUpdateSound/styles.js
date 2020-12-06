@@ -2,6 +2,9 @@ import styled, { keyframes } from 'styled-components'
 
 import { colors } from 'styles'
 
+import { IoIosCog } from 'react-icons/io'
+import { GiSoundWaves } from 'react-icons/gi'
+
 const SETTINGS_PADDING = 18
 
 const gradientAnimation = keyframes`
@@ -89,3 +92,6 @@ export const AbsoluteTopCircle = styled.div`
   justify-content: center;
   cursor: pointer;
 `
+
+export const StyledCogIcon = styled(IoIosCog)``
+export const SoundWaveIcon = styled(GiSoundWaves)``
