@@ -10,6 +10,7 @@ import get from 'lodash/get'
 import Dropzone from 'react-dropzone'
 
 import { drawLinearWaveForm } from 'helpers/audioVisualizations'
+import { getWaveformDataPoints } from 'helpers/sounds'
 
 import {
   Container,
@@ -30,37 +31,18 @@ class Sound extends PureComponent {
 
   componentDidMount() {
     const { initWaveform } = this.props
-    if (!isEmpty(initWaveform)) {
-      const { current: waveformImageRef } = this.waveformImageRef
-      drawLinearWaveForm(
-        initWaveform,
-        waveformImageRef,
-        colors.lushLava,
-        'source-atop',
-      )
-    }
+    this.drawWaveform(initWaveform)
   }
 
-  filterData = audioBuffer => {
-    const rawData = audioBuffer.getChannelData(0) // We only need to work with one channel of data
-    const samples = 70 // Number of samples we want to have in our final data set
-    const blockSize = Math.floor(rawData.length / samples) // the number of samples in each subdivision
-    const filteredData = []
-    for (let i = 0; i < samples; i += 1) {
-      const blockStart = blockSize * i // the location of the first sample in the block
-      let sum = 0
-      for (let j = 0; j < blockSize; j += 1) {
-        sum += Math.abs(rawData[blockStart + j]) // find the sum of all the samples in the block
-      }
-      filteredData.push(sum / blockSize) // divide the sum by the block size to get the average
-    }
-    return filteredData
-  }
-
-  // This guarantees that the largest data point will be set to 1, and the rest of the data will scale proportionally
-  normalizeData = filteredData => {
-    const multiplier = Math.pow(Math.max(...filteredData), -1)
-    return filteredData.map(n => n * multiplier)
+  drawWaveform = waveform => {
+    const { current: waveformImageRef } = this.waveformImageRef
+    if (isEmpty(waveform)) return
+    drawLinearWaveForm(
+      waveform,
+      waveformImageRef,
+      colors.lushLava,
+      'source-atop',
+    )
   }
 
   handleDropSound = files => {
@@ -71,19 +53,11 @@ class Sound extends PureComponent {
       const buffer = reader.result
       const audioContext = new AudioContext()
       audioContext.decodeAudioData(buffer).then(audioBuffer => {
-        const filtered = this.filterData(audioBuffer)
-        const normalized = this.normalizeData(filtered) // waveform []
+        const waveform = getWaveformDataPoints(audioBuffer)
         const duration = get(audioBuffer, 'duration')
-
-        const { current: waveformImageRef } = this.waveformImageRef
-        drawLinearWaveForm(
-          normalized,
-          waveformImageRef,
-          colors.lushLava,
-          'source-atop',
-        )
-        this.setState({ waveform: normalized }, () => {
-          onDropSoundFile(soundFile, normalized, duration)
+        this.drawWaveform(waveform)
+        this.setState({ waveform }, () => {
+          onDropSoundFile(soundFile, waveform, duration)
         })
       })
     })
