@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes, css } from 'styled-components'
 
 import { colors } from 'styles'
 
@@ -6,6 +6,7 @@ import { IoIosCog } from 'react-icons/io'
 import { GiSoundWaves } from 'react-icons/gi'
 
 const SETTINGS_PADDING = 18
+export const SETTINGS_ICON_SIZE = 22
 
 const gradientAnimation = keyframes`
   25% {
@@ -55,35 +56,55 @@ export const Container = styled.div`
   background: ${colors.whitesmoke};
 `
 
-export const UploadButton = styled.div`
+const hoverColorTransition = css`
+  color: ${colors.luciaLash};
+  transition: color 0.3s ease-out;
+  :hover {
+    color: ${colors.westSide};
+  }
+`
+
+export const Button = styled.button.attrs({
+  type: 'button',
+})`
+  font-weight: 300;
+  text-transform: uppercase;
+  font-size: 16px;
+  letter-spacing: 7px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  outline: none;
+
+  ${hoverColorTransition};
+`
+
+export const BottomButtons = styled.div`
   position: absolute;
   top: calc(100% + ${SETTINGS_PADDING}px);
   right: 50%;
   white-space: nowrap;
   -webkit-transform: translateX(50%);
   transform: translateX(50%);
-  color: ${colors.luciaLash};
-  font-weight: 300;
-  text-transform: uppercase;
-  font-size: 18px;
-  transition: color 0.5s ease-out;
-  letter-spacing: 8px;
-  cursor: pointer;
+  width: 100%;
+  display: flex;
 
-  :hover {
-    color: ${colors.westSide};
+  justify-content: flex-end;
+
+  ${Button}:first-child {
+    margin-right: 33px;
   }
 `
 
-export const AbsoluteTopCircle = styled.div`
-  width: 48px;
-  height: 48px;
+export const AbsoluteIconsCircle = styled.div`
+  width: 42px;
+  height: 42px;
   border-radius: 100%;
   background: white;
   position: absolute;
 
   transform: translateY(50%);
-  right: -24px;
+  right: -21px;
   bottom: 50%;
 
   z-index: 5;
@@ -91,7 +112,15 @@ export const AbsoluteTopCircle = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  > svg {
+    ${hoverColorTransition};
+  }
 `
 
-export const StyledCogIcon = styled(IoIosCog)``
-export const SoundWaveIcon = styled(GiSoundWaves)``
+export const StyledCogIcon = styled(IoIosCog).attrs({
+  size: SETTINGS_ICON_SIZE,
+})``
+export const SoundWaveIcon = styled(GiSoundWaves).attrs({
+  size: SETTINGS_ICON_SIZE,
+})``

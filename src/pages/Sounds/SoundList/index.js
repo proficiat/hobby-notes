@@ -71,6 +71,7 @@ class SoundList extends PureComponent {
       return null
     }
     const mutation = isUpdate ? UPDATE_SOUND : UPLOAD_SOUND
+    const cancelFunc = isUpdate ? this.onToggleUpdate : this.toggleUpload
     return (
       <Mutation
         key={getId(sound)}
@@ -82,6 +83,7 @@ class SoundList extends PureComponent {
             <UploadUpdateSound
               isLoading={loading}
               soundToEdit={sound}
+              onCancel={cancelFunc}
               onMutateSound={mutateFunction}
             />
           )

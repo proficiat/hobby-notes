@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { IoIosCrop } from 'react-icons/io'
 
 import ReactCrop from 'react-image-crop'
+import { AbsoluteIconsCircle, SETTINGS_ICON_SIZE } from '../styles'
 
 export const CoverFrame = styled.div`
   position: relative;
@@ -17,23 +18,13 @@ export const StyledReactCrop = styled(ReactCrop)`
   height: 168px;
 `
 
-export const AbsoluteCropCircle = styled.div`
-  width: 48px;
-  height: 48px;
-  border-radius: 100%;
-  background: white;
-  position: absolute;
-  transform: translateY(50%);
-  left: -24px;
-  bottom: 50%;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+export const AbsoluteCropCircle = styled(AbsoluteIconsCircle)`
+  left: -21px;
 `
 
-export const StyledCropIcon = styled(IoIosCrop)``
+export const StyledCropIcon = styled(IoIosCrop).attrs({
+  size: SETTINGS_ICON_SIZE,
+})``
 
 export const DropzoneRoot = styled.div`
   height: 100%;
