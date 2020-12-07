@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { colors } from 'styles'
 
@@ -23,29 +23,29 @@ export const StyledSup = styled.sup`
   font-size: 16px;
 `
 
+const inputsBaseStyle = css`
+  outline: none;
+  font-family: 'economica, serif;', serif;
+  font-weight: 300;
+  border: 1px solid ${colors.luciaLash};
+  color: ${colors.luciaLash};
+  margin-top: 4px;
+`
+
 export const Input = styled.input`
+  ${inputsBaseStyle};
   height: 28px;
   background-color: white;
-  outline: none;
-  font-family: 'economica, serif;';
-  color: ${colors.luciaLash};
-  font-weight: 300;
   width: 220px;
-  margin-top: 4px;
   padding-left: 8px;
-  border: 1px solid ${colors.luciaLash};
 `
 
 export const TextArea = styled.textarea`
-  margin-top: 4px;
-  border: 1px solid ${colors.luciaLash};
-  font-weight: 300;
-  font-family: 'economica, serif;';
+  ${inputsBaseStyle};
   resize: none;
   ${'' /* vertical; */};
   height: 28px;
   padding: 6px 6px 6px 8px;
-  outline: none;
 
   ::placeholder,
   ::-webkit-input-placeholder {

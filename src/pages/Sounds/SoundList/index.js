@@ -72,7 +72,11 @@ class SoundList extends PureComponent {
     }
     const mutation = isUpdate ? UPDATE_SOUND : UPLOAD_SOUND
     return (
-      <Mutation mutation={mutation} update={this.handleUpdateSounds(isUpdate)}>
+      <Mutation
+        key={getId(sound)}
+        mutation={mutation}
+        update={this.handleUpdateSounds(isUpdate)}
+      >
         {(mutateFunction, { loading }) => {
           return (
             <UploadUpdateSound

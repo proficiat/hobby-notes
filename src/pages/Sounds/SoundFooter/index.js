@@ -65,12 +65,12 @@ class SoundFooter extends PureComponent {
               <PlaySign size={12} strokeWidth={5} />
             </StepMarkBox>
             <StyledRepeatIcon
-              active={isRepeat}
+              active={isRepeat ? 1 : 0}
               size={22}
               onClick={onToggleRepeatOrShuffle(true)}
             />
             <StyledShuffleIcon
-              active={isShuffle}
+              active={isShuffle ? 1 : 0}
               size={22}
               onClick={onToggleRepeatOrShuffle(false)}
             />

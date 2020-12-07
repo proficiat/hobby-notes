@@ -158,10 +158,11 @@ class SoundCard extends PureComponent {
 SoundCard.defaultProps = {
   isViewerInPower: false,
   audioRef: null,
+  audioCurrentTime: null,
 }
 
 SoundCard.propTypes = {
-  audioCurrentTime: PropTypes.number.isRequired,
+  audioCurrentTime: PropTypes.number,
   audioRef: PropTypes.object,
   deleteSound: PropTypes.func.isRequired,
   isActive: PropTypes.bool.isRequired,
