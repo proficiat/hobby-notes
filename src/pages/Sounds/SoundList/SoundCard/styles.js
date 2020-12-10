@@ -2,47 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { colors } from 'styles'
 
-import { FiTrash, FiEdit2 } from 'react-icons/fi'
-
 const CARD_HEIGHT = 128
-
-export const SoundControlsBar = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  visibility: hidden;
-  margin: 0 8px 0 auto;
-  width: 36px;
-`
-
-export const StyledEditIcon = styled(FiEdit2)``
-export const StyledTrashIcon = styled(FiTrash)``
-
-export const HoverFrame = styled.div`
-  display: flex;
-  width: 100%;
-  min-height: ${CARD_HEIGHT}px;
-  margin-bottom: 36px;
-
-  :hover {
-    ${SoundControlsBar} {
-      visibility: visible;
-    }
-  }
-`
-
-export const IconsCircleFrame = styled.div`
-  width: 36px;
-  height: 36px;
-  border-radius: 100%;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  margin: 5px 0;
-`
 
 export const SoundFrame = styled.div`
   display: flex;
@@ -52,6 +12,7 @@ export const SoundFrame = styled.div`
   height: 100%;
   background: transparent;
   cursor: pointer;
+  margin-bottom: 36px;
 `
 
 export const WaveformCanvas = styled.canvas`
@@ -144,6 +105,7 @@ export const TrackHeader = styled.div`
   display: flex;
   align-items: center;
   font-size: 16px;
+  justify-content: space-between;
   color: ${colors.luciaLash};
   padding-left: 40px;
   padding-top: 5px;

@@ -25,9 +25,9 @@ import Spinner from 'components/Icons/Spinner'
 import PuzzleIcon from 'components/Icons/Puzzle'
 
 import BufferingFeedback from './BufferingFeedback'
+import SettingsPopover from './SettingsPopover'
 
 import {
-  HoverFrame,
   SoundFrame,
   Cover,
   Track,
@@ -36,10 +36,6 @@ import {
   PlaySign,
   PauseSign,
   WaveformImageCanvas,
-  SoundControlsBar,
-  IconsCircleFrame,
-  StyledEditIcon,
-  StyledTrashIcon,
   WaveformProgressBar,
   TrackHeader,
   TimeLine,
@@ -89,7 +85,7 @@ class SoundCard extends PureComponent {
     const {
       sound,
       isViewerInPower,
-      deleteSound,
+      onDeleteSound,
       isSoundDeleting,
       isSoundPaused,
       isActive,
@@ -104,53 +100,49 @@ class SoundCard extends PureComponent {
       audioCurrentTime,
     )
     return (
-      <HoverFrame>
-        {isViewerInPower && !isSoundDeleting && (
-          <SoundControlsBar>
-            <IconsCircleFrame>
-              <StyledEditIcon onClick={() => onToggleUpdate(soundId)} />
-            </IconsCircleFrame>
-            <IconsCircleFrame>
-              <StyledTrashIcon onClick={deleteSound} />
-            </IconsCircleFrame>
-          </SoundControlsBar>
-        )}
-        <SoundFrame>
-          <Cover onClick={this.handlePress}>
-            {imageUrl ? <img alt="test" src={imageUrl} /> : <PuzzleIcon />}
+      <SoundFrame>
+        <Cover onClick={this.handlePress}>
+          {imageUrl ? <img alt="test" src={imageUrl} /> : <PuzzleIcon />}
 
-            <PlayButton playing={!isSoundPaused}>
-              {isSoundPaused ? <PlaySign /> : <PauseSign />}
-            </PlayButton>
-          </Cover>
-          {isSoundDeleting && <Spinner />}
-          {!isSoundDeleting && (
-            <Track playing={!isSoundPaused}>
-              <TrackHeader>{soundName}</TrackHeader>
-              <TimeLine>
-                {isActive && <span>{currentDuration}</span>}
-                <WaveformProgressBar
-                  ref={this.progressBarRef}
-                  onClick={this.handleSeekProgress}
-                >
-                  <BufferingFeedback
-                    amountColor={colors.suicidePreventionBlue}
-                    bgColor={colors.luciaLash}
-                    progressColor={colors.lushLava}
-                    soundId={soundId}
-                  />
-                  <WaveformImageCanvas
-                    id={`canvasImage${soundId}`}
-                    ref={this.waveformImageRef}
-                  />
-                </WaveformProgressBar>
-                {soundDuration}
-              </TimeLine>
-              {/* <WaveformCanvas ref={this.waveformRef} /> */}
-            </Track>
-          )}
-        </SoundFrame>
-      </HoverFrame>
+          <PlayButton playing={!isSoundPaused}>
+            {isSoundPaused ? <PlaySign /> : <PauseSign />}
+          </PlayButton>
+        </Cover>
+        {isSoundDeleting && <Spinner />}
+        {!isSoundDeleting && (
+          <Track playing={!isSoundPaused}>
+            <TrackHeader>
+              {soundName}
+              {isViewerInPower && !isSoundDeleting && (
+                <SettingsPopover
+                  onDeleteSound={onDeleteSound}
+                  onToggleUpdate={() => onToggleUpdate(soundId)}
+                />
+              )}
+            </TrackHeader>
+            <TimeLine>
+              {isActive && <span>{currentDuration}</span>}
+              <WaveformProgressBar
+                ref={this.progressBarRef}
+                onClick={this.handleSeekProgress}
+              >
+                <BufferingFeedback
+                  amountColor={colors.suicidePreventionBlue}
+                  bgColor={colors.luciaLash}
+                  progressColor={colors.lushLava}
+                  soundId={soundId}
+                />
+                <WaveformImageCanvas
+                  id={`canvasImage${soundId}`}
+                  ref={this.waveformImageRef}
+                />
+              </WaveformProgressBar>
+              {soundDuration}
+            </TimeLine>
+            {/* <WaveformCanvas ref={this.waveformRef} /> */}
+          </Track>
+        )}
+      </SoundFrame>
     )
   }
 }
@@ -164,13 +156,13 @@ SoundCard.defaultProps = {
 SoundCard.propTypes = {
   audioCurrentTime: PropTypes.number,
   audioRef: PropTypes.object,
-  deleteSound: PropTypes.func.isRequired,
   isActive: PropTypes.bool.isRequired,
   isSoundDeleting: PropTypes.bool.isRequired,
   isSoundPaused: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
   sound: PropTypes.object.isRequired,
   // onRefetchSounds: PropTypes.func.isRequired,
+  onDeleteSound: PropTypes.func.isRequired,
   onSeekProgress: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
   onToggleUpdate: PropTypes.func.isRequired,
@@ -195,7 +187,7 @@ export default compose(
         },
       }),
       props: ({ deleteSound, deleteSoundResult: { loading } }) => ({
-        deleteSound,
+        onDeleteSound: deleteSound,
         isSoundDeleting: loading,
       }),
     },
