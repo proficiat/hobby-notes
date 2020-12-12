@@ -6,7 +6,8 @@ import findIndex from 'lodash/findIndex'
 
 export const DEFAULT_AUDIO_VOLUME = 0.5
 
-export const getSoundDurations = (sound, currentTime) => {
+// ToDo: just format seconds
+export const getSoundDurations = (sound = null, currentTime = null) => {
   const currentDuration = Duration.fromObject({
     seconds: currentTime,
   }).toFormat('mm:ss')

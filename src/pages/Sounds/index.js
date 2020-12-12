@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import { gql } from '@apollo/client'
-
 import { graphql } from '@apollo/client/react/hoc'
 
 import { compose } from 'recompose'
@@ -14,6 +12,8 @@ import {
   findActiveSound,
   findActiveSoundIndex,
 } from 'helpers/sounds'
+
+import { ALL_SOUNDS } from 'queries/sounds'
 
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
@@ -318,29 +318,17 @@ Sounds.propTypes = {
 }
 
 export default compose(
-  graphql(
-    gql`
-      {
-        allSounds {
-          name
-          audioUrl
-          imageUrl
-          waveform
-          id
-          duration
-          uploadedAt
-        }
-      }
-    `,
-    {
-      name: 'allSounds',
-      props: ({ allSounds: { refetch, allSounds, loading } }) => ({
-        allSounds,
-        isSoundsLoading: loading,
-        onRefetchSounds: () => refetch(),
-      }),
+  graphql(ALL_SOUNDS, {
+    name: 'allSounds',
+    options: {
+      fetchPolicy: 'network-only',
     },
-  ),
+    props: ({ allSounds: { refetch, allSounds, loading } }) => ({
+      allSounds,
+      isSoundsLoading: loading,
+      onRefetchSounds: () => refetch(),
+    }),
+  }),
   graphql(GET_IS_USER_LOGGED_IN, {
     name: 'isViewerInPower',
     props: ({ isViewerInPower: { isViewerInPower } }) => ({

@@ -75,4 +75,11 @@ export const UPDATE_SOUND = gql`
   }
 `
 
-
+export const DELETE_SOUND = gql`
+  mutation deleteSound($id: String!) {
+    deleteSound(id: $id) {
+      id
+      name
+    }
+  }
+`

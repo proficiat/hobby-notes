@@ -21,8 +21,9 @@ const resolvers = {
     },
     deleteSound: async (root, args) => {
       const { id } = args
-      const deleted = await Sound.findByIdAndRemove(id)
-      return deleted
+      // mocked on front for now (to save cloudinary links)
+      return Sound.findById(id, 'name')
+      // return Sound.findByIdAndRemove(id)
     },
     updateSound: (root, args) => {
       const { id, name } = args

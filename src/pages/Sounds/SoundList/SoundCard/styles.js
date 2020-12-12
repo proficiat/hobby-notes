@@ -1,10 +1,10 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { colors } from 'styles'
 
-const CARD_HEIGHT = 128
+export const SOUND_CARD_HEIGHT = 128
 
-export const SoundFrame = styled.div`
+export const Base = styled.div`
   display: flex;
   flex: 1;
   align-items: center;
@@ -13,40 +13,6 @@ export const SoundFrame = styled.div`
   background: transparent;
   cursor: pointer;
   margin-bottom: 36px;
-`
-
-export const WaveformCanvas = styled.canvas`
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-  visibility: hidden;
-`
-
-export const WaveformImageCanvas = styled.canvas`
-  position: absolute;
-  z-index: 2;
-  left: 0;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-`
-
-export const Track = styled.div`
-  width: 100%;
-  min-height: ${CARD_HEIGHT}px;
-  display: flex;
-  flex-direction: column;
-
-  ${props =>
-    props.playing &&
-    css`
-      ${WaveformCanvas} {
-        visibility: visible;
-      }
-    `}
 `
 
 export const PlayButton = styled.div`
@@ -66,7 +32,7 @@ export const PlayButton = styled.div`
 
 export const Cover = styled.div`
   height: 100%;
-  min-width: ${CARD_HEIGHT}px;
+  min-width: ${SOUND_CARD_HEIGHT}px;
   background: ${colors.whitesmoke};
   position: relative;
 
@@ -99,43 +65,4 @@ export const PauseSign = styled.div`
   border-left: solid 3px;
   border-right: solid 3px;
   border-color: #f7f8fa;
-`
-
-export const TrackHeader = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  justify-content: space-between;
-  color: ${colors.luciaLash};
-  padding-left: 40px;
-  padding-top: 5px;
-  line-height: 1.2;
-  font-weight: 700;
-  text-transform: uppercase;
-`
-
-export const WaveformProgressBar = styled.div`
-  position: relative;
-  background: ${colors.background};
-  padding: 4px;
-  width: 100%;
-  min-height: calc(${CARD_HEIGHT}px / 2);
-  margin: 0 8px;
-  display: flex;
-  flex: 1;
-`
-
-export const TimeLine = styled.div`
-  display: flex;
-  width: 100%;
-  min-height: calc(${CARD_HEIGHT}px / 2);
-  align-items: center;
-  margin: auto 0 auto 0;
-  padding-left: 40px;
-  font-size: 13px;
-  font-weight: 700;
-
-  > span:first-child {
-    color: ${colors.lushLava};
-  }
 `
