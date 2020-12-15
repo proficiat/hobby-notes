@@ -17,7 +17,7 @@ const typeDef = gql`
   }
 
   extend type Mutation {
-    addSound(
+    uploadSound(
       name: String!
       imageUrl: String
       audioUrl: String!

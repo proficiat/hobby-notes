@@ -255,13 +255,7 @@ class Sounds extends PureComponent {
   }
 
   render() {
-    const {
-      allSounds,
-      // headerSearchValue,
-      isSoundsLoading,
-      isViewerInPower,
-      onRefetchSounds,
-    } = this.props
+    const { allSounds, isSoundsLoading, isViewerInPower } = this.props
     const { activeSoundId, isPaused, isRepeat, isShuffle } = this.state
     const sound = findActiveSound(activeSoundId, allSounds)
 
@@ -272,11 +266,9 @@ class Sounds extends PureComponent {
             {/* <GroupsList /> */}
             <SoundList
               activeSoundId={activeSoundId}
-              audioRef={this.audioRef.current}
               isPaused={isPaused}
               isViewerInPower={isViewerInPower}
               sounds={this.handleSearchSounds()}
-              onRefetchSounds={onRefetchSounds}
               onSeekProgress={this.onSeekProgress}
               onSoundClick={this.onSoundClick}
             />
@@ -314,7 +306,6 @@ Sounds.propTypes = {
   headerSearchValue: PropTypes.string,
   isSoundsLoading: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
-  onRefetchSounds: PropTypes.func.isRequired,
 }
 
 export default compose(

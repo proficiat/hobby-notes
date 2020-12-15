@@ -8,7 +8,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    addSound: async (root, args, context) => {
+    uploadSound: async (root, args, context) => {
       const sound = new Sound({ ...args })
       try {
         await sound.save()

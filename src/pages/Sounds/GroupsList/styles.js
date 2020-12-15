@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { colors } from 'styles'
-
 // import { space, layout } from 'styled-system'
 
 export const Frame = styled.div`
@@ -21,7 +19,7 @@ export const Item = styled.div`
   align-items: center;
   height: 80px;
   margin-bottom: 24px;
-  color: ${colors.lushLava};
+  color: ${props => props.theme.lushLava};
   font-weight: 300;
 `
 

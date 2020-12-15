@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { colors } from 'styles'
-
 import { DEFAULT_AUDIO_VOLUME } from 'helpers/sounds'
 
 import { IoMdVolumeHigh, IoMdVolumeLow, IoMdVolumeOff } from 'react-icons/io'
@@ -23,7 +21,7 @@ export const AbsoluteFrame = styled.div`
   right: 50%;
   -webkit-transform: translateX(50%);
   transform: translateX(50%);
-  background: ${colors.luciaLash};
+  background: ${props => props.theme.luciaLash};
   width: 44px;
   height: ${ABSOLUTE_FRAME_HEIGHT}px;
   z-index: 6;
@@ -46,7 +44,7 @@ export const AbsoluteFrame = styled.div`
     position: absolute;
     pointer-events: none;
     border: solid 11px transparent;
-    border-top-color: ${colors.luciaLash};
+    border-top-color: ${props => props.theme.luciaLash};
     z-index: 6;
   }
 `
@@ -85,7 +83,7 @@ export const ActiveVolumeHeight = styled.div`
   position: relative;
   display: block;
   width: 100%;
-  background: ${colors.suicidePreventionBlue};
+  background: ${props => props.theme.suicidePreventionBlue};
   height: ${INIT_ACTIVE_VOLUME_HEIGHT}px;
   transition: height 0.5s linear;
 
@@ -103,13 +101,14 @@ export const ActiveVolumeHeight = styled.div`
 `
 
 const baseIconStyle = css`
-  color: ${props => (props.active ? colors.lushLava : colors.luciaLash)};
+  color: ${props =>
+    props.active ? props.theme.lushLava : props.theme.luciaLash};
   cursor: pointer;
   height: 22px;
   width: 22px;
   :hover {
     color: ${props =>
-      props.active ? colors.lushLava : colors.suicidePreventionBlue};
+      props.active ? props.theme.lushLava : props.theme.suicidePreventionBlue};
   }
 `
 export const StyledVolumeHeightIcon = styled(IoMdVolumeHigh)`

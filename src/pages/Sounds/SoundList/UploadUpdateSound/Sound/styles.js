@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { colors } from 'styles'
-
 export const Container = styled.div`
   cursor: pointer;
   position: relative;
@@ -27,7 +25,7 @@ export const DropzoneRoot = styled.div`
   justify-content: center;
   flex: 1;
   outline: none;
-  background: ${colors.whitesmoke};
+  background: ${props => props.theme.whitesmoke};
   padding: 0 22px;
 `
 
@@ -35,7 +33,7 @@ export const DropzonePrompt = styled.div`
   text-align: center;
   font-size: 18px;
   font-weight: 300;
-  color: ${colors.suicidePreventionBlue};
+  color: ${props => props.theme.suicidePreventionBlue};
   flex: 1;
   padding: 0 17px;
 `

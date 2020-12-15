@@ -15,7 +15,7 @@ export const ALL_SOUNDS = gql`
 `
 
 export const UPLOAD_SOUND = gql`
-  mutation createSound(
+  mutation uploadSound(
     $name: String!
     $imageUrl: String
     $audioUrl: String!
@@ -24,7 +24,7 @@ export const UPLOAD_SOUND = gql`
     $duration: Float!
     $uploadedAt: String!
   ) {
-    addSound(
+    uploadSound(
       name: $name
       imageUrl: $imageUrl
       audioUrl: $audioUrl

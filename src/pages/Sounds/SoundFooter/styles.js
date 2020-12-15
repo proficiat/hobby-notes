@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { colors } from 'styles'
-
 import { IoMdRepeat, IoMdShuffle } from 'react-icons/io'
 
 import { space, layout } from 'styled-system'
@@ -31,7 +29,7 @@ export const PlayControls = styled.div`
   align-items: center;
 
   > div {
-    border-color: ${colors.luciaLash};
+    border-color: ${props => props.theme.luciaLash};
   }
 `
 
@@ -55,10 +53,10 @@ export const StepMarkBox = styled.div`
       border-right: 2px solid;
       padding-right: 4px;
     `}
-   border-color: ${colors.luciaLash} !important;
+   border-color: ${props => props.theme.luciaLash} !important;
    
    > div {
-    border-color: ${colors.luciaLash};
+    border-color: ${props => props.theme.luciaLash};
    }
   
   ${layout}
@@ -66,11 +64,12 @@ export const StepMarkBox = styled.div`
 `
 
 const baseIconStyle = css`
-  color: ${props => (props.active ? colors.lushLava : colors.luciaLash)};
+  color: ${props =>
+    props.active ? props.theme.lushLava : props.theme.luciaLash};
   cursor: pointer;
   :hover {
     color: ${props =>
-      props.active ? colors.lushLava : colors.suicidePreventionBlue};
+      props.active ? props.theme.lushLava : props.theme.suicidePreventionBlue};
   }
 `
 

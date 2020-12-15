@@ -33,7 +33,7 @@ class SoundList extends PureComponent {
 
     const responseSound = isUpdate
       ? response.data.updateSound
-      : response.data.addSound
+      : response.data.uploadSound
 
     if (isUpdate) {
       const { updateSoundId } = this.state
@@ -95,11 +95,9 @@ class SoundList extends PureComponent {
   render() {
     const {
       activeSoundId,
-      audioRef,
       sounds,
       isPaused,
       isViewerInPower,
-      onRefetchSounds,
       onSoundClick,
       onSeekProgress,
     } = this.props
@@ -122,14 +120,12 @@ class SoundList extends PureComponent {
               }
               return (
                 <SoundCard
-                  audioRef={audioRef}
                   index={index}
                   isActive={isSoundActive}
                   isSoundPaused={isSoundPaused}
                   isViewerInPower={isViewerInPower}
                   key={soundId}
                   sound={sound}
-                  onRefetchSounds={onRefetchSounds}
                   onSeekProgress={onSeekProgress}
                   onSoundClick={onSoundClick}
                   onToggleUpdate={this.onToggleUpdate}
@@ -146,18 +142,15 @@ class SoundList extends PureComponent {
 SoundList.defaultProps = {
   isViewerInPower: false,
   activeSoundId: '',
-  audioRef: null,
   sounds: [],
 }
 
 SoundList.propTypes = {
   activeSoundId: PropTypes.string,
-  audioRef: PropTypes.object,
   client: PropTypes.object.isRequired,
   isPaused: PropTypes.bool.isRequired,
   isViewerInPower: PropTypes.bool,
   sounds: PropTypes.array,
-  onRefetchSounds: PropTypes.func.isRequired,
   onSeekProgress: PropTypes.func.isRequired,
   onSoundClick: PropTypes.func.isRequired,
 }

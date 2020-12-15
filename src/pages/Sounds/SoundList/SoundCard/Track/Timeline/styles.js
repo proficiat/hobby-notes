@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { colors } from 'styles'
 
 import { SOUND_CARD_HEIGHT } from '../../styles'
 
@@ -14,7 +13,7 @@ export const Base = styled.div`
   font-weight: 700;
 
   > span:first-child {
-    color: ${colors.lushLava};
+    color: ${props => props.theme.lushLava};
   }
 `
 
@@ -29,7 +28,7 @@ export const WaveformImageCanvas = styled.canvas`
 
 export const WaveformProgressBar = styled.div`
   position: relative;
-  background: ${colors.background};
+  background: ${props => props.theme.background};
   padding: 4px;
   width: 100%;
   min-height: calc(${SOUND_CARD_HEIGHT}px / 2);

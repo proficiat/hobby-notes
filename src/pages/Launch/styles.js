@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { colors } from 'styles'
-
 export const Container = styled.div`
   position: absolute;
   display: flex;
@@ -11,7 +9,7 @@ export const Container = styled.div`
   padding: 33px 80px;
   top: 38px;
   left: 88px;
-  background: ${colors.luciaLash};
+  background: ${props => props.theme.luciaLash};
   font-weight: 300;
   width: 380px;
   z-index: 6;
@@ -29,7 +27,7 @@ export const Container = styled.div`
     position: absolute;
     pointer-events: none;
     border: solid 16px transparent;
-    border-right-color: ${colors.luciaLash};
+    border-right-color: ${props => props.theme.luciaLash};
     z-index: 6;
   }
 `
@@ -55,7 +53,7 @@ export const Input = styled.input`
   background-color: white;
   outline: none;
   border: 1px solid white;
-  color: ${colors.luciaLash};
+  color: ${props => props.theme.luciaLash};
   font-weight: 300;
   width: 220px;
   margin-top: 4px;
@@ -66,14 +64,13 @@ export const Input = styled.input`
 export const Button = styled.button`
   height: 44px;
   font-size: 16px;
-  font-family: 'economica, serif';
   font-weight: 300;
   margin-top: 18px;
   width: 144px;
-  background-color: ${colors.red};
+  background-color: ${props => props.theme.red};
   outline: none;
   cursor: pointer;
-  color: ${colors.blush};
+  color: ${props => props.theme.blush};
   text-transform: uppercase;
   border: none;
   border-radius: 4px;
@@ -87,5 +84,5 @@ export const StyledForm = styled.form`
 
 export const Error = styled.div`
   font-size: 15px;
-  color: ${colors.lushLava};
+  color: ${props => props.theme.lushLava};
 `

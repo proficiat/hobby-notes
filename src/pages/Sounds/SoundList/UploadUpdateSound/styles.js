@@ -1,7 +1,5 @@
 import styled, { keyframes, css } from 'styled-components'
 
-import { colors } from 'styles'
-
 import { IoIosCog } from 'react-icons/io'
 import { GiSoundWaves } from 'react-icons/gi'
 
@@ -28,18 +26,18 @@ export const GradientBG = styled.div`
   display: flex;
   flex: 1;
   min-height: 168px;
-  background: ${colors.whitesmoke};
+  background: ${props => props.theme.whitesmoke};
   margin-right: 9px;
   max-width: 720px;
   padding: var(--lineWidth);
 
   background: linear-gradient(
     to right,
-    ${colors.whitesmoke},
-    ${colors.whitesmoke},
-    ${colors.red},
-    ${colors.whitesmoke},
-    ${colors.whitesmoke}
+    ${props => props.theme.whitesmoke},
+    ${props => props.theme.whitesmoke},
+    ${props => props.theme.red},
+    ${props => props.theme.whitesmoke},
+    ${props => props.theme.whitesmoke}
   );
 
   animation-name: ${gradientAnimation};
@@ -48,19 +46,26 @@ export const GradientBG = styled.div`
   animation-direction: alternate;
   animation-iteration-count: infinite;
   background-size: 80% 80%;
+
+  ${props =>
+    props.isUpdate &&
+    css`
+      margin-bottom: 74px;
+      max-width: 900px;
+    `};
 `
 
 export const Container = styled.div`
   display: flex;
   flex: 1;
-  background: ${colors.whitesmoke};
+  background: ${props => props.theme.whitesmoke};
 `
 
 const hoverColorTransition = css`
-  color: ${colors.luciaLash};
+  color: ${props => props.theme.luciaLash};
   transition: color 0.3s ease-out;
   :hover {
-    color: ${colors.westSide};
+    color: ${props => props.theme.westSide};
   }
 `
 

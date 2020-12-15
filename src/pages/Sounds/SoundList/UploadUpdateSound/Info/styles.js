@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { colors } from 'styles'
-
 export const Base = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,21 +12,20 @@ export const Field = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 16px;
-  color: ${colors.luciaLash};
+  color: ${props => props.theme.luciaLash};
   margin-bottom: 11px;
 `
 
 export const StyledSup = styled.sup`
-  color: ${colors.westSide};
+  color: ${props => props.theme.westSide};
   font-size: 16px;
 `
 
 const inputsBaseStyle = css`
   outline: none;
-  font-family: 'economica, serif;', serif;
   font-weight: 300;
-  border: 1px solid ${colors.luciaLash};
-  color: ${colors.luciaLash};
+  border: 1px solid ${props => props.theme.luciaLash};
+  color: ${props => props.theme.luciaLash};
   margin-top: 4px;
 `
 
@@ -49,9 +46,9 @@ export const TextArea = styled.textarea`
 
   ::placeholder,
   ::-webkit-input-placeholder {
-    color: ${colors.blue};
+    color: ${props => props.theme.blue};
   }
   :-ms-input-placeholder {
-    color: ${colors.blue};
+    color: ${props => props.theme.blue};
   }
 `

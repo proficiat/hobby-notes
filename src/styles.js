@@ -1,22 +1,19 @@
 import styled, { createGlobalStyle } from 'styled-components'
 
 export const colors = {
-  primary: '#220a82',
-  secondary: '#14cbc4',
-  accent: '#e535ab',
   background: '#f7f8fa',
   grey: '#d8d9e0',
-  text: '#343c5a',
-  textSecondary: '#747790',
   red: '#C3002F',
   blue: '#34558B',
-  green: '#4D724D',
+  // green: '#4D724D',
+
   luciaLash: '#0A0A0A',
   lushLava: '#FF4500',
   suicidePreventionBlue: '#00a1ff',
-  phantomBlue: '#191970',
-  chinesePorcelain: '#395E7D',
-  navy: '#02075D',
+
+  // phantomBlue: '#191970',
+  // chinesePorcelain: '#395E7D',
+  // navy: '#02075D',
   blush: '#FFC0CB',
   whitesmoke: '#f5f5f5',
   westSide: '#f9900f',
@@ -33,7 +30,7 @@ export const PageContent = styled.div`
   flex-direction: column;
   flex: 1 1 0;
   background: ${colors.background};
-  color: ${colors.text};
+  color: ${colors.luciaLash};
 `
 export const GlobalStyle = createGlobalStyle({
   [['html', 'body']]: {
@@ -48,7 +45,7 @@ export const GlobalStyle = createGlobalStyle({
     padding: 0,
     fontFamily: 'economica, serif;',
     backgroundColor: colors.background,
-    color: colors.text,
+    color: colors.luciaLash,
     fontSize: '14px',
     overflow: 'hidden',
   },

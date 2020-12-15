@@ -140,7 +140,7 @@ class UploadUpdateSound extends PureComponent {
       description,
     } = this.initSoundData
     return (
-      <GradientBG>
+      <GradientBG isUpdate={!this.isUpload}>
         <Container>
           <Cover initImageUrl={initImageUrl} onImageCrop={this.onImageCrop} />
           {isLoad && <Spinner />}
