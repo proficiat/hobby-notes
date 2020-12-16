@@ -9,6 +9,7 @@ export const Frame = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 64px;
+  min-height: 0;
 
   ::-webkit-scrollbar {
     display: none;
@@ -17,6 +18,7 @@ export const Frame = styled.div`
 export const Wrapper = styled.div`
   display: flex;
   justify-content: center;
+  min-height: 0;
 `
 
 export const SoundsList = styled.div`
@@ -25,6 +27,7 @@ export const SoundsList = styled.div`
   flex: 1;
   max-width: 900px;
   padding: 0 64px;
+  min-height: 0;
 
   > div:first-child {
     margin-top: 36px;

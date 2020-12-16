@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { colors } from 'styles'
-
 export const SOUND_CARD_HEIGHT = 128
 
 export const Base = styled.div`
@@ -9,7 +7,7 @@ export const Base = styled.div`
   flex: 1;
   align-items: center;
   min-width: 330px;
-  height: 100%;
+  min-height: ${SOUND_CARD_HEIGHT}px;
   background: transparent;
   cursor: pointer;
   margin-bottom: 36px;
@@ -33,7 +31,7 @@ export const PlayButton = styled.div`
 export const Cover = styled.div`
   height: 100%;
   min-width: ${SOUND_CARD_HEIGHT}px;
-  background: ${colors.whitesmoke};
+  background: ${props => props.theme.whitesmoke};
   position: relative;
 
   > img {

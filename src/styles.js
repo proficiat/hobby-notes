@@ -23,12 +23,14 @@ export const MainWrapper = styled.div`
   display: flex;
   flex: 1 1 0;
   height: 100vh;
+  min-height: 0;
 `
 
 export const PageContent = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 0;
+  min-height: 0;
   background: ${colors.background};
   color: ${colors.luciaLash};
 `
