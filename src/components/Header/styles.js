@@ -1,10 +1,6 @@
 import styled from 'styled-components'
 
-import { colors } from 'styles'
-
-import { IoMdSearch } from 'react-icons/io'
-
-export const Frame = styled.div`
+export const Base = styled.div`
   display: flex;
   height: 64px;
   width: 100%;
@@ -22,28 +18,4 @@ export const Name = styled.div`
   text-align: center;
   color: white;
   text-transform: uppercase;
-`
-
-export const SearchInput = styled.input`
-  height: 28px;
-  background-color: white;
-  outline: none;
-  border: 1px solid white;
-  color: ${colors.luciaLash};
-  font-weight: 300;
-  width: 330px;
-  padding-left: 8px;
-  border-radius: 4px;
-`
-
-export const SearchBase = styled.div`
-  display: flex;
-  align-items: center;
-`
-export const StyledSearchIcon = styled(IoMdSearch)`
-  color: white;
-  height: 22px;
-  width: 22px;
-
-  margin-right: 12px;
 `

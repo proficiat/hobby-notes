@@ -39,11 +39,13 @@ export const GlobalStyle = createGlobalStyle({
   },
   [['button', 'input', 'textarea']]: {
     fontFamily: 'economica, serif',
+    letterSpacing: '1px',
   },
   body: {
     margin: 0,
     padding: 0,
     fontFamily: 'economica, serif;',
+    letterSpacing: '1px',
     backgroundColor: colors.background,
     color: colors.luciaLash,
     fontSize: '14px',
