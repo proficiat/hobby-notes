@@ -7,30 +7,21 @@ import { compose } from 'recompose'
 
 import Spinner from 'components/Icons/Spinner'
 
-import {
-  DEFAULT_AUDIO_VOLUME,
-  findActiveSound,
-  findActiveSoundIndex,
-} from 'helpers/sounds'
+import { findActiveSound, findActiveSoundIndex } from 'helpers/sounds'
 
 import { ALL_SOUNDS } from 'queries/sounds'
 
 import get from 'lodash/get'
-import forEach from 'lodash/forEach'
 import shuffle from 'lodash/shuffle'
 import map from 'lodash/map'
 import indexOf from 'lodash/indexOf'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 
-import {
-  GET_IS_USER_LOGGED_IN,
-  GET_HEADER_SEARCH_VALUE,
-  audioCurrentTimeVar,
-} from 'cache'
+import { GET_IS_USER_LOGGED_IN, GET_HEADER_SEARCH_VALUE } from 'cache'
 import SoundList from './SoundList'
-// import GroupsList from './GroupsList'
 import SoundFooter from './SoundFooter'
+import Audio from './Audio'
 
 import { ListsBase } from './styles'
 
@@ -45,27 +36,6 @@ class Sounds extends PureComponent {
       shuffleIds: [],
     }
     this.audioRef = React.createRef()
-  }
-
-  componentDidMount() {
-    const { current: audioRef } = this.audioRef
-    if (audioRef) {
-      audioRef.addEventListener('timeupdate', this.handleSoundTimeUpdate)
-      audioRef.addEventListener('progress', this.handleSoundProgress)
-      audioRef.volume = DEFAULT_AUDIO_VOLUME
-    }
-  }
-
-  componentWillUnmount() {
-    const { current: audioRef } = this.audioRef
-    if (audioRef) {
-      audioRef.removeEventListener('progress', this.handleSoundProgress, false)
-      audioRef.removeEventListener(
-        'timeupdate',
-        this.handleSoundTimeUpdate,
-        false,
-      )
-    }
   }
 
   setInitSoundId = () => {
@@ -192,57 +162,6 @@ class Sounds extends PureComponent {
     }
   }
 
-  handleSoundProgress = () => {
-    try {
-      const { activeSoundId } = this.state
-      const { current: audioRef } = this.audioRef
-      const duration = get(audioRef, 'duration')
-      if (duration > 0 && activeSoundId) {
-        const buffered = get(audioRef, 'buffered')
-        const currentTime = get(audioRef, 'currentTime')
-        for (let i = 0; i < buffered.length; i += 1) {
-          if (buffered.start(buffered.length - 1 - i) < currentTime) {
-            const amountElements = document.getElementsByClassName(
-              `buffered-amount-${activeSoundId}`,
-            )
-            forEach(amountElements, element => {
-              element.style.width = `${(buffered.end(buffered.length - 1 - i) /
-                duration) *
-                100}%`
-            })
-            break
-          }
-        }
-      }
-    } catch (e) {
-      //
-    }
-  }
-
-  handleSoundTimeUpdate = event => {
-    try {
-      const { activeSoundId } = this.state
-      const { current: audioRef } = this.audioRef
-      audioCurrentTimeVar(get(event, 'target.currentTime', 0))
-      const duration = get(audioRef, 'duration')
-      const currentTime = get(audioRef, 'currentTime')
-      if (activeSoundId && duration > 0) {
-        const filledInterest = (currentTime / duration) * 100
-        const progressElements = document.getElementsByClassName(
-          `progress-amount-${activeSoundId}`,
-        )
-        forEach(progressElements, element => {
-          element.style.width = `${filledInterest}%`
-        })
-        if (filledInterest >= 100) {
-          this.onSwitchSound(false, true)()
-        }
-      }
-    } catch (e) {
-      //
-    }
-  }
-
   handleSearchSounds = () => {
     const { allSounds, headerSearchValue } = this.props
     if (headerSearchValue === '') {
@@ -258,12 +177,10 @@ class Sounds extends PureComponent {
     const { allSounds, isSoundsLoading, isViewerInPower } = this.props
     const { activeSoundId, isPaused, isRepeat, isShuffle } = this.state
     const sound = findActiveSound(activeSoundId, allSounds)
-
     return (
       <React.Fragment>
         {!isSoundsLoading && (
           <ListsBase>
-            {/* <GroupsList /> */}
             <SoundList
               activeSoundId={activeSoundId}
               isPaused={isPaused}
@@ -275,10 +192,11 @@ class Sounds extends PureComponent {
           </ListsBase>
         )}
         {isSoundsLoading && <Spinner />}
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <audio crossOrigin="anonymous" ref={this.audioRef}>
-          <source src={get(sound, 'audioUrl')} />
-        </audio>
+        <Audio
+          ref={this.audioRef}
+          sound={sound}
+          onSwitchSound={this.onSwitchSound}
+        />
         <SoundFooter
           isPaused={isPaused}
           isRepeat={isRepeat}
