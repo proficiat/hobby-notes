@@ -1,5 +1,10 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useImperativeHandle,
+} from 'react'
 import PropTypes from 'prop-types'
 
 import { DEFAULT_AUDIO_VOLUME } from 'helpers/sounds'
@@ -35,16 +40,51 @@ const countPlay = (soundId, duration) => {
 }
 
 const Audio = React.forwardRef((props, ref) => {
+  const audioRef = useRef(null)
   const { sound, onSwitchSound } = props
   const soundId = getId(sound)
   const audioUrl = get(sound, 'audioUrl', '')
 
   useEffect(() => {
-    const { current } = ref
+    const { current } = audioRef
     if (current) {
       current.volume = DEFAULT_AUDIO_VOLUME
     }
-  }, [ref])
+  }, [])
+
+  useImperativeHandle(ref, () => ({
+    pause: () => {
+      audioRef.current.pause()
+    },
+    load: () => {
+      audioRef.current.load()
+    },
+    play: () => {
+      audioRef.current.play()
+    },
+    setVolume: volume => {
+      audioRef.current.volume = volume
+    },
+    isPaused: () => audioRef.current.paused,
+    seekProgress: (isActive, progressBarRef, event) => {
+      if (!isActive) {
+        return
+      }
+      try {
+        if (progressBarRef) {
+          const percentWidth =
+            (event.clientX - progressBarRef.offsetLeft) /
+            progressBarRef.offsetWidth
+          const { current } = audioRef
+          if (current) {
+            current.currentTime = percentWidth * current.duration
+          }
+        }
+      } catch (error) {
+        //
+      }
+    },
+  }))
 
   const handleTimeUpdate = event => {
     const { target } = event
@@ -67,7 +107,7 @@ const Audio = React.forwardRef((props, ref) => {
   }
 
   useLayoutEffect(() => {
-    const { current } = ref
+    const { current } = audioRef
     const handleProgress = event => {
       const { target } = event
       const currentTime = get(target, 'currentTime', 0)
@@ -100,10 +140,14 @@ const Audio = React.forwardRef((props, ref) => {
         passive: true,
       })
     }
-  }, [ref, soundId])
+  }, [soundId])
 
   return (
-    <audio crossOrigin="anonymous" ref={ref} onTimeUpdate={handleTimeUpdate}>
+    <audio
+      crossOrigin="anonymous"
+      ref={audioRef}
+      onTimeUpdate={handleTimeUpdate}
+    >
       <source src={audioUrl} />
     </audio>
   )

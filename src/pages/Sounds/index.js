@@ -53,7 +53,7 @@ class Sounds extends PureComponent {
     const { current: audioRef } = this.audioRef
     if (audioRef) {
       let isSoundPaused = false
-      if (audioRef.paused || !isActive) {
+      if (audioRef.isPaused() || !isActive) {
         isSoundPaused = true
       }
       this.setState({ isPaused: !isSoundPaused }, () => {
@@ -105,29 +105,10 @@ class Sounds extends PureComponent {
     this.handleSwitchSoundId(nextSoundId, isAutoSwitch)
   }
 
-  onSeekProgress = (isActive, progressBarRef, event) => {
-    const { current: audioRef } = this.audioRef
-    if (!isActive) {
-      return
-    }
-    try {
-      if (progressBarRef) {
-        const percentWidth =
-          (event.clientX - progressBarRef.offsetLeft) /
-          progressBarRef.offsetWidth
-        if (audioRef) {
-          audioRef.currentTime = percentWidth * audioRef.duration
-        }
-      }
-    } catch (error) {
-      //
-    }
-  }
-
   onChangeAudioVolume = volumeFraction => {
     const { current: audioRef } = this.audioRef
     if (audioRef) {
-      audioRef.volume = volumeFraction
+      audioRef.setVolume(volumeFraction)
     }
   }
 
@@ -186,7 +167,11 @@ class Sounds extends PureComponent {
               isPaused={isPaused}
               isViewerInPower={isViewerInPower}
               sounds={this.handleSearchSounds()}
-              onSeekProgress={this.onSeekProgress}
+              onSeekProgress={get(
+                this.audioRef,
+                'current.seekProgress',
+                () => {},
+              )}
               onSoundClick={this.onSoundClick}
             />
           </ListsBase>
@@ -203,7 +188,7 @@ class Sounds extends PureComponent {
           isShuffle={isShuffle}
           sound={sound}
           onChangeAudioVolume={this.onChangeAudioVolume}
-          onSeekProgress={this.onSeekProgress}
+          onSeekProgress={get(this.audioRef, 'current.seekProgress', () => {})}
           onSoundClick={this.onSoundClick}
           onSwitchSound={this.onSwitchSound}
           onToggleRepeatOrShuffle={this.onToggleRepeatOrShuffle}
