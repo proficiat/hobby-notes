@@ -6,8 +6,10 @@ import React, {
   useImperativeHandle,
 } from 'react'
 import PropTypes from 'prop-types'
+import { useMutation } from '@apollo/client'
 
 import { DEFAULT_AUDIO_VOLUME } from 'helpers/sounds'
+import { UPDATE_SOUND } from 'queries/sounds'
 
 import { audioCurrentTimeVar } from 'cache'
 
@@ -16,34 +18,24 @@ import { getId } from 'helpers/utility'
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
 
-let prevSoundId = null
-let playingTime = 0
-let countInterval = null
-// eslint-disable-next-line no-unused-vars
-const countPlay = (soundId, duration) => {
-  if (prevSoundId !== soundId) {
-    if (playingTime) {
-      const filled = (playingTime / duration) * 100
-      if (filled >= 80) {
-        // console.log('count + 1')
-      }
-    }
-    if (countInterval) {
-      clearInterval(countInterval)
-    }
-    prevSoundId = soundId
-    playingTime = 0
-    countInterval = setInterval(() => {
-      playingTime += 1
-    }, 1000)
-  }
+const INIT_PLAYING_DATA = {
+  playingTime: 0,
+  prevCurrentTime: 0,
 }
 
 const Audio = React.forwardRef((props, ref) => {
   const audioRef = useRef(null)
+  const playingData = useRef({ ...INIT_PLAYING_DATA })
   const { sound, onSwitchSound } = props
   const soundId = getId(sound)
   const audioUrl = get(sound, 'audioUrl', '')
+
+  const [updatePlayedCount] = useMutation(UPDATE_SOUND, {
+    variables: {
+      id: soundId,
+      played: get(sound, 'played', 0) + 1,
+    },
+  })
 
   useEffect(() => {
     const { current } = audioRef
@@ -51,6 +43,12 @@ const Audio = React.forwardRef((props, ref) => {
       current.volume = DEFAULT_AUDIO_VOLUME
     }
   }, [])
+
+  useEffect(() => {
+    if (soundId) {
+      playingData.current = { ...INIT_PLAYING_DATA }
+    }
+  }, [soundId])
 
   useImperativeHandle(ref, () => ({
     pause: () => {
@@ -91,8 +89,21 @@ const Audio = React.forwardRef((props, ref) => {
     const currentTime = get(target, 'currentTime', 0)
     const duration = get(target, 'duration', 0)
 
+    const { current } = playingData
+    const currentTimeDiff = currentTime - current.prevCurrentTime
+    current.prevCurrentTime = currentTime
+    if (currentTimeDiff > 0 && currentTimeDiff < 1) {
+      current.playingTime += currentTimeDiff
+      const filled = (current.playingTime / duration) * 100
+      if (filled >= 80) {
+        playingData.current = { ...INIT_PLAYING_DATA }
+        updatePlayedCount()
+          .then(res => {})
+          .catch(e => {})
+      }
+    }
+
     audioCurrentTimeVar(currentTime)
-    // countPlay(activeSoundId, duration)
 
     const filledInterest = (currentTime / duration) * 100
     const progressElements = document.getElementsByClassName(

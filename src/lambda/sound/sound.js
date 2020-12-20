@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const schema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: false,
     unique: true,
     minlength: 2,
   },
@@ -24,6 +24,10 @@ const schema = new mongoose.Schema({
   duration: {
     type: Number,
     required: true,
+  },
+  played: {
+    type: Number,
+    required: false,
   },
   uploadedAt: {
     type: String,

@@ -13,7 +13,13 @@ import Spinner from 'components/Icons/Spinner'
 import SettingsPopover from './SettingsPopover'
 import Timeline from './Timeline'
 
-import { Base, TrackHeader, ErrorMessage } from './styles'
+import {
+  Base,
+  TopPane,
+  ErrorMessage,
+  BottomPane,
+  PlayOutlineIcon,
+} from './styles'
 
 const Track = ({
   isActive,
@@ -26,6 +32,7 @@ const Track = ({
   const [errorMessage, setErrorMessage] = useState(null)
   const soundId = getId(sound)
   const soundName = get(sound, 'name', '')
+  const played = get(sound, 'played', 0)
 
   const handleError = error => {
     const errorGQLMessage =
@@ -68,7 +75,7 @@ const Track = ({
 
   return (
     <Base playing={!isSoundPaused}>
-      <TrackHeader>
+      <TopPane>
         {soundName}
         {isViewerInPower && (
           <SettingsPopover
@@ -76,12 +83,20 @@ const Track = ({
             onToggleUpdate={() => onToggleUpdate(soundId)}
           />
         )}
-      </TrackHeader>
+      </TopPane>
       <Timeline
         isActive={isActive}
         sound={sound}
         onSeekProgress={onSeekProgress}
       />
+      <BottomPane>
+        {played && (
+          <React.Fragment>
+            <PlayOutlineIcon />
+            {played}
+          </React.Fragment>
+        )}
+      </BottomPane>
     </Base>
   )
 }

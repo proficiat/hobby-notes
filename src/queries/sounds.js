@@ -9,6 +9,7 @@ export const ALL_SOUNDS = gql`
       imageUrl
       waveform
       duration
+      played
       uploadedAt
     }
   }
@@ -40,6 +41,7 @@ export const UPLOAD_SOUND = gql`
       description
       waveform
       duration
+      played
       uploadedAt
     }
   }
@@ -48,12 +50,13 @@ export const UPLOAD_SOUND = gql`
 export const UPDATE_SOUND = gql`
   mutation updateSound(
     $id: String!
-    $name: String!
+    $name: String
     $imageUrl: String
     $audioUrl: String
     $description: String
     $waveform: [Float]
     $duration: Float
+    $played: Int
   ) {
     updateSound(
       id: $id
@@ -63,6 +66,7 @@ export const UPDATE_SOUND = gql`
       description: $description
       waveform: $waveform
       duration: $duration
+      played: $played
     ) {
       id
       name
@@ -71,6 +75,7 @@ export const UPDATE_SOUND = gql`
       description
       waveform
       duration
+      played
     }
   }
 `

@@ -1,15 +1,12 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import { graphql } from '@apollo/client/react/hoc'
-
 import { compose } from 'recompose'
-
-import Spinner from 'components/Icons/Spinner'
-
-import { findActiveSound, findActiveSoundIndex } from 'helpers/sounds'
-
+import { graphql } from '@apollo/client/react/hoc'
 import { ALL_SOUNDS } from 'queries/sounds'
+
+import { GET_IS_USER_LOGGED_IN, GET_HEADER_SEARCH_VALUE } from 'cache'
+import { findActiveSound, findActiveSoundIndex } from 'helpers/sounds'
 
 import get from 'lodash/get'
 import shuffle from 'lodash/shuffle'
@@ -18,7 +15,8 @@ import indexOf from 'lodash/indexOf'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 
-import { GET_IS_USER_LOGGED_IN, GET_HEADER_SEARCH_VALUE } from 'cache'
+import Spinner from 'components/Icons/Spinner'
+
 import SoundList from './SoundList'
 import SoundFooter from './SoundFooter'
 import Audio from './Audio'

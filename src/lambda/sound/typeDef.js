@@ -9,6 +9,7 @@ const typeDef = gql`
     description: String
     waveform: [Float]!
     duration: Float!
+    played: Int
     uploadedAt: String!
   }
 
@@ -29,12 +30,13 @@ const typeDef = gql`
     deleteSound(id: String!): Sound
     updateSound(
       id: String!
-      name: String!
+      name: String
       imageUrl: String
       audioUrl: String
       description: String
       waveform: [Float]
       duration: Float
+      played: Int
     ): Sound
   }
 `

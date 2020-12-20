@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { colors } from 'styles'
+import { IoPlayOutline } from 'react-icons/io5'
 
 import { SOUND_CARD_HEIGHT } from '../styles'
 
@@ -16,6 +16,7 @@ export const WaveformCanvas = styled.canvas`
 
 export const Base = styled.div`
   width: 100%;
+  padding-left: 24px;
   min-height: ${SOUND_CARD_HEIGHT}px;
   display: flex;
   flex-direction: column;
@@ -29,17 +30,18 @@ export const Base = styled.div`
     `}
 `
 
-export const TrackHeader = styled.div`
+const Pane = styled.div`
   display: flex;
   align-items: center;
+  color: ${props => props.theme.luciaLash};
+  text-transform: uppercase;
+  line-height: 1.2;
+`
+
+export const TopPane = styled(Pane)`
   font-size: 16px;
   justify-content: space-between;
-  color: ${colors.luciaLash};
-  padding-left: 40px;
-  padding-top: 5px;
-  line-height: 1.2;
   font-weight: 700;
-  text-transform: uppercase;
 `
 
 export const ErrorMessage = styled.div`
@@ -47,5 +49,20 @@ export const ErrorMessage = styled.div`
   font-size: 16px;
   font-weight: 300;
   text-align: center;
-  color: ${colors.red};
+  color: ${props => props.theme.red};
+`
+export const BottomPane = styled(Pane)`
+  font-size: 13px;
+  justify-content: flex-end;
+  padding-top: 5px;
+  font-weight: 500;
+`
+
+export const PlayOutlineIcon = styled(IoPlayOutline).attrs({
+  size: 15,
+})`
+  margin-right: 5px;
+  :hover {
+    color: ${props => props.theme.suicidePreventionBlue};
+  }
 `

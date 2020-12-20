@@ -1,6 +1,5 @@
 import { Duration } from 'luxon'
 import get from 'lodash/get'
-import memoize from 'lodash/memoize'
 import find from 'lodash/find'
 import findIndex from 'lodash/findIndex'
 
@@ -17,13 +16,11 @@ export const getSoundDurations = (sound = null, currentTime = null) => {
   return { currentDuration, soundDuration }
 }
 
-export const findActiveSound = memoize((activeSoundId, sounds) =>
-  find(sounds, sound => get(sound, 'id') === activeSoundId),
-)
+export const findActiveSound = (activeSoundId, sounds) =>
+  find(sounds, sound => get(sound, 'id') === activeSoundId)
 
-export const findActiveSoundIndex = memoize((activeSoundId, sounds) =>
-  findIndex(sounds, ['id', activeSoundId]),
-)
+export const findActiveSoundIndex = (activeSoundId, sounds) =>
+  findIndex(sounds, ['id', activeSoundId])
 
 const filterData = audioBuffer => {
   const rawData = audioBuffer.getChannelData(0) // We only need to work with one channel of data

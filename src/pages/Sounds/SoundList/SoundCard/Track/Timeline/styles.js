@@ -8,7 +8,6 @@ export const Base = styled.div`
   min-height: calc(${SOUND_CARD_HEIGHT}px / 2);
   align-items: center;
   margin: auto 0 auto 0;
-  padding-left: 40px;
   font-size: 13px;
   font-weight: 700;
 

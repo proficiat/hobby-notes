@@ -1,3 +1,5 @@
+const omit = require('lodash/omit')
+
 const { UserInputError } = require('apollo-server-lambda')
 const Sound = require('./sound')
 
@@ -26,9 +28,9 @@ const resolvers = {
       // return Sound.findByIdAndRemove(id)
     },
     updateSound: (root, args) => {
-      const { id, name } = args
-
-      return Sound.findByIdAndUpdate(id, { name })
+      const { id } = args
+      const updatedArgs = omit(args, ['id'])
+      return Sound.findByIdAndUpdate(id, { ...updatedArgs })
     },
   },
 }
