@@ -33,7 +33,7 @@ const Audio = React.forwardRef((props, ref) => {
   const [updatePlayedCount] = useMutation(UPDATE_SOUND, {
     variables: {
       id: soundId,
-      played: get(sound, 'played', 0) + 1,
+      played: 1,
     },
   })
 

@@ -1,4 +1,5 @@
 const omit = require('lodash/omit')
+const get = require('lodash/get')
 
 const { UserInputError } = require('apollo-server-lambda')
 const Sound = require('./sound')
@@ -27,10 +28,22 @@ const resolvers = {
       return Sound.findById(id, 'name')
       // return Sound.findByIdAndRemove(id)
     },
-    updateSound: (root, args) => {
-      const { id } = args
-      const updatedArgs = omit(args, ['id'])
-      return Sound.findByIdAndUpdate(id, { ...updatedArgs })
+    updateSound: async (root, args) => {
+      const { id, played } = args
+      const updatedArgs = omit(args, ['id', 'played'])
+      const sound = await Sound.findById(id)
+      const soundPlayed = get(sound, 'played', 0)
+      const playedUpdate = played ? { played: soundPlayed + 1 } : {}
+      const updates = { ...updatedArgs, ...playedUpdate }
+      try {
+        await sound.set(updates)
+        await sound.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+      return sound
     },
   },
 }
