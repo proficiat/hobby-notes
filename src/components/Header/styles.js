@@ -19,3 +19,8 @@ export const Name = styled.div`
   color: white;
   text-transform: uppercase;
 `
+
+export const RightSide = styled.div`
+  display: flex;
+  align-items: center;
+`

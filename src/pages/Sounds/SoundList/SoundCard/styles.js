@@ -52,7 +52,7 @@ export const PlaySign = styled.div`
   height: 40%;
   border-top: 3px solid;
   border-right: 3px solid;
-  border-color: #f7f8fa;
+  border-color: ${props => props.theme.background};
   transform: rotate(45deg);
 `
 
@@ -62,5 +62,28 @@ export const PauseSign = styled.div`
   height: 50%;
   border-left: solid 3px;
   border-right: solid 3px;
-  border-color: #f7f8fa;
+  border-color: ${props => props.theme.background};
+`
+
+export const ActiveSound = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${props => props.theme.suicidePreventionBlue};
+  cursor: pointer;
+  margin-right: 28px;
+  font-weight: 300;
+
+  > img {
+    height: 28px;
+    width: 28px;
+  }
+
+  :hover {
+    color: #4cbdfe; // lighten 30%
+  }
+`
+
+export const ActiveSoundName = styled.div`
+  margin-left: 10px;
+  text-transform: uppercase;
 `

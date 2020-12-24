@@ -2,13 +2,16 @@ import React from 'react'
 
 import Search from './Search'
 
-import { Base, Name } from './styles'
+import { Base, Name, RightSide } from './styles'
 
 const Header = props => {
   return (
     <Base>
       <Name>Adsum</Name>
-      <Search />
+      <RightSide>
+        <div id="activeSound" />
+        <Search />
+      </RightSide>
     </Base>
   )
 }
