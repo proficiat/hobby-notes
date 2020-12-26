@@ -18,6 +18,9 @@ export const Name = styled.div`
   text-align: center;
   color: white;
   text-transform: uppercase;
+  ::before {
+    content: 'Adsum';
+  }
 `
 
 export const RightSide = styled.div`
