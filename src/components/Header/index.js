@@ -1,17 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-// import ToggleSwitch from '../ToggleSwitch'
-// import BubbleSwitch from '../BubbleeSwitch'
+import BubbleSwitch from '../BubbleeSwitch'
 
 import Search from './Search'
 
 import { Base, Name, RightSide } from './styles'
 
 const Header = props => {
-  // const [theme, setTheme] = useState('light')
-  // const toggleTheme = () => {
-  //   setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'))
-  // }
+  const [theme, setTheme] = useState('light')
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'))
+  }
 
   return (
     <Base>
@@ -19,8 +18,7 @@ const Header = props => {
       <RightSide>
         <div id="activeSound" />
         <Search />
-        {/* <ToggleSwitch isChecked={theme === 'light'} onToggle={toggleTheme} /> */}
-        {/* <BubbleSwitch /> */}
+        <BubbleSwitch isChecked={theme === 'light'} onToggle={toggleTheme} />
       </RightSide>
     </Base>
   )

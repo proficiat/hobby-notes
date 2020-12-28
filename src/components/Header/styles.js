@@ -10,7 +10,7 @@ export const Base = styled.div`
   flex-shrink: 0;
   position: fixed;
   z-index: 6;
-  padding-right: 32px;
+  padding-right: 22px;
 `
 
 export const Name = styled.div`

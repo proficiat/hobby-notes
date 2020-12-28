@@ -12,8 +12,6 @@ import get from 'lodash/get'
 import LogoVectorKey from 'components/Icons/LogoVectorKey'
 import { getId, findIndexAndUpdateById } from 'helpers/utility'
 
-// import BubbleSwitch from 'components/BubbleeSwitch'
-
 import SoundCard from './SoundCard'
 import UploadUpdateSound from './UploadUpdateSound'
 
@@ -109,7 +107,6 @@ class SoundList extends PureComponent {
         <VectorKey>
           {isVisibleUpload && this.renderUploadOrUpdate()}
           <LogoVectorKey onClick={this.toggleUpload} />
-          {/* <BubbleSwitch /> */}
         </VectorKey>
         <Wrapper>
           <SoundsList>
