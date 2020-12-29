@@ -215,10 +215,9 @@ export default compose(
     options: {
       fetchPolicy: 'network-only',
     },
-    props: ({ allSounds: { refetch, allSounds, loading } }) => ({
+    props: ({ allSounds: { allSounds, loading } }) => ({
       allSounds,
       isSoundsLoading: loading,
-      onRefetchSounds: () => refetch(),
     }),
   }),
   graphql(GET_IS_USER_LOGGED_IN, {

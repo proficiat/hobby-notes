@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+
+import { themeNameVar } from 'cache'
 
 import BubbleSwitch from '../BubbleeSwitch'
 
@@ -11,6 +13,9 @@ const Header = props => {
   const toggleTheme = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'))
   }
+  useEffect(() => {
+    themeNameVar(theme)
+  }, [theme])
 
   return (
     <Base>

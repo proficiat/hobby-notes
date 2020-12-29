@@ -46,7 +46,11 @@ class SideBar extends PureComponent {
     }
     onSetToken(null)
     await localStorage.clear()
-    await client.resetStore()
+    //  This will cause the store to be cleared
+    //  and all active queries to be refetched.
+    // await client.resetStore()
+    // If you just want the store to be cleared
+    await client.clearStore()
   }
 
   handleLaunchClick = () => {
