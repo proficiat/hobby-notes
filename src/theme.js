@@ -1,5 +1,10 @@
 import { colors } from './styles'
 
 export default {
-  ...colors,
+  light: {
+    ...colors,
+  },
+  dark: {
+    ...colors,
+  },
 }

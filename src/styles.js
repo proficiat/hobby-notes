@@ -6,11 +6,9 @@ export const colors = {
   red: '#C3002F',
   blue: '#34558B',
   // green: '#4D724D',
-
   luciaLash: '#0A0A0A',
   lushLava: '#FF4500',
   suicidePreventionBlue: '#00a1ff',
-
   // phantomBlue: '#191970',
   // chinesePorcelain: '#395E7D',
   // navy: '#02075D',

@@ -6,12 +6,12 @@ import { cache, GET_IS_USER_LOGGED_IN } from 'cache'
 import Spinner from 'components/Icons/Spinner'
 
 import { persistCache } from 'apollo-cache-persist'
-
+import ThemeProviderWrapper from './ThemeProviderWrapper'
 import SideBar from './components/SideBar'
 import Header from './components/Header'
 import Sounds from './pages/Sounds'
 
-import { createApolloClient } from './client'
+import { createApolloClient } from './Client'
 
 import { MainWrapper, PageContent } from './styles'
 
@@ -50,13 +50,15 @@ const App = () => {
   }
   return (
     <ApolloProvider client={client}>
-      <MainWrapper>
-        <Header />
-        <SideBar token={token} onSetToken={setToken} />
-        <PageContent>
-          <Sounds />
-        </PageContent>
-      </MainWrapper>
+      <ThemeProviderWrapper>
+        <MainWrapper>
+          <Header />
+          <SideBar token={token} onSetToken={setToken} />
+          <PageContent>
+            <Sounds />
+          </PageContent>
+        </MainWrapper>
+      </ThemeProviderWrapper>
     </ApolloProvider>
   )
 }

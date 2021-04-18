@@ -3,7 +3,9 @@ import { InMemoryCache } from '@apollo/client/cache'
 
 export const headerSearchValueVar = makeVar('')
 export const audioCurrentTimeVar = makeVar(0)
-export const themeNameVar = makeVar('dark')
+export const themeNameVar = makeVar(
+  localStorage.getItem('theme-name') || 'dark',
+)
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -21,7 +23,13 @@ export const cache = new InMemoryCache({
         },
         themeName: {
           read() {
-            return window.localStorage.getItem('theme-name')
+            return themeNameVar()
+          },
+        },
+        allSounds: {
+          merge(existing, incoming) {
+            // Equivalent to what happens if there is no custom merge function.
+            return incoming
           },
         },
       },
