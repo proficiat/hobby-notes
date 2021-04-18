@@ -5,16 +5,21 @@ export const colors = {
   grey: '#d8d9e0',
   red: '#C3002F',
   blue: '#34558B',
-  // green: '#4D724D',
   luciaLash: '#0A0A0A',
   lushLava: '#FF4500',
   suicidePreventionBlue: '#00a1ff',
-  // phantomBlue: '#191970',
-  // chinesePorcelain: '#395E7D',
-  // navy: '#02075D',
   blush: '#FFC0CB',
   whitesmoke: '#f5f5f5',
   westSide: '#f9900f',
+}
+
+export const themeColors = {
+  light: {
+    ...colors,
+  },
+  dark: {
+    ...colors,
+  },
 }
 
 export const MainWrapper = styled.div`
@@ -29,7 +34,7 @@ export const PageContent = styled.div`
   flex-direction: column;
   flex: 1 1 0;
   min-height: 0;
-  background: ${colors.background};
+  background: ${props => props.theme.background};
   color: ${colors.luciaLash};
 `
 export const GlobalStyle = createGlobalStyle({

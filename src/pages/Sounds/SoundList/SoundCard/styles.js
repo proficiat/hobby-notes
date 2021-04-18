@@ -8,6 +8,7 @@ export const Base = styled.div`
   align-items: center;
   min-width: 330px;
   min-height: ${SOUND_CARD_HEIGHT}px;
+  height: ${SOUND_CARD_HEIGHT}px;
   background: transparent;
   cursor: pointer;
   margin-bottom: 36px;
