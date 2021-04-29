@@ -19,7 +19,7 @@ export const TimeDuration = styled.div`
   margin: 0 28px;
   font-size: 13px;
   color: ${props =>
-    props.current ? props.theme.lushLava : props.theme.luciaLash};
+    props.current ? props.theme.active : props.theme.defaultText};
   line-height: normal;
   font-weight: 700;
 `

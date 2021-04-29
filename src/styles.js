@@ -1,7 +1,9 @@
 import styled, { createGlobalStyle } from 'styled-components'
+import React from 'react'
 
 export const colors = {
-  background: '#f7f8fa',
+  white: '#ffffff',
+  athensGray: '#f7f8fa',
   grey: '#d8d9e0',
   red: '#C3002F',
   blue: '#34558B',
@@ -11,16 +13,49 @@ export const colors = {
   blush: '#FFC0CB',
   whitesmoke: '#f5f5f5',
   westSide: '#f9900f',
+  woodsmoke: '#181a1b',
+  shark: '#282d33',
+  darkShark: '#202429',
 }
 
 export const themeColors = {
   light: {
+    background: colors.athensGray,
+    defaultText: colors.luciaLash,
+    active: colors.lushLava,
+    waveform: {
+      amount: colors.suicidePreventionBlue,
+      bg: colors.luciaLash,
+      progress: colors.lushLava,
+    },
+    vectorKeyBg: colors.whitesmoke,
+    sideBar: {
+      bg: colors.white,
+      hoverText: colors.red,
+    },
+    footerBg: colors.white,
     ...colors,
   },
   dark: {
+    background: colors.woodsmoke,
+    defaultText: colors.white,
+    active: colors.westSide,
+    waveform: {
+      amount: colors.suicidePreventionBlue,
+      bg: colors.white,
+      progress: colors.westSide,
+    },
+    vectorKeyBg: colors.shark,
+    sideBar: {
+      bg: colors.darkShark,
+      hoverText: colors.suicidePreventionBlue,
+    },
+    footerBg: colors.darkShark,
     ...colors,
   },
 }
+
+export const ThemeContext = React.createContext(themeColors.dark)
 
 export const MainWrapper = styled.div`
   display: flex;

@@ -9,7 +9,7 @@ import isEmpty from 'lodash/isEmpty'
 import { GET_AUDIO_CURRENT_TIME } from 'cache'
 import { getSoundDurations } from 'helpers/sounds'
 
-import { colors } from 'styles'
+import { ThemeContext } from 'styles'
 
 import { ProgressArea, ProgressLine, TimeDuration } from './styles'
 import BufferingFeedback from '../../SoundList/SoundCard/BufferingFeedback'
@@ -30,6 +30,7 @@ class TimeLine extends PureComponent {
 
   render() {
     const { audioCurrentTime, sound } = this.props
+    const theme = this.context
     const { currentDuration, soundDuration } = getSoundDurations(
       sound,
       audioCurrentTime,
@@ -44,7 +45,7 @@ class TimeLine extends PureComponent {
           <ProgressLine>
             <BufferingFeedback
               dot
-              progressColor={colors.lushLava}
+              progressColor={theme.active}
               soundId={get(sound, 'id', null)}
             />
           </ProgressLine>
@@ -54,6 +55,8 @@ class TimeLine extends PureComponent {
     )
   }
 }
+
+TimeLine.contextType = ThemeContext
 
 TimeLine.defaultProps = {
   sound: null,

@@ -25,7 +25,7 @@ export const PlayButton = styled.div`
   left: 25%;
   z-index: 2;
   border-radius: 100%;
-  border: 3px solid #f7f8fa;
+  border: 3px solid ${props => props.theme.athensGray};
   visibility: ${props => (props.playing ? 'visible' : 'hidden')};
 `
 
@@ -53,7 +53,7 @@ export const PlaySign = styled.div`
   height: 40%;
   border-top: 3px solid;
   border-right: 3px solid;
-  border-color: ${props => props.theme.background};
+  border-color: ${props => props.theme.athensGray};
   transform: rotate(45deg);
 `
 
@@ -63,7 +63,7 @@ export const PauseSign = styled.div`
   height: 50%;
   border-left: solid 3px;
   border-right: solid 3px;
-  border-color: ${props => props.theme.background};
+  border-color: ${props => props.theme.athensGray};
 `
 
 export const ActiveSound = styled.div`

@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client'
 import { GET_THEME_NAME } from 'cache'
 import { ThemeProvider } from 'styled-components'
 import theme from './theme'
+import { ThemeContext } from './styles'
 
 const ThemeProviderWrapper = props => {
   const { children } = props
@@ -18,7 +19,13 @@ const ThemeProviderWrapper = props => {
       window.removeEventListener('beforeunload', saveThemeName)
     }
   })
-  return <ThemeProvider theme={theme[data.themeName]}>{children}</ThemeProvider>
+  return (
+    <ThemeProvider theme={theme[data.themeName]}>
+      <ThemeContext.Provider value={theme[data.themeName]}>
+        {children}
+      </ThemeContext.Provider>
+    </ThemeProvider>
+  )
 }
 
 ThemeProviderWrapper.propTypes = {

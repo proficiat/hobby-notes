@@ -38,7 +38,7 @@ export const VectorKey = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${colors.whitesmoke};
+  background: ${props => props.theme.vectorKeyBg};
   min-height: 280px;
   padding-top: 1px;
 

@@ -355,7 +355,7 @@ export const Switch = styled.div`
   > label {
     height: ${BULB_SIZE + INDENT * 2}px;
     width: ${BULB_SIZE * 2 + INDENT * 4}px;
-    background-color: #241f39; //#39315a;
+    background-color: #181a1b; //#39315a;
     //border: 1px solid white;
     border-radius: 100px;
     display: block;

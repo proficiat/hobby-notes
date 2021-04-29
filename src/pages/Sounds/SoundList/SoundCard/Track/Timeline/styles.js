@@ -10,9 +10,10 @@ export const Base = styled.div`
   margin: auto 0 auto 0;
   font-size: 13px;
   font-weight: 700;
+  color: ${props => props.theme.defaultText};
 
   > span:first-child {
-    color: ${props => props.theme.lushLava};
+    color: ${props => props.theme.active};
   }
 `
 

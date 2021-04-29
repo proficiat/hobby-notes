@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react'
+import React, { useRef, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { colors } from 'styles'
+import { ThemeContext } from 'styles'
 
 import {
   // subscribeWaveForm,
@@ -18,57 +18,45 @@ import { Base, WaveformImageCanvas, WaveformProgressBar } from './styles'
 import CurrentDuration from './CurrentDuration'
 import BufferingFeedback from '../../BufferingFeedback'
 
-class Timeline extends PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {}
-    this.progressBarRef = React.createRef()
-    this.waveformRef = React.createRef()
-    this.waveformImageRef = React.createRef()
-  }
+const Timeline = ({ isActive, sound, onSeekProgress }) => {
+  const progressBarRef = useRef(null)
+  const waveformImageRef = useRef(null)
+  const theme = useContext(ThemeContext)
 
-  componentDidMount() {
-    const { sound } = this.props
-    const { current: waveformImageRef } = this.waveformImageRef
+  useEffect(() => {
+    const { current } = waveformImageRef
     const waveform = get(sound, 'waveform', [])
     if (waveformImageRef && !isEmpty(waveform)) {
-      drawLinearWaveForm(waveform, waveformImageRef)
+      drawLinearWaveForm(waveform, current, theme.background)
       // drawWaveFormBars(waveform, waveformImageRef)
     }
+  }, [theme])
+
+  const handleSeekProgress = event => {
+    const { current } = progressBarRef
+    onSeekProgress(isActive, current, event)
   }
 
-  handleSeekProgress = event => {
-    const { isActive, onSeekProgress } = this.props
-    const { current: progressBarRef } = this.progressBarRef
-    onSeekProgress(isActive, progressBarRef, event)
-  }
-
-  render() {
-    const { sound, isActive } = this.props
-    const soundId = get(sound, 'id')
-    const { soundDuration } = getSoundDurations(sound)
-    return (
-      <Base>
-        {isActive && <CurrentDuration />}
-        <WaveformProgressBar
-          ref={this.progressBarRef}
-          onClick={this.handleSeekProgress}
-        >
-          <BufferingFeedback
-            amountColor={colors.suicidePreventionBlue}
-            bgColor={colors.luciaLash}
-            progressColor={colors.lushLava}
-            soundId={soundId}
-          />
-          <WaveformImageCanvas
-            id={`canvasImage${soundId}`}
-            ref={this.waveformImageRef}
-          />
-        </WaveformProgressBar>
-        {soundDuration}
-      </Base>
-    )
-  }
+  const soundId = get(sound, 'id')
+  const { soundDuration } = getSoundDurations(sound)
+  return (
+    <Base>
+      {isActive && <CurrentDuration />}
+      <WaveformProgressBar ref={progressBarRef} onClick={handleSeekProgress}>
+        <BufferingFeedback
+          amountColor={theme.waveform.amount}
+          bgColor={theme.waveform.bg}
+          progressColor={theme.waveform.progress}
+          soundId={soundId}
+        />
+        <WaveformImageCanvas
+          id={`canvasImage${soundId}`}
+          ref={waveformImageRef}
+        />
+      </WaveformProgressBar>
+      {soundDuration}
+    </Base>
+  )
 }
 
 Timeline.propTypes = {

@@ -102,7 +102,7 @@ export const ActiveVolumeHeight = styled.div`
 
 const baseIconStyle = css`
   color: ${props =>
-    props.active ? props.theme.lushLava : props.theme.luciaLash};
+    props.active ? props.theme.lushLava : props.theme.defaultText};
   cursor: pointer;
   height: 22px;
   width: 22px;

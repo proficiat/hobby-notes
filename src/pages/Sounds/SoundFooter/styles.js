@@ -8,7 +8,7 @@ export const Frame = styled.div`
   display: flex;
   height: 44px;
   width: 100%;
-  background: white;
+  background: ${props => props.theme.footerBg};
   margin-top: auto;
   align-items: center;
   flex-shrink: 0;
@@ -29,7 +29,7 @@ export const PlayControls = styled.div`
   align-items: center;
 
   > div {
-    border-color: ${props => props.theme.luciaLash};
+    border-color: ${props => props.theme.defaultText};
   }
 `
 
@@ -53,10 +53,10 @@ export const StepMarkBox = styled.div`
       border-right: 2px solid;
       padding-right: 4px;
     `}
-   border-color: ${props => props.theme.luciaLash} !important;
+   border-color: ${props => props.theme.defaultText} !important;
    
    > div {
-    border-color: ${props => props.theme.luciaLash};
+    border-color: ${props => props.theme.defaultText};
    }
   
   ${layout}
@@ -65,11 +65,11 @@ export const StepMarkBox = styled.div`
 
 const baseIconStyle = css`
   color: ${props =>
-    props.active ? props.theme.lushLava : props.theme.luciaLash};
+    props.active ? props.theme.active : props.theme.defaultText};
   cursor: pointer;
   :hover {
     color: ${props =>
-      props.active ? props.theme.lushLava : props.theme.suicidePreventionBlue};
+      props.active ? props.theme.active : props.theme.suicidePreventionBlue};
   }
 `
 

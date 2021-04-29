@@ -33,7 +33,7 @@ export const Base = styled.div`
 const Pane = styled.div`
   display: flex;
   align-items: center;
-  color: ${props => props.theme.luciaLash};
+  color: ${props => props.theme.defaultText};
   text-transform: uppercase;
   line-height: 1.2;
 `
