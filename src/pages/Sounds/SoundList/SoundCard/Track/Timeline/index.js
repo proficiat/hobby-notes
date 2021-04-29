@@ -30,7 +30,7 @@ const Timeline = ({ isActive, sound, onSeekProgress }) => {
       drawLinearWaveForm(waveform, current, theme.background)
       // drawWaveFormBars(waveform, waveformImageRef)
     }
-  }, [theme])
+  }, [theme, sound])
 
   const handleSeekProgress = event => {
     const { current } = progressBarRef
