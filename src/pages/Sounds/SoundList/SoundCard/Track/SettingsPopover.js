@@ -16,7 +16,7 @@ const SettingsIcon = styled(IoEllipsisHorizontalCircle).attrs({
   size: 20,
 })`
   color: ${props =>
-    props.open ? colors.suicidePreventionBlue : colors.luciaLash};
+    props.open ? colors.suicidePreventionBlue : props.theme.defaultText};
   :hover {
     color: ${colors.suicidePreventionBlue};
   }

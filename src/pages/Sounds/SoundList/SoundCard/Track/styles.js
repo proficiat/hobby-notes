@@ -62,7 +62,4 @@ export const PlayOutlineIcon = styled(IoPlayOutline).attrs({
   size: 15,
 })`
   margin-right: 5px;
-  :hover {
-    color: ${props => props.theme.suicidePreventionBlue};
-  }
 `
