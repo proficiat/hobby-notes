@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { IoIosHelpCircleOutline } from 'react-icons/io'
 
 export const Container = styled.div`
   position: absolute;
@@ -32,12 +34,16 @@ export const Container = styled.div`
   }
 `
 
-export const Title = styled.h3`
-  margin-bottom: 18px;
+const fontStyle = css`
   font-weight: 300;
+  text-transform: uppercase;
+`
+
+export const Title = styled.h3`
+  ${fontStyle};
+  margin-bottom: 12px;
   color: white;
   font-size: 28px;
-  text-transform: uppercase;
 `
 
 export const Field = styled.div`
@@ -62,16 +68,15 @@ export const Input = styled.input`
 `
 
 export const Button = styled.button`
+  ${fontStyle};
   height: 44px;
   font-size: 16px;
-  font-weight: 300;
   margin-top: 18px;
   width: 144px;
   background-color: ${props => props.theme.red};
   outline: none;
   cursor: pointer;
   color: ${props => props.theme.blush};
-  text-transform: uppercase;
   border: none;
   border-radius: 4px;
 `
@@ -85,4 +90,27 @@ export const StyledForm = styled.form`
 export const Error = styled.div`
   font-size: 15px;
   color: ${props => props.theme.lushLava};
+`
+
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+
+export const HelpSubTitle = styled.div`
+  ${fontStyle};
+  color: ${props => props.theme.suicidePreventionBlue};
+  white-space: nowrap;
+  margin-bottom: 4px;
+
+  font-size: 11px;
+`
+
+export const StyledHelpIcon = styled(IoIosHelpCircleOutline)`
+  cursor: pointer;
+  margin-left: auto;
+  :hover {
+    color: ${props => props.theme.suicidePreventionBlue};
+  }
 `

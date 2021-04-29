@@ -1,5 +1,3 @@
-import isEmpty from 'lodash/isEmpty'
-
 const widgetSetup = {
   cloudName: process.env.REACT_APP_CLOUD_NAME,
   uploadPreset: process.env.REACT_APP_CLOUD_UPLOAD_PRESET,

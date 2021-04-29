@@ -16,12 +16,16 @@ import {
   Button,
   StyledForm,
   Error,
+  HelpSubTitle,
+  StyledHelpIcon,
+  Row,
 } from './styles'
 
 const Launch = props => {
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState('Adsum')
   const [password, setPassword] = useState('')
+  const [isVisibleHelpTip, setTipVisibility] = useState(false)
 
   const handleError = error => {
     const errorGQLMessage = get(error, 'graphQLErrors[0].message')
@@ -61,15 +65,29 @@ const Launch = props => {
     }
   }
 
+  const handleMouseOverHelpIcon = () => setTipVisibility(true)
+  const handleMouseOutHelpIcon = () => setTipVisibility(false)
+
   const { onAddLaunchRef } = props
 
   return (
     <Container ref={onAddLaunchRef}>
       <Title>Welcome</Title>
+      <HelpSubTitle>
+        {isVisibleHelpTip ? 'just for creator' : '\u200b'}
+      </HelpSubTitle>
       <StyledForm onSubmit={submit}>
         <Field>
-          Name:
+          <Row>
+            Name:
+            <StyledHelpIcon
+              size={20}
+              onMouseOut={handleMouseOutHelpIcon}
+              onMouseOver={handleMouseOverHelpIcon}
+            />
+          </Row>
           <Input
+            readOnly
             type="text"
             value={username}
             onChange={({ target }) => setUsername(target.value)}
