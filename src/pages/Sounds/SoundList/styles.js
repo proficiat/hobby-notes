@@ -1,13 +1,11 @@
 import styled from 'styled-components'
 
 export const Frame = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
   margin-top: 64px;
   min-height: 0;
+  width: 100%;
 
   ::-webkit-scrollbar {
     display: none;
