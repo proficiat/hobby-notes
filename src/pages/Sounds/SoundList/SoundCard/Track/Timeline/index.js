@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react'
+import React, { useRef, useContext, useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { ThemeContext } from 'styles'
@@ -23,7 +23,7 @@ const Timeline = ({ isActive, sound, onSeekProgress }) => {
   const waveformImageRef = useRef(null)
   const theme = useContext(ThemeContext)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const { current } = waveformImageRef
     const waveform = get(sound, 'waveform', [])
     if (waveformImageRef && !isEmpty(waveform)) {

@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { PureComponent } from 'react'
+import React, { useState, useRef, useContext, useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { colors } from 'styles'
+import { ThemeContext } from 'styles'
 
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
@@ -19,84 +19,56 @@ import {
   WaveformImageCanvas,
 } from './styles'
 
-class Sound extends PureComponent {
-  constructor(props) {
-    super(props)
-    const { initWaveform } = props
-    this.state = {
-      waveform: initWaveform,
-    }
-    this.waveformImageRef = React.createRef()
-  }
+const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
+  const [waveform, setWaveform] = useState(initWaveform)
+  const waveformImageRef = useRef(null)
+  const theme = useContext(ThemeContext)
 
-  componentDidMount() {
-    const { initWaveform } = this.props
-    this.drawWaveform(initWaveform)
-  }
-
-  drawWaveform = waveform => {
-    const { current: waveformImageRef } = this.waveformImageRef
+  useLayoutEffect(() => {
+    const { current } = waveformImageRef
     if (isEmpty(waveform)) return
-    drawLinearWaveForm(
-      waveform,
-      waveformImageRef,
-      colors.westSide,
-      'source-atop',
-    )
-  }
+    drawLinearWaveForm(waveform, current, theme.active, 'source-atop')
+  }, [waveform, theme])
 
-  handleDropSound = files => {
-    const { onDropSoundFile } = this.props
+  const handleDropSound = files => {
     const reader = new FileReader()
     const soundFile = files[0]
     reader.addEventListener('load', () => {
       const buffer = reader.result
       const audioContext = new AudioContext()
       audioContext.decodeAudioData(buffer).then(audioBuffer => {
-        const waveform = getWaveformDataPoints(audioBuffer)
+        const waveformDataPoints = getWaveformDataPoints(audioBuffer)
         const duration = get(audioBuffer, 'duration')
-        this.drawWaveform(waveform)
-        this.setState({ waveform }, () => {
-          onDropSoundFile(soundFile, waveform, duration)
-        })
+        setWaveform(waveformDataPoints)
+        onDropSoundFile(soundFile, waveformDataPoints, duration)
       })
     })
     reader.readAsArrayBuffer(soundFile)
   }
 
-  render() {
-    const { waveform } = this.state
-    const { isVisible } = this.props
-    const isEmptyWaveform = isEmpty(waveform)
-    return (
-      <Container visible={isVisible}>
-        <Dropzone
-          accept="audio/*"
-          multiple={false}
-          onDrop={this.handleDropSound}
-        >
-          {({ getRootProps, getInputProps }) => (
-            <DropzoneRoot
-              {...getRootProps({
-                className: 'dropzone',
-                // onDrop: event => event.stopPropagation(),
-              })}
-            >
-              <WaveformImageCanvas ref={this.waveformImageRef} />
-              {isEmptyWaveform && (
-                <DropzonePrompt>
-                  Attach files by dragging & dropping, selecting or pasting
-                  them.
-                </DropzonePrompt>
-              )}
+  return (
+    <Container visible={isVisible}>
+      <Dropzone accept="audio/*" multiple={false} onDrop={handleDropSound}>
+        {({ getRootProps, getInputProps }) => (
+          <DropzoneRoot
+            {...getRootProps({
+              className: 'dropzone',
+              // onDrop: event => event.stopPropagation(),
+            })}
+          >
+            <WaveformImageCanvas ref={waveformImageRef} />
+            {isEmpty(waveform) && (
+              <DropzonePrompt>
+                Attach files by dragging & dropping, selecting or pasting them.
+              </DropzonePrompt>
+            )}
 
-              <input {...getInputProps()} />
-            </DropzoneRoot>
-          )}
-        </Dropzone>
-      </Container>
-    )
-  }
+            <input {...getInputProps()} />
+          </DropzoneRoot>
+        )}
+      </Dropzone>
+    </Container>
+  )
 }
 
 Sound.defaultProps = {
