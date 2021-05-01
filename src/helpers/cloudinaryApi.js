@@ -4,7 +4,7 @@ const widgetSetup = {
 }
 
 export const uploadFileToCloudinary = async file => {
-  if (file.length === 0) return null
+  if (file && file.length === 0) return null
   const formData = new FormData()
   const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${widgetSetup.cloudName}/upload`
   const CLOUDINARY_UPLOAD_PRESET = widgetSetup.uploadPreset

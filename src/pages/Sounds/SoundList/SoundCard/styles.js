@@ -35,10 +35,12 @@ export const Cover = styled.div`
   min-width: ${SOUND_CARD_HEIGHT}px;
   background: ${props => props.theme.whitesmoke};
   position: relative;
+  border-radius: 4px;
 
   > img {
     max-width: 100%;
     max-height: 100%;
+    border-radius: 4px;
   }
 
   :hover {

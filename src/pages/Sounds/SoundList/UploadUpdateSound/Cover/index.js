@@ -165,7 +165,9 @@ class Cover extends PureComponent {
                   <Image alt="preview" src={croppedImageUrl} />
                 )}
 
-                {!coverImageSrc && !croppedImageUrl && <PuzzleIcon />}
+                {!coverImageSrc && !croppedImageUrl && (
+                  <PuzzleIcon shadow={false} />
+                )}
               </DropzoneRoot>
             )}
           </Dropzone>

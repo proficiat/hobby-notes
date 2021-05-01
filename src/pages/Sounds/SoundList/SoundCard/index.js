@@ -59,7 +59,11 @@ const SoundCard = ({
           document.getElementById('activeSound'),
         )}
       <Cover onClick={handlePress}>
-        {imageUrl ? <img alt="test" src={imageUrl} /> : <PuzzleIcon />}
+        {imageUrl ? (
+          <img alt="test" src={imageUrl} />
+        ) : (
+          <PuzzleIcon shadow={false} />
+        )}
 
         <PlayButton playing={!isSoundPaused}>
           {isSoundPaused ? <PlaySign /> : <PauseSign />}

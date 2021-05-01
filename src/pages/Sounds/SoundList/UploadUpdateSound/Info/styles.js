@@ -11,8 +11,8 @@ export const Base = styled.div`
 export const Field = styled.div`
   display: flex;
   flex-direction: column;
-  font-size: 16px;
-  color: ${props => props.theme.luciaLash};
+  font-size: 14px;
+  color: ${props => props.theme.defaultText};
   margin-bottom: 11px;
 `
 
@@ -25,14 +25,15 @@ const inputsBaseStyle = css`
   outline: none;
   font-weight: 300;
   border: 1px solid ${props => props.theme.luciaLash};
-  color: ${props => props.theme.luciaLash};
+  color: ${props => props.theme.defaultText};
+  background: ${props => props.theme.background};
   margin-top: 4px;
+  border-radius: 4px;
 `
 
 export const Input = styled.input`
   ${inputsBaseStyle};
   height: 28px;
-  background-color: white;
   width: 220px;
   padding-left: 8px;
 `
@@ -46,9 +47,9 @@ export const TextArea = styled.textarea`
 
   ::placeholder,
   ::-webkit-input-placeholder {
-    color: ${props => props.theme.blue};
+    color: ${props => props.theme.doveGray};
   }
   :-ms-input-placeholder {
-    color: ${props => props.theme.blue};
+    color: ${props => props.theme.doveGray};
   }
 `

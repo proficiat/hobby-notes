@@ -25,15 +25,13 @@ export const DropzoneRoot = styled.div`
   justify-content: center;
   flex: 1;
   outline: none;
-  background: ${props => props.theme.whitesmoke};
   padding: 0 22px;
 `
 
 export const DropzonePrompt = styled.div`
   text-align: center;
-  font-size: 18px;
   font-weight: 300;
-  color: ${props => props.theme.suicidePreventionBlue};
+  color: ${props => props.theme.defaultText};
   flex: 1;
   padding: 0 17px;
 `

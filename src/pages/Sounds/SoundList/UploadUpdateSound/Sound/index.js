@@ -40,7 +40,7 @@ class Sound extends PureComponent {
     drawLinearWaveForm(
       waveform,
       waveformImageRef,
-      colors.lushLava,
+      colors.westSide,
       'source-atop',
     )
   }

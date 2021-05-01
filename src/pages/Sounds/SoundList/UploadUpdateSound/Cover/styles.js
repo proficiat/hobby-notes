@@ -11,6 +11,8 @@ export const CoverFrame = styled.div`
   align-items: center;
   justify-content: center;
   width: 168px;
+  cursor: pointer;
+  border-radius: 4px;
 `
 
 export const StyledReactCrop = styled(ReactCrop)`
@@ -41,4 +43,5 @@ export const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 4px;
 `

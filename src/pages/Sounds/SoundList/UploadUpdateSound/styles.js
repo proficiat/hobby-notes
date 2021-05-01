@@ -26,18 +26,18 @@ export const GradientBG = styled.div`
   display: flex;
   flex: 1;
   min-height: 168px;
-  background: ${props => props.theme.whitesmoke};
   margin-right: 9px;
   max-width: 720px;
+  border-radius: 4px;
   padding: var(--lineWidth);
 
   background: linear-gradient(
     to right,
-    ${props => props.theme.whitesmoke},
-    ${props => props.theme.whitesmoke},
+    ${props => props.theme.vectorKeyBg},
+    ${props => props.theme.vectorKeyBg},
     ${props => props.theme.red},
-    ${props => props.theme.whitesmoke},
-    ${props => props.theme.whitesmoke}
+    ${props => props.theme.vectorKeyBg},
+    ${props => props.theme.vectorKeyBg}
   );
 
   animation-name: ${gradientAnimation};
@@ -58,11 +58,12 @@ export const GradientBG = styled.div`
 export const Container = styled.div`
   display: flex;
   flex: 1;
-  background: ${props => props.theme.whitesmoke};
+  background: ${props => props.theme.vectorKeyBg};
+  border-radius: 4px;
 `
 
 const hoverColorTransition = css`
-  color: ${props => props.theme.luciaLash};
+  color: ${props => props.theme.defaultText};
   transition: color 0.3s ease-out;
   :hover {
     color: ${props => props.theme.westSide};
@@ -74,7 +75,7 @@ export const Button = styled.button.attrs({
 })`
   font-weight: 300;
   text-transform: uppercase;
-  font-size: 16px;
+  font-size: 15px;
   letter-spacing: 7px;
   cursor: pointer;
   background: transparent;
@@ -105,7 +106,7 @@ export const AbsoluteIconsCircle = styled.div`
   width: 42px;
   height: 42px;
   border-radius: 100%;
-  background: white;
+  background: ${props => props.theme.background};
   position: absolute;
 
   transform: translateY(50%);
