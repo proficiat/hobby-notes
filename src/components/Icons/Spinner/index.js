@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components'
 
-import { ReactComponent as Logo } from '../../../assets/logo.svg'
-import { colors } from '../../../styles'
+import { ReactComponent as Logo } from 'assets/logo.svg'
+import { colors } from 'styles'
 
 const spin = keyframes`
   to {

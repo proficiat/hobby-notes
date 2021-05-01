@@ -5,6 +5,7 @@ export const colors = {
   white: '#ffffff',
   athensGray: '#f7f8fa',
   grey: '#d8d9e0',
+  doveGray: '#727272',
   red: '#C3002F',
   blue: '#34558B',
   luciaLash: '#0A0A0A',
@@ -33,7 +34,10 @@ export const themeColors = {
       bg: colors.white,
       hoverText: colors.red,
     },
-    footerBg: colors.white,
+    footer: {
+      bg: colors.white,
+      progressLine: colors.grey,
+    },
     ...colors,
   },
   dark: {
@@ -50,7 +54,10 @@ export const themeColors = {
       bg: colors.darkShark,
       hoverText: colors.suicidePreventionBlue,
     },
-    footerBg: colors.darkShark,
+    footer: {
+      bg: colors.darkShark,
+      progressLine: colors.doveGray,
+    },
     ...colors,
   },
 }

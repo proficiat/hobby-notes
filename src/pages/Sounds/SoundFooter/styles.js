@@ -8,7 +8,7 @@ export const Frame = styled.div`
   display: flex;
   height: 44px;
   width: 100%;
-  background: ${props => props.theme.footerBg};
+  background: ${props => props.theme.footer.bg};
   margin-top: auto;
   align-items: center;
   flex-shrink: 0;

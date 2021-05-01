@@ -70,7 +70,8 @@ export const PauseSign = styled.div`
 export const ActiveSound = styled.div`
   display: flex;
   align-items: center;
-  color: ${props => props.theme.suicidePreventionBlue};
+  color: ${props => props.theme.doveGray}
+
   cursor: pointer;
   margin-right: 28px;
   font-weight: 300;
@@ -81,11 +82,12 @@ export const ActiveSound = styled.div`
   }
 
   :hover {
-    color: #4cbdfe; // lighten 30%
+    color: ${props => props.theme.suicidePreventionBlue};
+    ${'' /* #4cbdfe; // lighten 30% */}
   }
 `
 
 export const ActiveSoundName = styled.div`
   margin-left: 10px;
-  text-transform: uppercase;
+  font-size: 16px;
 `

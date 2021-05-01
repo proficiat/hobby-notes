@@ -11,7 +11,7 @@ export const ProgressArea = styled.div`
 export const ProgressLine = styled.div`
   width: 100%;
   height: 1px;
-  background: ${props => props.theme.grey};
+  background: ${props => props.theme.footer.progressLine};
   display: flex;
 `
 
