@@ -26,9 +26,17 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
 
   useLayoutEffect(() => {
     const { current } = waveformImageRef
-    if (isEmpty(waveform)) return
+    const ctx = current.getContext('2d')
+    const { fillStyle } = ctx
+
+    if (
+      isEmpty(waveform) ||
+      !isVisible ||
+      fillStyle === theme.active.toLowerCase()
+    )
+      return
     drawLinearWaveForm(waveform, current, theme.active, 'source-atop')
-  }, [waveform, theme])
+  }, [waveform, theme, isVisible])
 
   const handleDropSound = files => {
     const reader = new FileReader()
