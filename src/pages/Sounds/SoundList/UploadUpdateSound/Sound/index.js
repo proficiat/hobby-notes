@@ -17,10 +17,13 @@ import {
   DropzoneRoot,
   DropzonePrompt,
   WaveformImageCanvas,
+  Progress,
+  ProgressBar,
 } from './styles'
 
 const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
   const [waveform, setWaveform] = useState(initWaveform)
+  const [loadingPerceent, setLoadingPercent] = useState(0)
   const waveformImageRef = useRef(null)
   const theme = useContext(ThemeContext)
 
@@ -41,6 +44,11 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
   const handleDropSound = files => {
     const reader = new FileReader()
     const soundFile = files[0]
+    reader.addEventListener('progress', event => {
+      const { loaded, total } = event
+      const persent = (loaded / total) * 100
+      setLoadingPercent(persent)
+    })
     reader.addEventListener('load', () => {
       const buffer = reader.result
       const audioContext = new AudioContext()
@@ -48,6 +56,7 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
         const waveformDataPoints = getWaveformDataPoints(audioBuffer)
         const duration = get(audioBuffer, 'duration')
         setWaveform(waveformDataPoints)
+        setLoadingPercent(0)
         onDropSoundFile(soundFile, waveformDataPoints, duration)
       })
     })
@@ -65,7 +74,12 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
             })}
           >
             <WaveformImageCanvas ref={waveformImageRef} />
-            {isEmpty(waveform) && (
+            {loadingPerceent !== 0 && (
+              <Progress>
+                <ProgressBar width={loadingPerceent} />
+              </Progress>
+            )}
+            {isEmpty(waveform) && !loadingPerceent && (
               <DropzonePrompt>
                 Attach files by dragging & dropping, selecting or pasting them.
               </DropzonePrompt>
