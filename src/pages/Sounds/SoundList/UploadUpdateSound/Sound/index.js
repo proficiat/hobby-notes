@@ -6,19 +6,19 @@ import { ThemeContext } from 'styles'
 
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
+import round from 'lodash/round'
 
 import Dropzone from 'react-dropzone'
 
 import { drawLinearWaveForm } from 'helpers/audioVisualizations'
 import { getWaveformDataPoints } from 'helpers/sounds'
+import ProgressBar from './ProgressBar'
 
 import {
   Container,
   DropzoneRoot,
   DropzonePrompt,
   WaveformImageCanvas,
-  Progress,
-  ProgressBar,
 } from './styles'
 
 const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
@@ -46,7 +46,7 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
     const soundFile = files[0]
     reader.addEventListener('progress', event => {
       const { loaded, total } = event
-      const persent = (loaded / total) * 100
+      const persent = round((loaded / total) * 100)
       setLoadingPercent(persent)
     })
     reader.addEventListener('load', () => {
@@ -74,11 +74,7 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
             })}
           >
             <WaveformImageCanvas ref={waveformImageRef} />
-            {loadingPerceent !== 0 && (
-              <Progress>
-                <ProgressBar width={loadingPerceent} />
-              </Progress>
-            )}
+            {loadingPerceent !== 0 && <ProgressBar percent={loadingPerceent} />}
             {isEmpty(waveform) && !loadingPerceent && (
               <DropzonePrompt>
                 Attach files by dragging & dropping, selecting or pasting them.

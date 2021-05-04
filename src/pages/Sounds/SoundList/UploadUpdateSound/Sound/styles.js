@@ -26,12 +26,12 @@ export const DropzoneRoot = styled.div`
   flex: 1;
   outline: none;
   padding: 0 26px;
+  font-weight: 300;
+  color: ${props => props.theme.defaultText};
 `
 
 export const DropzonePrompt = styled.div`
   text-align: center;
-  font-weight: 300;
-  color: ${props => props.theme.defaultText};
   flex: 1;
   padding: 0 17px;
 `
@@ -42,19 +42,4 @@ export const WaveformImageCanvas = styled.canvas`
   height: 40%;
   bottom: 50%;
   transform: translateY(50%);
-`
-
-export const Progress = styled.div`
-  width: 100%;
-  background: ${props => props.theme.grey};
-  border-radius: 4px;
-  padding: 2px;
-`
-
-export const ProgressBar = styled.div`
-  width: ${props => props.width || 0}%;
-  background: ${props => props.theme.active};
-  height: 6px;
-  transition: 0.4 linear;
-  transition-property: width, background;
 `
