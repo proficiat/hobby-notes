@@ -6,31 +6,20 @@ import get from 'lodash/get'
 import { Field, Input, Base, StyledSup, TextArea } from './styles'
 
 class Info extends PureComponent {
-  constructor(props) {
-    super(props)
-    const { initData } = props
-    this.state = {
-      name: get(initData, 'name', ''),
-      description: get(initData, 'description', ''),
-    }
-  }
-
   handleChangeName = event => {
+    const { onChangeName } = this.props
     const name = get(event, 'target.value')
-    this.setState({ name })
+    onChangeName(name)
   }
 
   handleChangeDescription = event => {
+    const { onChangeDescription } = this.props
     const description = get(event, 'target.value')
-    this.setState({ description })
+    onChangeDescription(description)
   }
 
   render() {
-    const { name, description } = this.state
-    const { isVisible } = this.props
-    if (!isVisible) {
-      return null
-    }
+    const { name, description } = this.props
     return (
       <Base>
         <Field>
@@ -57,13 +46,11 @@ class Info extends PureComponent {
   }
 }
 
-Info.defaultProps = {
-  initData: null,
-}
-
 Info.propTypes = {
-  initData: PropTypes.object,
-  isVisible: PropTypes.bool.isRequired,
+  description: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onChangeDescription: PropTypes.func.isRequired,
+  onChangeName: PropTypes.func.isRequired,
 }
 
 export default Info
