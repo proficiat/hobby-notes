@@ -144,8 +144,8 @@ class UploadUpdateSound extends PureComponent {
           <Cover initImageUrl={initImageUrl} onImageCrop={this.onImageCrop} />
           {isLoad && <Spinner />}
           <Sound
-            initWaveform={waveform}
             isVisible={!isActiveSettings && !isLoad}
+            waveform={waveform}
             onDropSoundFile={this.onDropSoundFile}
           />
           {isActiveSettings && !isLoad && (

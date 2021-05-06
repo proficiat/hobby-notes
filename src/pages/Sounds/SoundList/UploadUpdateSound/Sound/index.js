@@ -21,8 +21,7 @@ import {
   WaveformImageCanvas,
 } from './styles'
 
-const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
-  const [waveform, setWaveform] = useState(initWaveform)
+const Sound = ({ waveform, isVisible, onDropSoundFile }) => {
   const [loadingPerceent, setLoadingPercent] = useState(0)
   const waveformImageRef = useRef(null)
   const theme = useContext(ThemeContext)
@@ -47,14 +46,15 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
       audioContext.decodeAudioData(buffer).then(audioBuffer => {
         const waveformDataPoints = getWaveformDataPoints(audioBuffer)
         const duration = get(audioBuffer, 'duration')
-        setWaveform(waveformDataPoints)
-        setLoadingPercent(0)
         onDropSoundFile(soundFile, waveformDataPoints, duration)
+        setLoadingPercent(0)
       })
     })
     reader.readAsArrayBuffer(soundFile)
   }
-  const loading = loadingPerceent !== 0
+
+  const isLoading = loadingPerceent !== 0
+
   return (
     <Container visible={isVisible}>
       <Dropzone accept="audio/*" multiple={false} onDrop={handleDropSound}>
@@ -66,11 +66,11 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
             })}
           >
             <WaveformImageCanvas
-              loading={loading || !isVisible ? 1 : 0}
+              loading={isLoading || !isVisible ? 1 : 0}
               ref={waveformImageRef}
             />
-            {loading && <ProgressBar percent={loadingPerceent} />}
-            {isEmpty(waveform) && !loading && (
+            {isLoading && <ProgressBar percent={loadingPerceent} />}
+            {isEmpty(waveform) && !isLoading && (
               <DropzonePrompt>
                 Attach files by dragging & dropping, selecting or pasting them.
               </DropzonePrompt>
@@ -84,13 +84,9 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
   )
 }
 
-Sound.defaultProps = {
-  initWaveform: [],
-}
-
 Sound.propTypes = {
-  initWaveform: PropTypes.array,
   isVisible: PropTypes.bool.isRequired,
+  waveform: PropTypes.array.isRequired,
   onDropSoundFile: PropTypes.func.isRequired,
 }
 
