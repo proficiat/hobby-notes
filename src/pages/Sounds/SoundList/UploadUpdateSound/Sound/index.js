@@ -21,7 +21,7 @@ import {
   WaveformImageCanvas,
 } from './styles'
 
-const Sound = ({ waveform, isVisible, onDropSoundFile }) => {
+const Sound = React.memo(({ waveform, isVisible, onDropSoundFile }) => {
   const [loadingPerceent, setLoadingPercent] = useState(0)
   const waveformImageRef = useRef(null)
   const theme = useContext(ThemeContext)
@@ -82,7 +82,7 @@ const Sound = ({ waveform, isVisible, onDropSoundFile }) => {
       </Dropzone>
     </Container>
   )
-}
+})
 
 Sound.propTypes = {
   isVisible: PropTypes.bool.isRequired,
