@@ -65,8 +65,18 @@ export const Container = styled.div`
 const hoverColorTransition = css`
   color: ${props => props.theme.defaultText};
   transition: color 0.3s ease-out;
-  :hover {
-    color: ${props => props.theme.westSide};
+
+  ${props =>
+    !props.disabled &&
+    css`
+      :hover {
+        color: ${props.theme.westSide};
+      }
+    `};
+
+  :disabled {
+    opacity: 0.4;
+    cursor: default;
   }
 `
 
