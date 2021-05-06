@@ -28,16 +28,8 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
   const theme = useContext(ThemeContext)
 
   useLayoutEffect(() => {
+    if (isEmpty(waveform) || !isVisible) return
     const { current } = waveformImageRef
-    const ctx = current.getContext('2d')
-    const { fillStyle } = ctx
-
-    if (
-      isEmpty(waveform) ||
-      !isVisible ||
-      fillStyle === theme.active.toLowerCase()
-    )
-      return
     drawLinearWaveForm(waveform, current, theme.active, 'source-atop')
   }, [waveform, theme, isVisible])
 
@@ -62,7 +54,7 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
     })
     reader.readAsArrayBuffer(soundFile)
   }
-
+  const loading = loadingPerceent !== 0
   return (
     <Container visible={isVisible}>
       <Dropzone accept="audio/*" multiple={false} onDrop={handleDropSound}>
@@ -73,9 +65,12 @@ const Sound = ({ initWaveform, isVisible, onDropSoundFile }) => {
               // onDrop: event => event.stopPropagation(),
             })}
           >
-            <WaveformImageCanvas ref={waveformImageRef} />
-            {loadingPerceent !== 0 && <ProgressBar percent={loadingPerceent} />}
-            {isEmpty(waveform) && !loadingPerceent && (
+            <WaveformImageCanvas
+              loading={loading || !isVisible ? 1 : 0}
+              ref={waveformImageRef}
+            />
+            {loading && <ProgressBar percent={loadingPerceent} />}
+            {isEmpty(waveform) && !loading && (
               <DropzonePrompt>
                 Attach files by dragging & dropping, selecting or pasting them.
               </DropzonePrompt>

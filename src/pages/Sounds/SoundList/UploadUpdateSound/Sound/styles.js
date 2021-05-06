@@ -15,7 +15,7 @@ export const Container = styled.div`
     css`
       flex: 0;
       min-width: 0;
-    `}
+    `};
 `
 
 export const DropzoneRoot = styled.div`
@@ -38,8 +38,7 @@ export const DropzonePrompt = styled.div`
 
 export const WaveformImageCanvas = styled.canvas`
   position: absolute;
-  width: 100%;
-  height: 40%;
-  bottom: 50%;
-  transform: translateY(50%);
+  width: 88%;
+  height: 50%;
+  visibility: ${props => (props.loading ? 'hidden' : 'visible')};
 `

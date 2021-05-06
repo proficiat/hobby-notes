@@ -16,7 +16,7 @@ const Status = styled.span`
 `
 
 export const Progress = styled.div`
-  width: 100%;
+  width: 96%;
   background: ${props => props.theme.background};
   border-radius: 4px;
 `
