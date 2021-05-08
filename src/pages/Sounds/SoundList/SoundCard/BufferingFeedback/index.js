@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { FEEDBACK_ELEMENTS } from 'helpers/sounds'
+
 import { Base, FeedbackBar, Dot } from './styles'
 
 const BufferingFeedback = ({
@@ -16,10 +18,10 @@ const BufferingFeedback = ({
   return (
     <Base color={bgColor}>
       <FeedbackBar color={amountColor}>
-        <span className={`buffered-amount-${soundId}`} />
+        <span className={`${FEEDBACK_ELEMENTS.buffered}-${soundId}`} />
       </FeedbackBar>
       <FeedbackBar color={progressColor}>
-        <span className={`progress-amount-${soundId}`}>
+        <span className={`${FEEDBACK_ELEMENTS.progress}-${soundId}`}>
           {dot && <Dot color={amountColor} />}
         </span>
       </FeedbackBar>

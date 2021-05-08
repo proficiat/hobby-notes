@@ -4,11 +4,16 @@ import React, {
   useLayoutEffect,
   useRef,
   useImperativeHandle,
+  useState,
 } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/client'
 
-import { DEFAULT_AUDIO_VOLUME } from 'helpers/sounds'
+import {
+  DEFAULT_AUDIO_VOLUME,
+  FEEDBACK_ELEMENTS,
+  updateFeedbackElements,
+} from 'helpers/sounds'
 import { UPDATE_SOUND } from 'queries/sounds'
 
 import { audioCurrentTimeVar } from 'cache'
@@ -16,7 +21,6 @@ import { audioCurrentTimeVar } from 'cache'
 import { getId } from 'helpers/utility'
 
 import get from 'lodash/get'
-import forEach from 'lodash/forEach'
 
 const INIT_PLAYING_DATA = {
   playingTime: 0,
@@ -28,6 +32,7 @@ const Audio = React.forwardRef((props, ref) => {
   const playingData = useRef({ ...INIT_PLAYING_DATA })
   const { sound, onSwitchSound } = props
   const soundId = getId(sound)
+  const [prevSoundId, setPrevSoundId] = useState()
   const audioUrl = get(sound, 'audioUrl', '')
 
   const [updatePlayedCount] = useMutation(UPDATE_SOUND, {
@@ -84,6 +89,14 @@ const Audio = React.forwardRef((props, ref) => {
     },
   }))
 
+  if (soundId !== prevSoundId) {
+    if (prevSoundId) {
+      updateFeedbackElements(prevSoundId, FEEDBACK_ELEMENTS.progress, 0)
+      updateFeedbackElements(prevSoundId, FEEDBACK_ELEMENTS.buffered, 0)
+    }
+    setPrevSoundId(soundId)
+  }
+
   const handleTimeUpdate = event => {
     const { target } = event
     const currentTime = get(target, 'currentTime', 0)
@@ -106,12 +119,11 @@ const Audio = React.forwardRef((props, ref) => {
     audioCurrentTimeVar(currentTime)
 
     const filledInterest = (currentTime / duration) * 100
-    const progressElements = document.getElementsByClassName(
-      `progress-amount-${soundId}`,
+    updateFeedbackElements(
+      soundId,
+      FEEDBACK_ELEMENTS.progress,
+      `${filledInterest}%`,
     )
-    forEach(progressElements, element => {
-      element.style.width = `${filledInterest}%`
-    })
     if (filledInterest >= 100) {
       onSwitchSound(false, true)()
     }
@@ -127,14 +139,14 @@ const Audio = React.forwardRef((props, ref) => {
       const buffered = get(target, 'buffered', [])
       for (let i = 0; i < buffered.length; i += 1) {
         if (buffered.start(buffered.length - 1 - i) < currentTime) {
-          const amountElements = document.getElementsByClassName(
-            `buffered-amount-${soundId}`,
+          const bufferedPercent = `${(buffered.end(buffered.length - 1 - i) /
+            duration) *
+            100}%`
+          updateFeedbackElements(
+            soundId,
+            FEEDBACK_ELEMENTS.buffered,
+            bufferedPercent,
           )
-          forEach(amountElements, element => {
-            element.style.width = `${(buffered.end(buffered.length - 1 - i) /
-              duration) *
-              100}%`
-          })
           break
         }
       }

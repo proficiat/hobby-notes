@@ -2,6 +2,7 @@ import { Duration } from 'luxon'
 import get from 'lodash/get'
 import find from 'lodash/find'
 import findIndex from 'lodash/findIndex'
+import forEach from 'lodash/forEach'
 
 export const DEFAULT_AUDIO_VOLUME = 0.5
 
@@ -48,4 +49,16 @@ const normalizeData = filteredData => {
 export const getWaveformDataPoints = audioBuffer => {
   const filtered = filterData(audioBuffer)
   return normalizeData(filtered)
+}
+
+export const FEEDBACK_ELEMENTS = {
+  progress: 'progress-amount',
+  buffered: 'buffered-amount',
+}
+
+export const updateFeedbackElements = (soundId, elementClass, width) => {
+  const elements = document.getElementsByClassName(`${elementClass}-${soundId}`)
+  forEach(elements, element => {
+    element.style.width = width
+  })
 }
