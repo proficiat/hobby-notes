@@ -5,6 +5,7 @@ export const ALL_SOUNDS = gql`
     allSounds {
       id
       name
+      description
       audioUrl
       imageUrl
       waveform

@@ -110,7 +110,7 @@ class UploadUpdateSound extends PureComponent {
 
   updateSound = () => {
     const { onMutateSound, soundToEdit } = this.props
-    const { name, description } = this.getInfoData()
+    const { name, description } = this.state
 
     onMutateSound({
       variables: {
