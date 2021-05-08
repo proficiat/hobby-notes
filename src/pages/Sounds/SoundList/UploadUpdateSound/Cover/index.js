@@ -20,11 +20,8 @@ import {
 class Cover extends PureComponent {
   constructor(props) {
     super(props)
-    const { initImageUrl } = props
     this.state = {
-      coverImageSrc: null,
-      croppedImageUrl: initImageUrl,
-      croppedImageFile: null,
+      imageSrc: null,
       crop: {
         aspect: 16 / 16,
       },
@@ -99,19 +96,15 @@ class Cover extends PureComponent {
   }
 
   handleImageCrop = () => {
-    const { croppedImageFile } = this.state
-    const { onImageCrop } = this.props
-    onImageCrop(croppedImageFile)
     this.setState({
-      coverImageSrc: null,
-      croppedImageFile: null,
+      imageSrc: null,
     })
   }
 
   handleImageDrop = files => {
     const reader = new FileReader()
     reader.addEventListener('load', () =>
-      this.setState({ coverImageSrc: reader.result }),
+      this.setState({ imageSrc: reader.result }),
     )
     reader.readAsDataURL(files[0])
   }
@@ -123,15 +116,17 @@ class Cover extends PureComponent {
         crop,
         'newFile.jpeg',
       )
-      this.setState({ croppedImageUrl: fileUrl, croppedImageFile: file })
+      const { onImageCrop } = this.props
+      onImageCrop(file, fileUrl)
     }
   }
 
   render() {
-    const { crop, coverImageSrc, croppedImageUrl } = this.state
+    const { imageUrl } = this.props
+    const { crop, imageSrc } = this.state
     return (
       <CoverFrame ref={this.addCoverFrameReF}>
-        {coverImageSrc && (
+        {imageSrc && (
           <Fragment>
             <AbsoluteCropCircle onClick={this.handleImageCrop}>
               <StyledCropIcon size={24} />
@@ -139,14 +134,14 @@ class Cover extends PureComponent {
             <StyledReactCrop
               crop={crop}
               ruleOfThirds
-              src={coverImageSrc}
+              src={imageSrc}
               onChange={this.onCropChange}
               onComplete={this.onCropComplete}
               onImageLoaded={this.onImageLoaded}
             />
           </Fragment>
         )}
-        {!coverImageSrc && (
+        {!imageSrc && (
           <Dropzone
             accept="image/jpeg, image/png"
             multiple={false}
@@ -161,13 +156,9 @@ class Cover extends PureComponent {
               >
                 <input {...getInputProps()} />
 
-                {croppedImageUrl && (
-                  <Image alt="preview" src={croppedImageUrl} />
-                )}
+                {imageUrl && <Image alt="preview" src={imageUrl} />}
 
-                {!coverImageSrc && !croppedImageUrl && (
-                  <PuzzleIcon shadow={false} />
-                )}
+                {!imageUrl && <PuzzleIcon shadow={false} />}
               </DropzoneRoot>
             )}
           </Dropzone>
@@ -177,12 +168,8 @@ class Cover extends PureComponent {
   }
 }
 
-Cover.defaultProps = {
-  initImageUrl: null,
-}
-
 Cover.propTypes = {
-  initImageUrl: PropTypes.string,
+  imageUrl: PropTypes.string.isRequired,
   onImageCrop: PropTypes.func.isRequired,
 }
 

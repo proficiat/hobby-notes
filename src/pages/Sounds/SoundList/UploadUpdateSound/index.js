@@ -26,7 +26,8 @@ import {
 
 const INIT_STATE = {
   isActiveSettings: false,
-  croppedImageFile: null,
+  imageFile: null,
+  imageUrl: null,
   soundFile: null,
   waveform: null,
   duration: null,
@@ -49,13 +50,20 @@ class UploadUpdateSound extends PureComponent {
     super(props)
     const { soundToEdit } = props
     this.initSoundData = getInitSoundData(soundToEdit)
-    const { waveform, name, description, duration } = this.initSoundData
+    const {
+      waveform,
+      name,
+      description,
+      duration,
+      imageUrl,
+    } = this.initSoundData
     this.state = {
       ...INIT_STATE,
       waveform,
       name,
       description,
       duration,
+      imageUrl,
     }
     this.isUpload = isEmpty(soundToEdit)
   }
@@ -72,8 +80,8 @@ class UploadUpdateSound extends PureComponent {
 
   onChangeDescription = description => this.setState({ description })
 
-  onImageCrop = croppedImageFile => {
-    this.setState({ croppedImageFile })
+  onImageCrop = (imageFile, imageUrl) => {
+    this.setState({ imageFile, imageUrl })
   }
 
   uploadSound = async () => {
@@ -81,14 +89,14 @@ class UploadUpdateSound extends PureComponent {
     this.setState({ isPreUploading: true })
 
     const {
-      croppedImageFile,
+      imageFile,
       soundFile,
       waveform,
       duration,
       name,
       description,
     } = this.state
-    const imageUrl = await uploadFileToCloudinary(croppedImageFile)
+    const imageUrl = await uploadFileToCloudinary(imageFile)
     const audioUrl = await uploadFileToCloudinary(soundFile)
     const uploadedAt = DateTime.local()
 
@@ -134,14 +142,14 @@ class UploadUpdateSound extends PureComponent {
       name,
       description,
       waveform,
+      imageUrl,
     } = this.state
     const { isLoading, onCancel } = this.props
     const isLoad = isLoading || isPreUploading
-    const { imageUrl: initImageUrl } = this.initSoundData
     return (
       <GradientBG isUpdate={!this.isUpload}>
         <Container>
-          <Cover initImageUrl={initImageUrl} onImageCrop={this.onImageCrop} />
+          <Cover imageUrl={imageUrl} onImageCrop={this.onImageCrop} />
           {isLoad && <Spinner />}
           <Sound
             isVisible={!isActiveSettings && !isLoad}
