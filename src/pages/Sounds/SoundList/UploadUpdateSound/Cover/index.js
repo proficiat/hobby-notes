@@ -17,14 +17,14 @@ import {
   AbsoluteCropCircle,
 } from './styles'
 
+const INIT_CROP = { aspect: 16 / 16 }
+
 class Cover extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
       imageSrc: null,
-      crop: {
-        aspect: 16 / 16,
-      },
+      crop: INIT_CROP,
     }
 
     this.imageRef = null
@@ -98,6 +98,7 @@ class Cover extends PureComponent {
   handleImageCrop = () => {
     this.setState({
       imageSrc: null,
+      crop: INIT_CROP,
     })
   }
 
@@ -168,8 +169,12 @@ class Cover extends PureComponent {
   }
 }
 
+Cover.defaultProps = {
+  imageUrl: '',
+}
+
 Cover.propTypes = {
-  imageUrl: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string,
   onImageCrop: PropTypes.func.isRequired,
 }
 
