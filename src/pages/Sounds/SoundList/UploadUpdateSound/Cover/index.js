@@ -31,6 +31,13 @@ class Cover extends PureComponent {
     this.coverFrameRef = null
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { imageUrl } = this.props
+    if (!imageUrl && prevProps.imageUrl) {
+      this.handleImageCrop()
+    }
+  }
+
   onImageLoaded = image => {
     this.imageRef = image
   }

@@ -171,7 +171,7 @@ class UploadUpdateSound extends PureComponent {
           )}
           <BottomButtons>
             <Button
-              disabled={isEmpty(waveform) || !name}
+              disabled={isEmpty(waveform) || !name || isLoad}
               onClick={this.isUpload ? this.uploadSound : this.updateSound}
             >
               {this.isUpload ? 'Upload' : 'Update'}

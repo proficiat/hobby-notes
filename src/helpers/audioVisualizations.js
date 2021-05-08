@@ -1,6 +1,7 @@
 import { colors } from 'styles'
 
 import forEach from 'lodash/forEach'
+import isEmpty from 'lodash/isEmpty'
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Visualizations_with_Web_Audio_API#Creating_a_frequency_bar_graph
 export const subscribeFrequencyBar = (canvasRef, audioRef) => {
@@ -100,6 +101,11 @@ export const drawLinearWaveForm = (
   canvas.width = canvas.offsetWidth * dpr
   canvas.height = (canvas.offsetHeight + padding * 2) * dpr
   const ctx = canvas.getContext('2d')
+
+  if (isEmpty(normalizedData)) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    return
+  }
   ctx.scale(dpr, dpr)
   ctx.translate(0, canvas.offsetHeight / 2 + padding) // Set Y = 0 to be in the middle of the canvas
 

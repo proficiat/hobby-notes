@@ -27,7 +27,7 @@ const Sound = React.memo(({ waveform, isVisible, onDropSoundFile }) => {
   const theme = useContext(ThemeContext)
 
   useLayoutEffect(() => {
-    if (isEmpty(waveform) || !isVisible) return
+    if (!isVisible) return
     const { current } = waveformImageRef
     drawLinearWaveForm(waveform, current, theme.active, 'source-atop')
   }, [waveform, theme, isVisible])
@@ -84,9 +84,13 @@ const Sound = React.memo(({ waveform, isVisible, onDropSoundFile }) => {
   )
 })
 
+Sound.defaultProps = {
+  waveform: [],
+}
+
 Sound.propTypes = {
   isVisible: PropTypes.bool.isRequired,
-  waveform: PropTypes.array.isRequired,
+  waveform: PropTypes.array,
   onDropSoundFile: PropTypes.func.isRequired,
 }
 
