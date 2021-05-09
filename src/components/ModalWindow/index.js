@@ -2,7 +2,9 @@ import React, { useRef, useEffect } from 'react'
 
 import PropTypes from 'prop-types'
 
-import { Base, Content, StyledCloseIcon, Buttons, Button } from './styles'
+import Button from 'components/Button'
+
+import { Base, Content, StyledCloseIcon, Buttons } from './styles'
 
 const ModalWindow = React.memo(({ children, isShow, callback }) => {
   const contentRef = useRef(null)
@@ -29,7 +31,9 @@ const ModalWindow = React.memo(({ children, isShow, callback }) => {
           <Button mr={28} onClick={() => callback(false)}>
             Cancel
           </Button>
-          <Button onClick={() => callback(true)}>Confirm</Button>
+          <Button confirm onClick={() => callback(true)}>
+            Confirm
+          </Button>
         </Buttons>
       </Content>
     </Base>

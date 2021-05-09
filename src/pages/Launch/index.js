@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import { useMutation } from '@apollo/client'
 
 import { GET_IS_USER_LOGGED_IN } from 'cache'
+import Button from 'components/Button'
 import { LOGIN } from 'queries/users'
 
 import {
@@ -13,7 +14,6 @@ import {
   Title,
   Field,
   Input,
-  Button,
   StyledForm,
   Error,
   HelpSubTitle,
@@ -102,7 +102,9 @@ const Launch = props => {
           />
         </Field>
         {errorMessage && <Error>{errorMessage}</Error>}
-        <Button type="submit">Enter</Button>
+        <Button confirm mt={18} type="submit">
+          Enter
+        </Button>
       </StyledForm>
     </Container>
   )

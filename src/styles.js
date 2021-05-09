@@ -17,6 +17,20 @@ export const colors = {
   woodsmoke: '#181a1b',
   shark: '#282d33',
   darkShark: '#202429',
+
+  jade: '#077b8a',
+  violet: '#5c3c92',
+  seaFoam: '#a2d5c6',
+  springRef: '#d72631',
+
+  almond: '#f5f0e1',
+  mango: '#ffc13b',
+
+  scarlet: '#b85042',
+  lightOlive: '#e7e8d1',
+  lightTeal: '#a7beae',
+
+  silver: '#C0C0C0',
 }
 
 export const themeColors = {

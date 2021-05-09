@@ -67,20 +67,6 @@ export const Input = styled.input`
   border-radius: 4px;
 `
 
-export const Button = styled.button`
-  ${fontStyle};
-  height: 44px;
-  font-size: 16px;
-  margin-top: 18px;
-  width: 144px;
-  background-color: ${props => props.theme.red};
-  outline: none;
-  cursor: pointer;
-  color: ${props => props.theme.blush};
-  border: none;
-  border-radius: 4px;
-`
-
 export const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
