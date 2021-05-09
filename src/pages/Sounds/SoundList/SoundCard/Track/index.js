@@ -8,6 +8,7 @@ import filter from 'lodash/filter'
 
 import { getId } from 'helpers/utility'
 import { DELETE_SOUND, ALL_SOUNDS } from 'queries/sounds'
+import ModalWindow from 'components/ModalWindow'
 
 import Spinner from 'components/Icons/Spinner'
 import SettingsPopover from './SettingsPopover'
@@ -33,6 +34,7 @@ const Track = ({
   const soundId = getId(sound)
   const soundName = get(sound, 'name', '')
   const played = get(sound, 'played', 0)
+  const [isShowDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const handleError = error => {
     const errorGQLMessage =
@@ -70,6 +72,14 @@ const Track = ({
     },
   )
 
+  const onToggleDelete = () => setShowDeleteConfirm(prevState => !prevState)
+  const deleteCallback = callback => {
+    if (callback) {
+      onDeleteSound()
+    }
+    onToggleDelete()
+  }
+
   if (isSoundDeleting) return <Spinner />
   if (errorMessage) return <ErrorMessage>{errorMessage}</ErrorMessage>
 
@@ -79,7 +89,8 @@ const Track = ({
         {soundName}
         {isViewerInPower && (
           <SettingsPopover
-            onDeleteSound={onDeleteSound}
+            // onDeleteSound={onDeleteSound}
+            onDeleteSound={onToggleDelete}
             onToggleUpdate={() => onToggleUpdate(soundId)}
           />
         )}
@@ -97,6 +108,10 @@ const Track = ({
           </React.Fragment>
         )}
       </BottomPane>
+      <ModalWindow callback={deleteCallback} isShow={isShowDeleteConfirm}>
+        Are you sure you want to delete the <b>{sound.name.toUpperCase()}</b>{' '}
+        sound?
+      </ModalWindow>
     </Base>
   )
 }
