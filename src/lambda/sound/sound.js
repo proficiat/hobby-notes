@@ -35,7 +35,7 @@ const schema = new mongoose.Schema({
   },
   buyLink: {
     type: String,
-    deefault: '',
+    default: '',
   },
 })
 

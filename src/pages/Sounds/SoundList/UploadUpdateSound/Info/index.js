@@ -1,53 +1,43 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import get from 'lodash/get'
-
 import RadioButton from 'components/RadioButton'
 
 import { Field, Input, Base, StyledSup, TextArea, Row, Privacy } from './styles'
 
+export const INFO_FIELDS = {
+  name: 'name',
+  description: 'description',
+  buyLink: 'buyLink',
+  isPrivate: 'isPrivate',
+}
+
+export const PRIVACY = {
+  public: 'public',
+  private: 'private',
+}
+
 class Info extends PureComponent {
-  handleChangeName = event => {
-    const { onChangeName } = this.props
-    const name = get(event, 'target.value')
-    onChangeName(name)
-  }
-
-  handleChangeDescription = event => {
-    const { onChangeDescription } = this.props
-    const description = get(event, 'target.value')
-    onChangeDescription(description)
-  }
-
-  handleChangeBuyLink = event => {
-    const { onChangeBuyLink } = this.props
-    const buyLink = get(event, 'target.value')
-    onChangeBuyLink(buyLink)
-  }
-
-  handleChangePrivacy = event => {
-    const { onChangePrivacy } = this.props
-    const {
-      target: { value },
-    } = event
-    onChangePrivacy(value)
-  }
-
   render() {
-    const { name, description, buyLink, isPrivate } = this.props
+    const {
+      name,
+      description,
+      buyLink,
+      isPrivate,
+      onChangeInfoField,
+    } = this.props
     return (
       <Base>
         <Row>
           <Field>
             <div>
               Name<StyledSup>*</StyledSup>
-            </div>{' '}
+            </div>
             <Input
               placeholder="Name your track"
               type="text"
               value={name}
-              onChange={this.handleChangeName}
+              onChange={onChangeInfoField(INFO_FIELDS.name)}
             />
           </Field>
           <Field>
@@ -55,18 +45,15 @@ class Info extends PureComponent {
               Privacy<StyledSup invisible>*</StyledSup>
             </div>
             <Privacy>
-              <RadioButton
-                checked={!isPrivate}
-                label="Public"
-                value="public"
-                onChange={this.handleChangePrivacy}
-              />
-              <RadioButton
-                checked={isPrivate}
-                label="Private"
-                value="private"
-                onChange={this.handleChangePrivacy}
-              />
+              {Object.values(PRIVACY).map(value => (
+                <RadioButton
+                  checked={value === PRIVACY.private ? isPrivate : !isPrivate}
+                  key={value}
+                  label={value.charAt(0).toUpperCase() + value.slice(1)}
+                  value={value}
+                  onChange={onChangeInfoField(INFO_FIELDS.isPrivate)}
+                />
+              ))}
             </Privacy>
           </Field>
         </Row>
@@ -76,15 +63,15 @@ class Info extends PureComponent {
             type="text"
             value={buyLink}
             width={1}
-            onChange={this.handleChangeBuyLink}
+            onChange={onChangeInfoField(INFO_FIELDS.buyLink)}
           />
         </Field>
         <Field>
-          Description{' '}
+          Description
           <TextArea
             placeholder="Describe your track"
             value={description}
-            onChange={this.handleChangeDescription}
+            onChange={onChangeInfoField(INFO_FIELDS.description)}
           />
         </Field>
       </Base>
@@ -97,10 +84,7 @@ Info.propTypes = {
   description: PropTypes.string.isRequired,
   isPrivate: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
-  onChangeBuyLink: PropTypes.func.isRequired,
-  onChangeDescription: PropTypes.func.isRequired,
-  onChangeName: PropTypes.func.isRequired,
-  onChangePrivacy: PropTypes.func.isRequired,
+  onChangeInfoField: PropTypes.func.isRequired,
 }
 
 export default Info

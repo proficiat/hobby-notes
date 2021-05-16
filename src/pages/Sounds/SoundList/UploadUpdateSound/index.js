@@ -12,7 +12,7 @@ import { uploadFileToCloudinary } from 'helpers/cloudinaryApi'
 import Spinner from 'components/Icons/Spinner'
 import Cover from './Cover'
 import Sound from './Sound'
-import Info from './Info'
+import Info, { INFO_FIELDS, PRIVACY } from './Info'
 
 import {
   GradientBG,
@@ -25,13 +25,16 @@ import {
 } from './styles'
 
 const INIT_STATE = {
+  isPreUploading: false,
   isActiveSettings: false,
+
   imageFile: null,
   imageUrl: null,
+
   soundFile: null,
   waveform: null,
   duration: null,
-  isPreUploading: false,
+
   name: '',
   description: '',
   buyLink: '',
@@ -69,20 +72,13 @@ class UploadUpdateSound extends PureComponent {
     })
   }
 
-  onChangeInfoField = (fieldName, value) => {
+  onChangeInfoField = fieldName => event => {
+    const value = get(event, 'target.value')
     this.setState({
-      [fieldName]: '',
+      [fieldName]:
+        fieldName === INFO_FIELDS.isPrivate ? value === PRIVACY.private : value,
     })
   }
-
-  onChangePrivacy = privacy =>
-    this.setState({ isPrivate: privacy === 'private' })
-
-  onChangeBuyLink = buyLink => this.setState({ buyLink })
-
-  onChangeName = name => this.setState({ name })
-
-  onChangeDescription = description => this.setState({ description })
 
   onImageCrop = (imageFile, imageUrl) => {
     this.setState({ imageFile, imageUrl })
@@ -169,10 +165,7 @@ class UploadUpdateSound extends PureComponent {
               description={description}
               isPrivate={isPrivate}
               name={name}
-              onChangeBuyLink={this.onChangeBuyLink}
-              onChangeDescription={this.onChangeDescription}
-              onChangeName={this.onChangeName}
-              onChangePrivacy={this.onChangePrivacy}
+              onChangeInfoField={this.onChangeInfoField}
             />
           )}
           {!isLoad && (
