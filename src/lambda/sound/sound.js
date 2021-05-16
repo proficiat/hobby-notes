@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const schema = new mongoose.Schema({
   name: {
     type: String,
-    required: false,
+    required: true,
     unique: true,
     minlength: 2,
   },
@@ -32,6 +32,10 @@ const schema = new mongoose.Schema({
   uploadedAt: {
     type: String,
     required: true,
+  },
+  buyLink: {
+    type: String,
+    deefault: '',
   },
 })
 

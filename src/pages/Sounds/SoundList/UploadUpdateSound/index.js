@@ -34,6 +34,7 @@ const INIT_STATE = {
   isPreUploading: false,
   name: '',
   description: '',
+  buyLink: '',
 }
 
 const getInitSoundData = soundToEdit => {
@@ -42,7 +43,8 @@ const getInitSoundData = soundToEdit => {
   const description = get(soundToEdit, 'description', '')
   const waveform = get(soundToEdit, 'waveform', [])
   const duration = get(soundToEdit, 'duration', null)
-  return { imageUrl, name, description, waveform, duration }
+  const buyLink = get(soundToEdit, 'buyLink', '')
+  return { imageUrl, name, description, waveform, duration, buyLink }
 }
 
 class UploadUpdateSound extends PureComponent {
@@ -56,6 +58,7 @@ class UploadUpdateSound extends PureComponent {
       description,
       duration,
       imageUrl,
+      buyLink,
     } = this.initSoundData
     this.state = {
       ...INIT_STATE,
@@ -64,6 +67,7 @@ class UploadUpdateSound extends PureComponent {
       description,
       duration,
       imageUrl,
+      buyLink,
     }
     this.isUpload = isEmpty(soundToEdit)
   }
@@ -75,6 +79,8 @@ class UploadUpdateSound extends PureComponent {
       duration,
     })
   }
+
+  onChangeBuyLink = buyLink => this.setState({ buyLink })
 
   onChangeName = name => this.setState({ name })
 
@@ -118,13 +124,14 @@ class UploadUpdateSound extends PureComponent {
 
   updateSound = () => {
     const { onMutateSound, soundToEdit } = this.props
-    const { name, description } = this.state
+    const { name, description, buyLink } = this.state
 
     onMutateSound({
       variables: {
         id: soundToEdit.id,
         name,
         description,
+        buyLink,
       },
     })
   }
@@ -143,6 +150,7 @@ class UploadUpdateSound extends PureComponent {
       description,
       waveform,
       imageUrl,
+      buyLink,
     } = this.state
     const { isLoading, onCancel } = this.props
     const isLoad = isLoading || isPreUploading
@@ -158,8 +166,10 @@ class UploadUpdateSound extends PureComponent {
           />
           {isActiveSettings && !isLoad && (
             <Info
+              buyLink={buyLink}
               description={description}
               name={name}
+              onChangeBuyLink={this.onChangeBuyLink}
               onChangeDescription={this.onChangeDescription}
               onChangeName={this.onChangeName}
             />

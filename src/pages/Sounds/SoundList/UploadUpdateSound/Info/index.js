@@ -18,8 +18,14 @@ class Info extends PureComponent {
     onChangeDescription(description)
   }
 
+  handleChangeBuyLink = event => {
+    const { onChangeBuyLink } = this.props
+    const buyLink = get(event, 'target.value')
+    onChangeBuyLink(buyLink)
+  }
+
   render() {
-    const { name, description } = this.props
+    const { name, description, buyLink } = this.props
     return (
       <Base>
         <Field>
@@ -31,6 +37,15 @@ class Info extends PureComponent {
             type="text"
             value={name}
             onChange={this.handleChangeName}
+          />
+        </Field>
+        <Field>
+          Buy-link
+          <Input
+            type="text"
+            value={buyLink}
+            width={1}
+            onChange={this.handleChangeBuyLink}
           />
         </Field>
         <Field>
@@ -47,8 +62,10 @@ class Info extends PureComponent {
 }
 
 Info.propTypes = {
+  buyLink: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  onChangeBuyLink: PropTypes.func.isRequired,
   onChangeDescription: PropTypes.func.isRequired,
   onChangeName: PropTypes.func.isRequired,
 }

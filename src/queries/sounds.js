@@ -12,6 +12,7 @@ export const ALL_SOUNDS = gql`
       duration
       played
       uploadedAt
+      buyLink
     }
   }
 `
@@ -25,6 +26,7 @@ export const UPLOAD_SOUND = gql`
     $waveform: [Float]!
     $duration: Float!
     $uploadedAt: String!
+    $buyLink: String
   ) {
     uploadSound(
       name: $name
@@ -34,6 +36,7 @@ export const UPLOAD_SOUND = gql`
       waveform: $waveform
       duration: $duration
       uploadedAt: $uploadedAt
+      buyLink: $buyLink
     ) {
       id
       name
@@ -44,6 +47,7 @@ export const UPLOAD_SOUND = gql`
       duration
       played
       uploadedAt
+      buyLink
     }
   }
 `
@@ -58,6 +62,7 @@ export const UPDATE_SOUND = gql`
     $waveform: [Float]
     $duration: Float
     $played: Int
+    $buyLink: String
   ) {
     updateSound(
       id: $id
@@ -68,6 +73,7 @@ export const UPDATE_SOUND = gql`
       waveform: $waveform
       duration: $duration
       played: $played
+      buyLink: $buyLink
     ) {
       id
       name
@@ -77,6 +83,7 @@ export const UPDATE_SOUND = gql`
       waveform
       duration
       played
+      buyLink
     }
   }
 `

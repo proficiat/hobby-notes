@@ -11,6 +11,7 @@ const typeDef = gql`
     duration: Float!
     played: Int
     uploadedAt: String!
+    buyLink: String
   }
 
   extend type Query {
@@ -26,6 +27,7 @@ const typeDef = gql`
       waveform: [Float]!
       duration: Float!
       uploadedAt: String!
+      buyLink: String
     ): Sound
     deleteSound(id: String!): Sound
     updateSound(
@@ -37,6 +39,7 @@ const typeDef = gql`
       waveform: [Float]
       duration: Float
       played: Int
+      buyLink: String
     ): Sound
   }
 `

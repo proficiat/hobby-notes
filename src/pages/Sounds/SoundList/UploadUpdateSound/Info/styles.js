@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { width } from 'styled-system'
+
 export const Base = styled.div`
   display: flex;
   flex-direction: column;
@@ -36,6 +38,8 @@ export const Input = styled.input`
   height: 28px;
   width: 220px;
   padding-left: 8px;
+
+  ${width};
 `
 
 export const TextArea = styled.textarea`
