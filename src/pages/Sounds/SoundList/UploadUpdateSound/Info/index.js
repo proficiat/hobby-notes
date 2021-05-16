@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 
 import get from 'lodash/get'
 
-import { Field, Input, Base, StyledSup, TextArea } from './styles'
+import RadioButton from 'components/RadioButton'
+
+import { Field, Input, Base, StyledSup, TextArea, Row, Privacy } from './styles'
 
 class Info extends PureComponent {
   handleChangeName = event => {
@@ -24,21 +26,50 @@ class Info extends PureComponent {
     onChangeBuyLink(buyLink)
   }
 
+  handleChangePrivacy = event => {
+    const { onChangePrivacy } = this.props
+    const {
+      target: { value },
+    } = event
+    onChangePrivacy(value)
+  }
+
   render() {
-    const { name, description, buyLink } = this.props
+    const { name, description, buyLink, isPrivate } = this.props
     return (
       <Base>
-        <Field>
-          <div>
-            Name<StyledSup>*</StyledSup>
-          </div>{' '}
-          <Input
-            placeholder="Name your track"
-            type="text"
-            value={name}
-            onChange={this.handleChangeName}
-          />
-        </Field>
+        <Row>
+          <Field>
+            <div>
+              Name<StyledSup>*</StyledSup>
+            </div>{' '}
+            <Input
+              placeholder="Name your track"
+              type="text"
+              value={name}
+              onChange={this.handleChangeName}
+            />
+          </Field>
+          <Field>
+            <div>
+              Privacy<StyledSup invisible>*</StyledSup>
+            </div>
+            <Privacy>
+              <RadioButton
+                checked={!isPrivate}
+                label="Public"
+                value="public"
+                onChange={this.handleChangePrivacy}
+              />
+              <RadioButton
+                checked={isPrivate}
+                label="Private"
+                value="private"
+                onChange={this.handleChangePrivacy}
+              />
+            </Privacy>
+          </Field>
+        </Row>
         <Field>
           Buy-link
           <Input
@@ -64,10 +95,12 @@ class Info extends PureComponent {
 Info.propTypes = {
   buyLink: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  isPrivate: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   onChangeBuyLink: PropTypes.func.isRequired,
   onChangeDescription: PropTypes.func.isRequired,
   onChangeName: PropTypes.func.isRequired,
+  onChangePrivacy: PropTypes.func.isRequired,
 }
 
 export default Info

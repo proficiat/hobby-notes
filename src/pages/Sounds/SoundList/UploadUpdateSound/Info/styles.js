@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { width } from 'styled-system'
+import { width, space } from 'styled-system'
 
 export const Base = styled.div`
   display: flex;
@@ -10,17 +10,41 @@ export const Base = styled.div`
   padding: 18px;
 `
 
+export const Row = styled.div`
+  display: flex;
+`
+
+export const Privacy = styled.div`
+  height: 28px;
+  margin-top: 4px;
+  color: ${props => props.theme.defaultText};
+  display: flex;
+  align-items: center;
+  > label:last-child {
+    margin-left: 12px;
+  }
+`
+
 export const Field = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   font-size: 14px;
   color: ${props => props.theme.defaultText};
   margin-bottom: 11px;
+
+  ${space};
 `
 
 export const StyledSup = styled.sup`
   color: ${props => props.theme.westSide};
   font-size: 16px;
+
+  ${props =>
+    props.invisible &&
+    css`
+      color: transparent;
+    `}
 `
 
 const inputsBaseStyle = css`
@@ -31,6 +55,14 @@ const inputsBaseStyle = css`
   background: ${props => props.theme.background};
   margin-top: 4px;
   border-radius: 4px;
+
+  ::placeholder,
+  ::-webkit-input-placeholder {
+    color: ${props => props.theme.doveGray};
+  }
+  :-ms-input-placeholder {
+    color: ${props => props.theme.doveGray};
+  }
 `
 
 export const Input = styled.input`
@@ -44,16 +76,9 @@ export const Input = styled.input`
 
 export const TextArea = styled.textarea`
   ${inputsBaseStyle};
-  resize: none;
-  ${'' /* vertical; */};
+  resize: vertical;
+  min-height: 28px;
   height: 28px;
+  max-height: 224px;
   padding: 6px 6px 6px 8px;
-
-  ::placeholder,
-  ::-webkit-input-placeholder {
-    color: ${props => props.theme.doveGray};
-  }
-  :-ms-input-placeholder {
-    color: ${props => props.theme.doveGray};
-  }
 `

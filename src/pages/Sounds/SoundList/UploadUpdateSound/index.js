@@ -35,6 +35,7 @@ const INIT_STATE = {
   name: '',
   description: '',
   buyLink: '',
+  isPrivate: false,
 }
 
 const getInitSoundData = soundToEdit => {
@@ -44,7 +45,8 @@ const getInitSoundData = soundToEdit => {
   const waveform = get(soundToEdit, 'waveform', [])
   const duration = get(soundToEdit, 'duration', null)
   const buyLink = get(soundToEdit, 'buyLink', '')
-  return { imageUrl, name, description, waveform, duration, buyLink }
+  const isPrivate = get(soundToEdit, 'isPrivate', false)
+  return { imageUrl, name, description, waveform, duration, buyLink, isPrivate }
 }
 
 class UploadUpdateSound extends PureComponent {
@@ -52,22 +54,9 @@ class UploadUpdateSound extends PureComponent {
     super(props)
     const { soundToEdit } = props
     this.initSoundData = getInitSoundData(soundToEdit)
-    const {
-      waveform,
-      name,
-      description,
-      duration,
-      imageUrl,
-      buyLink,
-    } = this.initSoundData
     this.state = {
       ...INIT_STATE,
-      waveform,
-      name,
-      description,
-      duration,
-      imageUrl,
-      buyLink,
+      ...this.initSoundData,
     }
     this.isUpload = isEmpty(soundToEdit)
   }
@@ -79,6 +68,15 @@ class UploadUpdateSound extends PureComponent {
       duration,
     })
   }
+
+  onChangeInfoField = (fieldName, value) => {
+    this.setState({
+      [fieldName]: '',
+    })
+  }
+
+  onChangePrivacy = privacy =>
+    this.setState({ isPrivate: privacy === 'private' })
 
   onChangeBuyLink = buyLink => this.setState({ buyLink })
 
@@ -151,6 +149,7 @@ class UploadUpdateSound extends PureComponent {
       waveform,
       imageUrl,
       buyLink,
+      isPrivate,
     } = this.state
     const { isLoading, onCancel } = this.props
     const isLoad = isLoading || isPreUploading
@@ -168,10 +167,12 @@ class UploadUpdateSound extends PureComponent {
             <Info
               buyLink={buyLink}
               description={description}
+              isPrivate={isPrivate}
               name={name}
               onChangeBuyLink={this.onChangeBuyLink}
               onChangeDescription={this.onChangeDescription}
               onChangeName={this.onChangeName}
+              onChangePrivacy={this.onChangePrivacy}
             />
           )}
           {!isLoad && (
