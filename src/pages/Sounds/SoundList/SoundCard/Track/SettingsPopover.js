@@ -15,10 +15,9 @@ import { FiTrash, FiEdit2 } from 'react-icons/fi'
 const SettingsIcon = styled(IoEllipsisHorizontalCircle).attrs({
   size: 20,
 })`
-  color: ${props =>
-    props.open ? colors.suicidePreventionBlue : props.theme.defaultText};
+  color: ${props => (props.open ? colors.westSide : props.theme.defaultText)};
   :hover {
-    color: ${colors.suicidePreventionBlue};
+    color: ${colors.westSide};
   }
 `
 

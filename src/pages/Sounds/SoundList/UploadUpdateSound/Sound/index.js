@@ -55,8 +55,11 @@ const Sound = React.memo(({ waveform, isVisible, onDropSoundFile }) => {
 
   const isLoading = loadingPerceent !== 0
 
+  if (!isVisible) {
+    return null
+  }
   return (
-    <Container visible={isVisible}>
+    <Container>
       <Dropzone accept="audio/*" multiple={false} onDrop={handleDropSound}>
         {({ getRootProps, getInputProps }) => (
           <DropzoneRoot
@@ -66,7 +69,7 @@ const Sound = React.memo(({ waveform, isVisible, onDropSoundFile }) => {
             })}
           >
             <WaveformImageCanvas
-              loading={isLoading || !isVisible ? 1 : 0}
+              loading={isLoading ? 1 : 0}
               ref={waveformImageRef}
             />
             {isLoading && <ProgressBar percent={loadingPerceent} />}

@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+import { lighten } from 'polished'
+
 const HEIGHT = 16
 const WIDTH = 16
 
@@ -24,7 +26,7 @@ const Checkmark = styled.span`
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: white;
+    background: ${({ theme }) => theme.luciaLash};
   }
 `
 
@@ -44,7 +46,8 @@ const Container = styled.label`
   }
 
   :hover input ~ ${Checkmark} {
-    background-color: ${({ theme }) => theme.suicidePreventionBlue};
+    background-color: ${({ theme }) =>
+      lighten(0.3, theme.suicidePreventionBlue)};
   }
 
   input:checked ~ ${Checkmark} {

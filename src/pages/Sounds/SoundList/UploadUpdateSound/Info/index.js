@@ -29,7 +29,7 @@ class Info extends PureComponent {
     return (
       <Base>
         <Row>
-          <Field>
+          <Field mr="12px">
             <div>
               Name<StyledSup>*</StyledSup>
             </div>

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 export const Container = styled.div`
   cursor: pointer;
@@ -7,15 +7,8 @@ export const Container = styled.div`
   flex-direction: column;
   flex: 1;
   z-index: 1;
-  min-width: 340px;
+  min-width: 320px;
   max-width: 800px;
-  visibility: ${props => (props.visible ? 'visible' : 'hidden')};
-  ${props =>
-    !props.visible &&
-    css`
-      flex: 0;
-      min-width: 0;
-    `};
 `
 
 export const DropzoneRoot = styled.div`
